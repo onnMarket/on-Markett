@@ -4,13 +4,13 @@ import {SafeAreaView,View,StyleSheet,Text,TextInput,TouchableOpacity,ScrollView,
 import { Avatar } from 'react-native-elements';
 
 const categorias = [
-  { nome: 'Resort', icone: 'beach-access', tipo: 'MaterialIcons' },
-  { nome: 'Casa de Família', icone: 'home', tipo: 'MaterialIcons' },
-  { nome: 'Hotel', icone: 'hotel', tipo: 'MaterialIcons' },
-  { nome: 'Pousada', icone: 'location-city', tipo: 'MaterialIcons' },
-  { nome: 'Vila', icone: 'building', tipo: 'FontAwesome' },
-  { nome: 'Apartmento', icone: 'business', tipo: 'MaterialIcons' },
-  { nome: 'Hostel', icone: 'bed', tipo: 'FontAwesome' },
+  { nome: 'Frutas', icone: 'local-grocery-store', tipo: 'MaterialIcons' },
+  { nome: 'Verduras', icone: 'eco', tipo: 'MaterialIcons' },
+  { nome: 'Frios', icone: 'business', tipo: 'MaterialIcons' },
+  { nome: 'Casa', icone: 'home', tipo: 'MaterialIcons' },
+  { nome: 'Higiene', icone: 'soap', tipo: 'MaterialIcons' },
+  { nome: 'Descartáveis', icone: 'trash', tipo: 'FontAwesome' },
+  { nome: 'Bebidas', icone: 'wine-glass', tipo: 'FontAwesome' },
   { nome: 'Veja mais ', icone: 'th-large', tipo: 'FontAwesome' }
 ];
 
