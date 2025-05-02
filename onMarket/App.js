@@ -37,13 +37,13 @@ export default function App() {
       {/* HEADER */}
       <View style={estilos.header}>
         <View style={estilos.caixaCabecalho}>
-          <Avatar
+        <Avatar
             rounded
             size="medium"
-            source={{
-              uri: 'https://play-lh.googleusercontent.com/2SIM81zLEHmiBRPyyYBsdpfjyZUT8mfpduB5b50SOu2MDlxTuHtvP3oW1H4C9Umoww=w240-h480-rw',
-            }}
+            source={require('./image/onMarket_3.png')}
           />
+
+
           <View style={estilos.caixaBusca}>
             <TextInput
               placeholder="Pesquise aqui..."
