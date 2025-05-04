@@ -4,14 +4,14 @@ import {SafeAreaView,View,StyleSheet,Text,TextInput,TouchableOpacity,ScrollView,
 import { Avatar } from 'react-native-elements';
 
 const categorias = [
-  { nome: 'Frutas', icone: 'local-grocery-store', tipo: 'MaterialIcons' },
-  { nome: 'Verduras', icone: 'eco', tipo: 'MaterialIcons' },
-  { nome: 'Frios', icone: 'business', tipo: 'MaterialIcons' },
+  { nome: 'Frutas', icone: 'apple', tipo: 'FontAwesome' },
+  { nome: 'Verduras', icone: 'leaf', tipo: 'FontAwesome' },
+  { nome: 'Frios', icone: 'snowflake-o', tipo: 'FontAwesome' },
   { nome: 'Casa', icone: 'home', tipo: 'MaterialIcons' },
-  { nome: 'Higiene', icone: 'soap', tipo: 'MaterialIcons' },
+  { nome: 'Higiene', icone: 'shower', tipo: 'FontAwesome' },
   { nome: 'Descartáveis', icone: 'trash', tipo: 'FontAwesome' },
-  { nome: 'Bebidas', icone: 'wine-glass', tipo: 'FontAwesome' },
-  { nome: 'Veja mais ', icone: 'th-large', tipo: 'FontAwesome' }
+  { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
+  { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
 
 const imagens_populares = [
@@ -42,7 +42,6 @@ export default function App() {
             size="medium"
             source={require('./image/onMarket_3.png')}
           />
-
 
           <View style={estilos.caixaBusca}>
             <TextInput
@@ -77,7 +76,7 @@ export default function App() {
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categoria</Text>
           <TouchableOpacity>
-            <MaterialIcons name="menu" size={30} color="#665DD1" />
+            <MaterialIcons name="menu" size={30} color="#2AAA53" />
           </TouchableOpacity>
         </View>
 
@@ -99,7 +98,7 @@ export default function App() {
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Destinos Populares</Text>
           <TouchableOpacity>
-            <MaterialIcons name="menu" size={30} color="#665DD1" />
+            <MaterialIcons name="menu" size={30} color="#2AAA53" />
           </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -161,7 +160,7 @@ const estilos = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    backgroundColor: '#665DD1',
+    backgroundColor: 'green',
     padding: 20,
     paddingTop: 50,
     borderBottomLeftRadius: 25,
@@ -220,7 +219,7 @@ const estilos = StyleSheet.create({
   bolinhanotificação: {
     width: 8,
     height: 8,
-    backgroundColor: 'orange',
+    backgroundColor: '#2AAA53',
     borderRadius: 4,
     position: 'absolute',
     top: 15,
@@ -236,7 +235,7 @@ const estilos = StyleSheet.create({
   },
   menu: {
     flexDirection: 'row',
-    backgroundColor: '#665DD1',
+    backgroundColor: 'green',
     paddingVertical: 12,
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -271,7 +270,7 @@ const estilos = StyleSheet.create({
     marginVertical: 12,
   },
   circuloIcone: {
-    backgroundColor: '#665DD1',
+    backgroundColor: '#2AAA53',
     padding: 16,
     borderRadius: 50,
     marginBottom: 8,
