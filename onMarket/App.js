@@ -1,6 +1,6 @@
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import React from 'react';
-import {SafeAreaView,View,StyleSheet,Text,TextInput,TouchableOpacity,ScrollView,Image,} from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
 const categorias = [
@@ -15,13 +15,34 @@ const categorias = [
 ];
 
 const imagens_populares = [
-  'https://static.todamateria.com.br/upload/es/ta/estado-de-pernambuco-og.jpg?class=ogImageWide',
-  'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/0f/9a/fc/66.jpg',
-  'https://www.vaidepromo.com.br/blog/wp-content/uploads/2024/03/Cidade-mais-visitada-dos-EUA-1024x682.jpg',
-  'https://midias.eurodicas.com.br/wp-content/uploads/2024/07/tudo-sobre-espanha-1-824x420.jpg.webp',
-  'https://res.cloudinary.com/worldpackers/image/upload/c_fill,f_auto,q_auto,w_1024/v1/guides/article_cover/qu18o8metz5esnm01sdv?_a=BACADKGT',
-    'https://www.essemundoenosso.com.br/wp-content/uploads/2021/12/vila-mangueira-destaque.jpg',
-  'https://enoestilo.com.br/wp-content/uploads/2014/06/paris-france-revista-enoestilo.jpg'
+  {
+    imagem: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRnDUm0T_hB6lj8h1uBFLXSsRkhutRP7WryynSn_U1zisITs-hJgjtCfU7YC0ClVWS7OW7ShHuAAYCIukXP6TrZLqq6z3-pJo-QvFWv9VKIgUd8US93X3WSyPs',
+    preco: 'R$ 74,95',
+    estrelas: 4.5,
+    nome: 'Queijo Reino Tirolez 500g',
+    vezes_comprado: 120
+  },
+  {
+    imagem: 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQVpbPMxCUDSolUwklWSpjC5D_E_d4pHxmzC4LkRwg21qnR4Hoop3hDv3hRPprHM0FhvTXNg3qMEXyPx61rkbJQJimWZ36oIgyRjDC4qPRtYgjUD20Jby6N',
+    preco: 'R$ 11,79',
+    estrelas: 4.0,
+    nome: 'Pão Hambúrguer Wickbold 200g',
+    vezes_comprado: 75
+  },
+  {
+    imagem: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ6mCDQr6t6K788RxqufkQ8YWOou8tBB__r1KY2tjIYajgD1E6sNHt4MeTA8ekdGE71dVzdQ7lEcUATXTy2TI_AKcxgsXOGdBm70nrqqVBSs3VY3pZVYYqL4A',
+    preco: 'R$ 73,38',
+    estrelas: 5.0,
+    nome: 'Conjunto Assadeiras Cereja Antiaderente Bege Retangular Alta',
+    vezes_comprado: 200
+  },
+  {
+    imagem: 'https://tupan.agilecdn.com.br/939573_1.jpg?v=36-1518983659',
+    preco: 'R$ 299,90',
+    estrelas: 4.8,
+    nome: 'Gabinete para Banheiro em MDF Suspenso 46x55 com Espelho Hortência Amêndoa White',
+    vezes_comprado: 180
+  }
 ];
 
 const imagens_recomendadas = [
@@ -37,12 +58,11 @@ export default function App() {
       {/* HEADER */}
       <View style={estilos.header}>
         <View style={estilos.caixaCabecalho}>
-        <Avatar
+          <Avatar
             rounded
-            size="medium"
+            size="large"
             source={require('./image/onMarket_3.png')}
           />
-
           <View style={estilos.caixaBusca}>
             <TextInput
               placeholder="Pesquise aqui..."
@@ -51,8 +71,12 @@ export default function App() {
             />
             <MaterialIcons name="search" size={24} color="gray" />
           </View>
+          <TouchableOpacity style={estilos.notificacao}>
+            <MaterialIcons name="notifications" size={28} color="gray" />
+            <View style={estilos.bolinhanotificação} />
+          </TouchableOpacity>
         </View>
-        <View style={estilos.caixaBoasVindas}>
+        {/*<View style={estilos.caixaBoasVindas}>
           <Avatar
             rounded
             size="medium"
@@ -68,7 +92,7 @@ export default function App() {
             <MaterialIcons name="notifications" size={28} color="gray" />
             <View style={estilos.bolinhanotificação} />
           </TouchableOpacity>
-        </View>
+        </View>*/}
       </View>
 
       {/* CONTEÚDO PRINCIPAL COM SCROLL */}
@@ -96,19 +120,24 @@ export default function App() {
         </View>
 
         <View style={estilos.linhaTitulo}>
-          <Text style={estilos.conteudo_principal}>Destinos Populares</Text>
+          <Text style={estilos.conteudo_principal}>Pedidos Populares</Text>
           <TouchableOpacity>
             <MaterialIcons name="menu" size={30} color="#2AAA53" />
           </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {imagens_populares.map((url, index) => (
+          {imagens_populares.map((item, index) => (
             <View key={index} style={estilos.cardDestino}>
               <Image
-                source={{ uri: url }}
+                source={{ uri: item.imagem }}
                 style={estilos.imagemDestino}
                 resizeMode="cover"
               />
+              <View style={estilos.infoCard}>
+                <Text style={estilos.nomeProduto}>{item.nome}</Text>
+                <Text style={estilos.precoProduto}>{item.preco}</Text>
+                <Text style={estilos.estrelasProduto}>{`⭐ ${item.estrelas} - ${item.vezes_comprado} comprados`}</Text>
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -214,7 +243,7 @@ const estilos = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#fff',
     padding: 10,
-    borderRadius: 25,
+    borderRadius: 50,
   },
   bolinhanotificação: {
     width: 8,
@@ -226,38 +255,18 @@ const estilos = StyleSheet.create({
     left: 15,
   },
   conteudo: {
-    flex: 1,
     padding: 20,
-  },
-  conteudo_principal: {
-    fontSize: 30,
-    color: 'gray',
-  },
-  menu: {
-    flexDirection: 'row',
-    backgroundColor: 'green',
-    paddingVertical: 12,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-  },
-  item: {
-    alignItems: 'center',
-  },
-  textoItem: {
-    color: '#fff',
-    fontSize: 12,
-    marginTop: 4,
+    marginBottom: 100,
   },
   linhaTitulo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 10,
+  },
+  conteudo_principal: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   grid: {
     flexDirection: 'row',
@@ -267,41 +276,71 @@ const estilos = StyleSheet.create({
   itemCategoria: {
     width: '22%',
     alignItems: 'center',
-    marginVertical: 12,
+    marginBottom: 20,
   },
   circuloIcone: {
     backgroundColor: '#2AAA53',
-    padding: 16,
     borderRadius: 50,
-    marginBottom: 8,
+    padding: 15,
+    marginBottom: 10,
   },
   textoCategoria: {
-    fontSize: 12,
     textAlign: 'center',
-    color: '#333',
+    fontSize: 14,
+    color: '#000',
   },
   cardDestino: {
-    width: 120,
-    height: 120,
     marginRight: 15,
-    borderRadius: 15,
+    width: 150,
+    borderRadius: 8,
     overflow: 'hidden',
   },
   imagemDestino: {
     width: '100%',
-    height: '100%',
-    borderRadius: 15,
+    height: 120,
+  },
+  infoCard: {
+    padding: 10,
+  },
+  nomeProduto: {
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  precoProduto: {
+    color: '#2AAA53',
+    fontSize: 12,
+    marginVertical: 4,
+  },
+  estrelasProduto: {
+    fontSize: 12,
+    color: '#777',
   },
   cardRecomendadoVertical: {
-    width: '100%',
-    height: 180,
-    marginBottom: 16,
-    borderRadius: 15,
+    marginBottom: 20,
+    borderRadius: 8,
     overflow: 'hidden',
   },
   imagemRecomendadoVertical: {
     width: '100%',
-    height: '100%',
-    borderRadius: 15,
+    height: 200,
+    borderRadius: 8,
+  },
+  menu: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  item: {
+    alignItems: 'center',
+  },
+  textoItem: {
+    color: '#fff',
+    fontSize: 10,
   },
 });
