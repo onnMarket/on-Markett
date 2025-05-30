@@ -17,7 +17,8 @@ export default function CriarConta({ navigation }) {
         nome,
         email,
         cpf,
-        senha
+        senha,
+        tipo: 'cliente', // Definindo o tipo como cliente
       })
       .then((response) => {
         console.log(response.data);

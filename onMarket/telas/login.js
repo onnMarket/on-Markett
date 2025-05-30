@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
         const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
         
         if (usuario) {
-          navigation.navigate('ListarContatos'); // redireciona após login bem-sucedido
+          navigation.navigate('Inicio'); // redireciona após login bem-sucedido
         } else {
           Alert.alert('Erro', 'Email ou senha inválidos!');
         }
@@ -93,8 +93,7 @@ const styles = StyleSheet.create({
   },
   recuperarSenha: {
     color: 'black',
-    alignSelf: 'flex-end',
-    marginRight: 45,
     marginBottom: 10,
+    textAlign: 'center',
   },
 });

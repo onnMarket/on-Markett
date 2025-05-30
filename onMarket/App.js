@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 
 import CriarConta from "./telas/criarConta";
@@ -7,7 +7,7 @@ import Login from "./telas/login";
 import RecuperacaoSenha from "./telas/recuperacaoSenha";
 import Inicio from "./telas/inicio";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
