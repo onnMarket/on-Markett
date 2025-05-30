@@ -1,52 +1,42 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Avatar, Input } from 'react-native-elements';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-
   function login() {
-    axios.get('http://localhost:3000/usuario') // ← ALTERADO para emulador Android
+    axios.get('http://localhost:3000/usuario') // IP especial do emulador Android
       .then((response) => {
         const usuarios = response.data;
         const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
+        
         if (usuario) {
-          navigation.navigate('ListarContatos'); // ← só vai funcionar se tela for criada
+          navigation.navigate('ListarContatos'); // redireciona após login bem-sucedido
         } else {
-          alert('Email ou senha inválidos!');
+          Alert.alert('Erro', 'Email ou senha inválidos!');
         }
       })
       .catch((error) => {
-        console.error(error);
-        alert('Erro ao conectar com o servidor.');
+        console.error('Erro ao conectar com o servidor:', error.message);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
       });
   }
 
-
   return (
     <SafeAreaView style={styles.container}>
-      {/*<Avatar
-        rounded
-        size="xlarge"
-        title="MJ"
-        source={{ uri: 'https://avatars.githubusercontent.com/u/169060996?v=4' }}
-        containerStyle={{ marginBottom: 20 }}
-      />*/}
-
-
       <Input
         placeholder="Email"
         leftIcon={<MaterialIcons name="email" size={24} color="black" />}
         containerStyle={styles.inputContainer}
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
       />
-
 
       <Input
         placeholder="Senha"
@@ -56,25 +46,21 @@ export default function Login({ navigation }) {
         value={senha}
         onChangeText={setSenha}
       />
-      <TouchableOpacity>
-        <Text style={{alignContent: 'flex-end'}}>Esqueceu a senha?</Text>
-      </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => navigation.navigate('RecuperacaoSenha')}>
+        <Text style={styles.recuperarSenha}>Esqueceu a senha?</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.botao_1} onPress={login}>
         <Text style={styles.texto}>Login</Text>
       </TouchableOpacity>
 
-
       <TouchableOpacity style={styles.botao_2} onPress={() => navigation.navigate('CadastroUsuario')}>
         <Text style={styles.texto}>Cadastre-se</Text>
       </TouchableOpacity>
-
-
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -84,8 +70,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    width: '70%',
-    alignSelf: 'center',
+    width: '80%',
+    marginBottom: 10,
   },
   botao_1: {
     backgroundColor: '#f4e453',
@@ -104,5 +90,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  recuperarSenha: {
+    color: 'black',
+    alignSelf: 'flex-end',
+    marginRight: 45,
+    marginBottom: 10,
   },
 });

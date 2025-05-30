@@ -8,7 +8,7 @@
     "splash": {
       "image": "./image/onMarket_1.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "blue"
     },
     "web": {
       "favicon": "./image/onMarket_3.png",

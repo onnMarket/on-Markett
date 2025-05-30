@@ -65,7 +65,7 @@ export default function App() {
           <Avatar
             rounded
             size="large"
-            source={require('./image/onMarket_3.png')}
+            source={require('../image/onMarket_3.png')}
           />
           <View style={estilos.caixaBusca}>
             <TextInput
