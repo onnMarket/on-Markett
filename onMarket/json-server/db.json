@@ -1,0 +1,21 @@
+{
+  "usuario": [
+    {
+      "id": "8c21",
+      "nome": "Mateus Juan",
+      "email": "mjhs2@discente.ifpe.edu.br",
+      "tipo": "admin",
+      "cpf": "0000000001",
+      "senha": "123456789"
+    },
+    {
+      "id": "29f9",
+      "nome": "aaa",
+      "email": "aa",
+      "cpf": "aa",
+      "senha": "a",
+      "tipo": "cliente"
+    }
+  ],
+  "produtos": []
+}
