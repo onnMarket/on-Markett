@@ -47,15 +47,6 @@ const imagens_populares = [
   }
 ];
 
-
-const imagens_recomendadas = [
-  'https://static.todamateria.com.br/upload/es/ta/estado-de-pernambuco-og.jpg?class=ogImageWide',
-  'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/0f/9a/fc/66.jpg',
-  'https://www.essemundoenosso.com.br/wp-content/uploads/2021/12/vila-mangueira-destaque.jpg',
-  'https://enoestilo.com.br/wp-content/uploads/2014/06/paris-france-revista-enoestilo.jpg'
-];
-
-
 export default function App() {
   return (
     <SafeAreaView style={estilos.container}>
@@ -76,27 +67,11 @@ export default function App() {
             <MaterialIcons name="search" size={24} color="gray" />
           </View>
           <TouchableOpacity style={estilos.notificacao}>
-            <MaterialIcons name="notifications" size={28} color="gray" />
-            <View style={estilos.bolinhanotificação} />
+            <TouchableOpacity style={estilos.item}>
+              <MaterialIcons name="shopping-cart" size={28} color="#fff" />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
-        {/*<View style={estilos.caixaBoasVindas}>
-          <Avatar
-            rounded
-            size="medium"
-            source={{
-              uri: 'https://avatars.githubusercontent.com/u/169060996?v=4',
-            }}
-          />
-          <View style={estilos.textoBoasVindas}>
-            <Text style={estilos.boasVindas}>Bem-vindo!</Text>
-            <Text style={estilos.nome}>Mateus Juan</Text>
-          </View>
-          <TouchableOpacity style={estilos.notificacao}>
-            <MaterialIcons name="notifications" size={28} color="gray" />
-            <View style={estilos.bolinhanotificação} />
-          </TouchableOpacity>
-        </View>*/}
       </View>
 
 
@@ -104,9 +79,6 @@ export default function App() {
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categoria</Text>
-          <TouchableOpacity>
-            <MaterialIcons name="menu" size={30} color="#2AAA53" />
-          </TouchableOpacity>
         </View>
 
 
@@ -115,9 +87,9 @@ export default function App() {
             <TouchableOpacity key={index} style={estilos.itemCategoria}>
               <View style={estilos.circuloIcone}>
                 {item.tipo === 'MaterialIcons' ? (
-                  <MaterialIcons name={item.icone} size={28} color="#fff" />
+                  <MaterialIcons name={item.icone} size={28} color="#212121" />
                 ) : (
-                  <FontAwesome name={item.icone} size={28} color="#fff" />
+                  <FontAwesome name={item.icone} size={28} color="#212121" />
                 )}
               </View>
               <Text style={estilos.textoCategoria}>{item.nome}</Text>
@@ -128,9 +100,6 @@ export default function App() {
 
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Pedidos Populares</Text>
-          <TouchableOpacity>
-            <MaterialIcons name="menu" size={30} color="#2AAA53" />
-          </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {imagens_populares.map((item, index) => (
@@ -148,20 +117,6 @@ export default function App() {
             </View>
           ))}
         </ScrollView>
-
-
-        <View style={estilos.linhaTitulo}>
-          <Text style={estilos.conteudo_principal}>Recomendados</Text>
-        </View>
-        {imagens_recomendadas.map((url, index) => (
-          <View key={index} style={estilos.cardRecomendadoVertical}>
-            <Image
-              source={{ uri: url }}
-              style={estilos.imagemRecomendadoVertical}
-              resizeMode="cover"
-            />
-          </View>
-        ))}
         <View style={{ height: 100 }} />
       </ScrollView>
 
@@ -169,22 +124,14 @@ export default function App() {
       {/* MENU FIXO INFERIOR */}
       <View style={estilos.menu}>
         <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="home" size={28} color="yellow" />
+          <MaterialIcons name="home" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Início</Text>
         </TouchableOpacity>
 
-
         <TouchableOpacity style={estilos.item}>
-          <FontAwesome name="compass" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Explorar</Text>
+          <MaterialIcons name="shopping-bag" size={28} color="#fff" />
+          <Text style={estilos.textoItem}>Histórico</Text>
         </TouchableOpacity>
-
-
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="search" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Pesquisar</Text>
-        </TouchableOpacity>
-
 
         <TouchableOpacity style={estilos.item}>
           <MaterialIcons name="person" size={28} color="#fff" />
@@ -199,10 +146,10 @@ export default function App() {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
   },
   header: {
-    backgroundColor: 'green',
+    backgroundColor: '#4CAF50',
     padding: 20,
     paddingTop: 50,
     borderBottomLeftRadius: 25,
@@ -221,7 +168,7 @@ const estilos = StyleSheet.create({
   caixaBusca: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -233,28 +180,8 @@ const estilos = StyleSheet.create({
     color: '#000',
     marginRight: 10,
   },
-  caixaBoasVindas: {
-    marginTop: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  textoBoasVindas: {
-    flex: 1,
-    marginLeft: 15,
-  },
-  boasVindas: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  nome: {
-    fontSize: 14,
-    color: '#fff',
-  },
   notificacao: {
     position: 'relative',
-    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 50,
   },
@@ -292,8 +219,8 @@ const estilos = StyleSheet.create({
     marginBottom: 20,
   },
   circuloIcone: {
-    backgroundColor: '#2AAA53',
-    borderRadius: 50,
+    backgroundColor: '#FF9800',
+    borderRadius:8,
     padding: 15,
     marginBottom: 10,
   },
@@ -341,7 +268,7 @@ const estilos = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: 'green',
+    backgroundColor: '#4CAF50',
     paddingVertical: 10,
     position: 'absolute',
     bottom: 0,
