@@ -8,6 +8,10 @@ const Produto = sequelize.define('Produto', {
     autoIncrement: true,
     allowNull: false,
   },
+  nome: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
   foto: {
     type: DataTypes.STRING, // pode ser URL ou caminho da imagem
     allowNull: true,        // pode ser opcional
