@@ -15,6 +15,14 @@
       "cpf": "aa",
       "senha": "a",
       "tipo": "cliente"
+    },
+    {
+      "id": "692f",
+      "nome": "AL.JUAN",
+      "email": "juanmateus565@gmail.com",
+      "cpf": "00000000002",
+      "senha": "123456789",
+      "tipo": "cliente"
     }
   ],
   "produtos": []
