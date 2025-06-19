@@ -2,7 +2,7 @@ import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
-
+import { useNavigation } from '@react-navigation/native';
 
 const categorias = [
   { nome: 'Frutas', icone: 'apple', tipo: 'FontAwesome' },
@@ -14,7 +14,6 @@ const categorias = [
   { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
   { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
-
 
 const imagens_populares = [
   {
@@ -48,6 +47,8 @@ const imagens_populares = [
 ];
 
 export default function InicioADM() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={estilos.container}>
       {/* HEADER */}
@@ -74,13 +75,14 @@ export default function InicioADM() {
         </View>
       </View>
 
-
       {/* CONTEÚDO PRINCIPAL COM SCROLL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
-          <Text style={estilos.conteudo_principal}>Categoria</Text>
+          <Text style={estilos.conteudo_principal}>Produtos Cadastrados</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
+            <MaterialIcons name="add-box" size={28} color="#000000" />
+          </TouchableOpacity>
         </View>
-
 
         <View style={estilos.grid}>
           {categorias.map((item, index) => (
@@ -96,7 +98,6 @@ export default function InicioADM() {
             </TouchableOpacity>
           ))}
         </View>
-
 
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Pedidos Populares</Text>
@@ -120,12 +121,11 @@ export default function InicioADM() {
         <View style={{ height: 100 }} />
       </ScrollView>
 
-
       {/* MENU FIXO INFERIOR */}
       <View style={estilos.menu}>
         <TouchableOpacity style={estilos.item}>
-            <MaterialIcons name="analytics" size={28} color={"#F5F5F5"}/>
-            <Text style={estilos.textoItem}>Relatórios</Text>
+          <MaterialIcons name="analytics" size={28} color={"#F5F5F5"} />
+          <Text style={estilos.textoItem}>Relatórios</Text>
         </TouchableOpacity>
         <TouchableOpacity style={estilos.item}>
           <MaterialIcons name="home" size={28} color="#F5F5F5" />
@@ -145,7 +145,6 @@ export default function InicioADM() {
     </SafeAreaView>
   );
 }
-
 
 const estilos = StyleSheet.create({
   container: {
@@ -224,7 +223,7 @@ const estilos = StyleSheet.create({
   },
   circuloIcone: {
     backgroundColor: '#FF9800',
-    borderRadius:8,
+    borderRadius: 8,
     padding: 15,
     marginBottom: 10,
   },
@@ -288,5 +287,3 @@ const estilos = StyleSheet.create({
     fontSize: 10,
   },
 });
-
-
