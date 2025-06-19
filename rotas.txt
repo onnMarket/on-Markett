@@ -1,0 +1,13 @@
+PATCH /pedidos/:id/status
+GET 127.0.1:3000/api/pedidos/2/ --> mostra o pedido
+GET 127.0.1:3000/api/pedidos/comprador/2 --> mostra os pedidos de um comprador específico
+POST /pedidos/finalizar 
+{
+  "compradorId": 1,
+  "formaPagamento": "pix",
+  "produtos": [
+    { "produtoId": 1, "quantidade": 2 },
+    { "produtoId": 2, "quantidade": 1 }
+  ]
+}
+--> Cadastrar uma compra

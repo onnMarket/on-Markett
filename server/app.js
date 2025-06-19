@@ -7,10 +7,12 @@ app.use(express.json());
 const userRoutes = require('./routes/userRoutes');
 const produtoRoutes = require('./routes/produtoRoutes'); 
 const loginRoutes = require('./routes/loginRoutes');
+const pedidoRoues = require('./routes/pedidoRoutes');
 
 app.use('/api', userRoutes);
 app.use('/api', produtoRoutes);  
 app.use('/api', loginRoutes);
+app.use('/api', pedidoRoues);
 
 const PORT = process.env.PORT || 3000;
 
