@@ -45,6 +45,12 @@ export default function cadastrarProdutos({ navigation }) {
         style={styles.input}
       />
       <TextInput
+        placeholder="Foto"
+        value={categoria}
+        onChangeText={setFoto}
+        style={styles.input}
+      />
+      <TextInput
         placeholder="Categoria"
         value={categoria}
         onChangeText={setCategoria}
@@ -79,7 +85,7 @@ export default function cadastrarProdutos({ navigation }) {
       />
 
 
-      <TouchableOpacity style={styles.botaoSalvar} onPress={criarConta}>
+      <TouchableOpacity style={styles.botaoSalvar} onPress={cadastrarProduto}>
         <Text style={styles.textoBotao}>Salvar</Text>
       </TouchableOpacity>
     </SafeAreaView>
