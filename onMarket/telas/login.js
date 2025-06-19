@@ -8,23 +8,30 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  function login() {
-    axios.get('http://localhost:3000/usuario') // IP especial do emulador Android
-      .then((response) => {
-        const usuarios = response.data;
-        const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
-        
-        if (usuario) {
-          navigation.navigate('Inicio'); // redireciona após login bem-sucedido
+function login() {
+  axios.get('http://localhost:3000/usuario')
+    .then((response) => {
+      const usuarios = response.data;
+      const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
+      
+      if (usuario) {
+        if (usuario.tipo === 'admin') {
+          navigation.navigate('InicioADM'); // redireciona para tela do admin
+        } else if (usuario.tipo === 'cliente') {
+          navigation.navigate('Inicio'); // redireciona para tela do cliente
         } else {
-          Alert.alert('Erro', 'Email ou senha inválidos!');
+          Alert.alert('Erro', 'Tipo de usuário desconhecido!');
         }
-      })
-      .catch((error) => {
-        console.error('Erro ao conectar com o servidor:', error.message);
-        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
-      });
-  }
+      } else {
+        Alert.alert('Erro', 'Email ou senha inválidos!');
+      }
+    })
+    .catch((error) => {
+      console.error('Erro ao conectar com o servidor:', error.message);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    });
+}
+
 
   return (
     <SafeAreaView style={styles.container}>
