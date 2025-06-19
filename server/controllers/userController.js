@@ -3,8 +3,8 @@ const User = require('../models/User');
 // Criar usuário
 exports.createUser = async (req, res) => {
   try {
-    const { id, nome, email, tipo, cpf, senha } = req.body;
-    const user = await User.create({ id, nome, email, tipo, cpf, senha });
+    const { nome, email, tipo, cpf, senha } = req.body;
+    const user = await User.create({ nome, email, tipo, cpf, senha });
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
