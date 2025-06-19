@@ -41,7 +41,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="cadastrarProdutos"
+          name="CadastrarProdutos"
           component={CadastrarProdutos}
           options={{ headerShown: false }}
         />
