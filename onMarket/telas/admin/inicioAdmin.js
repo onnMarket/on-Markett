@@ -15,36 +15,6 @@ const categorias = [
   { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
 
-const imagens_populares = [
-  {
-    imagem: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRnDUm0T_hB6lj8h1uBFLXSsRkhutRP7WryynSn_U1zisITs-hJgjtCfU7YC0ClVWS7OW7ShHuAAYCIukXP6TrZLqq6z3-pJo-QvFWv9VKIgUd8US93X3WSyPs',
-    preco: 'R$ 74,95',
-    estrelas: 4.5,
-    nome: 'Queijo Reino Tirolez 500g',
-    vezes_comprado: 120
-  },
-  {
-    imagem: 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQVpbPMxCUDSolUwklWSpjC5D_E_d4pHxmzC4LkRwg21qnR4Hoop3hDv3hRPprHM0FhvTXNg3qMEXyPx61rkbJQJimWZ36oIgyRjDC4qPRtYgjUD20Jby6N',
-    preco: 'R$ 11,79',
-    estrelas: 4.0,
-    nome: 'Pão Hambúrguer Wickbold 200g',
-    vezes_comprado: 75
-  },
-  {
-    imagem: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ6mCDQr6t6K788RxqufkQ8YWOou8tBB__r1KY2tjIYajgD1E6sNHt4MeTA8ekdGE71dVzdQ7lEcUATXTy2TI_AKcxgsXOGdBm70nrqqVBSs3VY3pZVYYqL4A',
-    preco: 'R$ 73,38',
-    estrelas: 5.0,
-    nome: 'Conjunto Assadeiras Cereja Antiaderente Bege Retangular Alta',
-    vezes_comprado: 200
-  },
-  {
-    imagem: 'https://tupan.agilecdn.com.br/939573_1.jpg?v=36-1518983659',
-    preco: 'R$ 299,90',
-    estrelas: 4.8,
-    nome: 'Gabinete para Banheiro em MDF Suspenso 46x55 com Espelho Hortência Amêndoa White',
-    vezes_comprado: 180
-  }
-];
 
 export default function InicioADM() {
   const navigation = useNavigation();
@@ -98,27 +68,6 @@ export default function InicioADM() {
             </TouchableOpacity>
           ))}
         </View>
-
-        <View style={estilos.linhaTitulo}>
-          <Text style={estilos.conteudo_principal}>Pedidos Populares</Text>
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {imagens_populares.map((item, index) => (
-            <View key={index} style={estilos.cardDestino}>
-              <Image
-                source={{ uri: item.imagem }}
-                style={estilos.imagemDestino}
-                resizeMode="cover"
-              />
-              <View style={estilos.infoCard}>
-                <Text style={estilos.nomeProduto}>{item.nome}</Text>
-                <Text style={estilos.precoProduto}>{item.preco}</Text>
-                <Text style={estilos.estrelasProduto}>{`⭐ ${item.estrelas} - ${item.vezes_comprado} comprados`}</Text>
-              </View>
-            </View>
-          ))}
-        </ScrollView>
-        <View style={{ height: 100 }} />
       </ScrollView>
 
       {/* MENU FIXO INFERIOR */}
