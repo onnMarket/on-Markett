@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextInput,
   TouchableOpacity,
@@ -8,17 +8,30 @@ import {
   Text,
   View,
   Image,
+  ScrollView,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function cadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
   const [foto, setFoto] = useState(null);
   const [categoria, setCategoria] = useState('');
+  const [novaCategoria, setNovaCategoria] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
   const [validade, setValidade] = useState('');
   const [quantidade, setQuantidade] = useState('');
+  const [listaCategorias, setListaCategorias] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://192.168.18.114:3000/categorias')
+      .then((response) => setListaCategorias(response.data))
+      .catch((error) =>
+        console.error('Erro ao carregar categorias:', error)
+      );
+  }, []);
 
   const escolherFoto = () => {
     launchImageLibrary(
@@ -33,94 +46,129 @@ export default function cadastrarProdutos({ navigation }) {
           console.error('Erro:', response.errorMessage);
         } else {
           const image = response.assets[0];
-          setFoto(image); // Você pode usar image.uri ou image.base64
+          setFoto(image);
         }
       }
     );
   };
 
-  function cadastrarProduto() {
-    axios
-      .post('http://localhost:3000/produtos', {
+  const cadastrarProduto = async () => {
+    const categoriaFinal = categoria === '__nova__' ? novaCategoria.trim() : categoria;
+
+    if (!categoriaFinal) {
+      alert('Selecione ou digite uma categoria válida.');
+      return;
+    }
+
+    try {
+      await axios.post('http://192.168.18.114:3000/produtos', {
         nome,
-        foto: foto?.base64, // ou foto.uri se for salvar o link
-        categoria,
+        foto: foto?.base64,
+        categoria: categoriaFinal,
         descricao,
         preco,
         validade,
         quantidade,
-      })
-      .then((response) => {
-        console.log(response.data);
-        alert('Produto cadastrado com sucesso!');
-        navigation.navigate('InicioADM');
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('Erro ao cadastrar Produto.');
       });
-  }
+
+      const categoriaExistente = listaCategorias.find(
+        (cat) => cat.nome.toLowerCase() === categoriaFinal.toLowerCase()
+      );
+
+      if (categoriaExistente) {
+        await axios.patch(`http://192.168.18.114:3000/categorias/${categoriaExistente.id}`, {
+          quantidade: categoriaExistente.quantidade + 1,
+        });
+      } else {
+        await axios.post('http://192.168.18.114:3000/categorias', {
+          nome: categoriaFinal,
+          quantidade: 1,
+        });
+      }
+
+      alert('Produto cadastrado com sucesso!');
+      navigation.navigate('InicioADM');
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao cadastrar produto.');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.formWrapper}>
+          <TextInput
+            placeholder="Nome"
+            value={nome}
+            onChangeText={setNome}
+            style={styles.input}
+          />
 
-      {/* Botão de escolher imagem */}
-      <TouchableOpacity style={styles.botaoFoto} onPress={escolherFoto}>
-        <Text style={styles.textoBotao}>
-          {foto ? 'Alterar Foto' : 'Escolher Foto'}
-        </Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.botaoFoto} onPress={escolherFoto}>
+            <Text style={styles.textoBotao}>
+              {foto ? 'Alterar Foto' : 'Escolher Foto'}
+            </Text>
+          </TouchableOpacity>
 
-      {/* Exibir imagem selecionada */}
-      {foto && (
-        <Image
-          source={{ uri: foto.uri }}
-          style={styles.imagemPreview}
-        />
-      )}
+          {foto && (
+            <Image source={{ uri: foto.uri }} style={styles.imagemPreview} />
+          )}
 
-      <TextInput
-        placeholder="Categoria"
-        value={categoria}
-        onChangeText={setCategoria}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Descrição"
-        value={descricao}
-        onChangeText={setDescricao}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Preço"
-        value={preco}
-        onChangeText={setPreco}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Validade: xx/xx/xxxx"
-        value={validade}
-        onChangeText={setValidade}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Quantidade no Estoque"
-        value={quantidade}
-        onChangeText={setQuantidade}
-        keyboardType="numeric"
-        style={styles.input}
-      />
+          <View style={styles.input}>
+            <Picker
+              selectedValue={categoria}
+              onValueChange={(itemValue) => setCategoria(itemValue)}
+            >
+              <Picker.Item label="Selecione uma categoria" value="" />
+              {listaCategorias.map((cat) => (
+                <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
+              ))}
+              <Picker.Item label="Criar nova categoria..." value="__nova__" />
+            </Picker>
+          </View>
 
-      <TouchableOpacity style={styles.botaoSalvar} onPress={cadastrarProduto}>
-        <Text style={styles.textoBotao}>Salvar</Text>
-      </TouchableOpacity>
+          {categoria === '__nova__' && (
+            <TextInput
+              placeholder="Nova Categoria"
+              value={novaCategoria}
+              onChangeText={setNovaCategoria}
+              style={styles.input}
+            />
+          )}
+
+          <TextInput
+            placeholder="Descrição"
+            value={descricao}
+            onChangeText={setDescricao}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Preço"
+            value={preco}
+            onChangeText={setPreco}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Validade: xx/xx/xxxx"
+            value={validade}
+            onChangeText={setValidade}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Quantidade no Estoque"
+            value={quantidade}
+            onChangeText={setQuantidade}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+
+          <TouchableOpacity style={styles.botaoSalvar} onPress={cadastrarProduto}>
+            <Text style={styles.textoBotao}>Salvar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -129,8 +177,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: 30,
+    alignItems: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+  },
+  formWrapper: {
+    width: '100%',
+    maxWidth: 400,
   },
   input: {
     borderWidth: 1,
@@ -159,6 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
+    marginBottom: 30,
   },
   textoBotao: {
     color: '#fff',

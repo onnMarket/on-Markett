@@ -31,7 +31,7 @@ export default function InicioADM() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/produtos') // 🔁 Troque localhost pelo IP real se for emulador Android
+      .get('http://192.168.18.114:3000/produtos') // 🔁 Troque localhost pelo IP real se for emulador Android
       .then((response) => {
         console.log('Produtos:', response.data);
         setProdutos(response.data);
@@ -238,13 +238,9 @@ const estilos = StyleSheet.create({
     fontSize: 12,
     marginVertical: 4,
   },
-  estrelasProduto: {
-    fontSize: 12,
-    color: '#777',
-  },
   imagemProduto: {
-    width: '100%',
-    height: 150,
+    width: '60%',
+    height: 250,
     borderRadius: 8,
     marginBottom: 10,
   },

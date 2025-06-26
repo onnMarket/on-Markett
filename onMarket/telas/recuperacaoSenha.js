@@ -17,7 +17,7 @@ export default function RecuperacaoSenha({ navigation }) {
     }
 
     try {
-      const response = await axios.get('http://localhost:3000/usuario');
+      const response = await axios.get('http://192.168.18.114:3000/usuario');
       const usuarios = response.data;
       const usuario = usuarios.find(u => u.email === email);
 
@@ -26,7 +26,7 @@ export default function RecuperacaoSenha({ navigation }) {
         return;
       }
 
-      await axios.patch(`http://localhost:3000/usuario/${usuario.id}`, {
+      await axios.patch(`http://192.168.18.114:3000/usuario/${usuario.id}`, {
         senha: novaSenha
       });
 

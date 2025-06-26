@@ -13,7 +13,7 @@ export default function CriarConta({ navigation }) {
   // Função para criar conta
   function criarConta() {
     axios
-      .post("http://localhost:3000/usuario", { // Mudado para o IP do emulador Android
+      .post("http://192.168.18.114:3000/usuario", { // Mudado para o IP do emulador Android
         nome,
         email,
         cpf,

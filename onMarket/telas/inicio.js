@@ -1,9 +1,17 @@
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import React from 'react';
-import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { Avatar } from 'react-native-elements';
 import axios from 'axios';
-
 
 const categorias = [
   { nome: 'Frutas', icone: 'apple', tipo: 'FontAwesome' },
@@ -15,20 +23,6 @@ const categorias = [
   { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
   { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
-
-const [produtos, setProdutos] = useState('');
-
-useEffect(() => {
-  axios.get("http://localhost:3000/produtos")
-    .then(response => {
-      setProdutos(response.data)
-    })
-    .catch(error => {
-      console.error("Erro ao buscar produtos:", error);
-    })
-    
-  })
-
 
 const imagens_populares = [
   {
@@ -62,6 +56,18 @@ const imagens_populares = [
 ];
 
 export default function App() {
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://192.168.18.114:3000/produtos")
+      .then(response => {
+        setProdutos(response.data);
+      })
+      .catch(error => {
+        console.error("Erro ao buscar produtos:", error);
+      });
+  }, []);
+
   return (
     <SafeAreaView style={estilos.container}>
       {/* HEADER */}
@@ -88,13 +94,11 @@ export default function App() {
         </View>
       </View>
 
-
       {/* CONTEÚDO PRINCIPAL COM SCROLL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categoria</Text>
         </View>
-
 
         <View style={estilos.grid}>
           {categorias.map((item, index) => (
@@ -110,7 +114,6 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-
 
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Pedidos Populares</Text>
@@ -134,7 +137,6 @@ export default function App() {
         <View style={{ height: 100 }} />
       </ScrollView>
 
-
       {/* MENU FIXO INFERIOR */}
       <View style={estilos.menu}>
         <TouchableOpacity style={estilos.item}>
@@ -155,7 +157,6 @@ export default function App() {
     </SafeAreaView>
   );
 }
-
 
 const estilos = StyleSheet.create({
   container: {
@@ -199,15 +200,6 @@ const estilos = StyleSheet.create({
     padding: 10,
     borderRadius: 50,
   },
-  bolinhanotificação: {
-    width: 8,
-    height: 8,
-    backgroundColor: '#2AAA53',
-    borderRadius: 4,
-    position: 'absolute',
-    top: 15,
-    left: 15,
-  },
   conteudo: {
     padding: 20,
     marginBottom: 100,
@@ -234,7 +226,7 @@ const estilos = StyleSheet.create({
   },
   circuloIcone: {
     backgroundColor: '#FF9800',
-    borderRadius:8,
+    borderRadius: 8,
     padding: 15,
     marginBottom: 10,
   },
@@ -269,16 +261,6 @@ const estilos = StyleSheet.create({
     fontSize: 12,
     color: '#777',
   },
-  cardRecomendadoVertical: {
-    marginBottom: 20,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  imagemRecomendadoVertical: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
-  },
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -298,5 +280,3 @@ const estilos = StyleSheet.create({
     fontSize: 10,
   },
 });
-
-

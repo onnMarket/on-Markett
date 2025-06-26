@@ -32,7 +32,8 @@
     "react-native-svg": "15.11.2",
     "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "^0.20.0"
+    "react-native-web": "^0.20.0",
+    "@react-native-picker/picker": "2.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
