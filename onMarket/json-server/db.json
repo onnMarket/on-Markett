@@ -25,5 +25,16 @@
       "tipo": "cliente"
     }
   ],
-  "produtos": []
+  "produtos": [
+        {
+      "id": "aa78",
+      "nome": "Feijão",
+      "foto": "Embalado",
+      "categoria": "Embalados",
+      "descricao": "Feijão Macassar Turquesa 1kg",
+      "preco": "10",
+      "validade": "30/10/2026",
+      "quantidade": "150"
+    }
+  ]
 }

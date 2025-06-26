@@ -16,7 +16,7 @@ export default function cadastrarProdutos({ navigation }) {
   // Função para criar conta
   function cadastrarProduto() {
     axios
-      .post("http://localhost:3000/usuario", { // Mudado para o IP do emulador Android
+      .post("http://localhost:3000/produtos", { // Mudado para o IP do emulador Android
         nome,
         foto,
         categoria,
@@ -27,12 +27,12 @@ export default function cadastrarProdutos({ navigation }) {
       })
       .then((response) => {
         console.log(response.data);
-        alert("Usuário cadastrado com sucesso!");
+        alert("Produto cadastrado com sucesso!");
         navigation.navigate('Login'); // Volta para a tela de login
       })
       .catch((error) => {
         console.error(error);
-        alert("Erro ao cadastrar usuário.");
+        alert("Erro ao cadastrar Produto.");
       });
   }
 

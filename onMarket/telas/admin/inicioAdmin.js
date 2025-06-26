@@ -1,8 +1,9 @@
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import React from 'react';
-import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const categorias = [
   { nome: 'Frutas', icone: 'apple', tipo: 'FontAwesome' },
@@ -15,9 +16,19 @@ const categorias = [
   { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
 
-
 export default function InicioADM() {
   const navigation = useNavigation();
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/produtos') // <-- Troque para IP da sua máquina se necessário
+      .then(response => {
+        setProdutos(response.data);
+      })
+      .catch(error => {
+        console.error("Erro ao buscar produtos:", error);
+      });
+  }, []);
 
   return (
     <SafeAreaView style={estilos.container}>
@@ -38,20 +49,15 @@ export default function InicioADM() {
             <MaterialIcons name="search" size={24} color="gray" />
           </View>
           <TouchableOpacity style={estilos.notificacao}>
-            <TouchableOpacity style={estilos.item}>
-              <MaterialIcons name="shopping-cart" size={28} color="#fff" />
-            </TouchableOpacity>
+            <MaterialIcons name="shopping-cart" size={28} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* CONTEÚDO PRINCIPAL COM SCROLL */}
+      {/* CONTEÚDO PRINCIPAL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Produtos Cadastrados</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
-            <MaterialIcons name="add-box" size={28} color="#000000" />
-          </TouchableOpacity>
         </View>
 
         <View style={estilos.grid}>
@@ -68,6 +74,29 @@ export default function InicioADM() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* PRODUTOS EM ESTOQUE */}
+        <View style={{ marginTop: 20 }}>
+          <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
+            <MaterialIcons name="add-box" size={28} color="#000000" />
+          </TouchableOpacity>
+          {produtos.length === 0 ? (
+            <Text style={{ marginTop: 10 }}>Nenhum produto encontrado.</Text>
+          ) : (
+            produtos.map(produto => (
+              <View key={produto.id} style={estilos.cardRecomendadoVertical}>
+                <View style={{ backgroundColor: '#FFF', padding: 15, borderRadius: 8 }}>
+                  <Text style={estilos.nomeProduto}>{produto.nome}</Text>
+                  <Text style={estilos.precoProduto}>R$ {produto.preco}</Text>
+                  <Text style={estilos.estrelasProduto}>Qtd: {produto.quantidade}</Text>
+                  <Text style={estilos.estrelasProduto}>Validade: {produto.validade}</Text>
+                  <Text style={estilos.estrelasProduto}>{produto.descricao}</Text>
+                </View>
+              </View>
+            ))
+          )}
+        </View>
       </ScrollView>
 
       {/* MENU FIXO INFERIOR */}
@@ -80,12 +109,10 @@ export default function InicioADM() {
           <MaterialIcons name="home" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Início</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={estilos.item}>
           <MaterialIcons name="ballot" size={28} color="#fff" />
           <Text style={estilos.textoItem}>Pedidos</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={estilos.item}>
           <MaterialIcons name="groups" size={28} color="#fff" />
           <Text style={estilos.textoItem}>Clientes</Text>
@@ -137,15 +164,6 @@ const estilos = StyleSheet.create({
     padding: 10,
     borderRadius: 50,
   },
-  bolinhanotificação: {
-    width: 8,
-    height: 8,
-    backgroundColor: '#2AAA53',
-    borderRadius: 4,
-    position: 'absolute',
-    top: 15,
-    left: 15,
-  },
   conteudo: {
     padding: 20,
     marginBottom: 100,
@@ -181,19 +199,6 @@ const estilos = StyleSheet.create({
     fontSize: 14,
     color: '#000',
   },
-  cardDestino: {
-    marginRight: 15,
-    width: 150,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  imagemDestino: {
-    width: '100%',
-    height: 120,
-  },
-  infoCard: {
-    padding: 10,
-  },
   nomeProduto: {
     fontWeight: 'bold',
     fontSize: 14,
@@ -211,11 +216,6 @@ const estilos = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 8,
     overflow: 'hidden',
-  },
-  imagemRecomendadoVertical: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
   },
   menu: {
     flexDirection: 'row',
