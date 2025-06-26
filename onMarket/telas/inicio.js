@@ -2,6 +2,7 @@ import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import axios from 'axios';
 
 
 const categorias = [
@@ -14,6 +15,19 @@ const categorias = [
   { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
   { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
 ];
+
+const [produtos, setProdutos] = useState('');
+
+useEffect(() => {
+  axios.get("http://localhost:3000/produtos")
+    .then(response => {
+      setProdutos(response.data)
+    })
+    .catch(error => {
+      console.error("Erro ao buscar produtos:", error);
+    })
+    
+  })
 
 
 const imagens_populares = [
