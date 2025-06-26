@@ -23,10 +23,18 @@
       "cpf": "00000000002",
       "senha": "123456789",
       "tipo": "cliente"
+    },
+    {
+      "id": "20c0",
+      "nome": "oi",
+      "email": "oi@gmail.com",
+      "cpf": "1",
+      "senha": "1",
+      "tipo": "cliente"
     }
   ],
   "produtos": [
-        {
+    {
       "id": "aa78",
       "nome": "Feijão",
       "foto": "Embalado",
@@ -35,6 +43,16 @@
       "preco": "10",
       "validade": "30/10/2026",
       "quantidade": "150"
+    },
+    {
+      "id": "6b04",
+      "nome": "Bolacha",
+      "foto": "",
+      "categoria": "Frio",
+      "descricao": "200g",
+      "preco": "5",
+      "validade": "10/10/2010",
+      "quantidade": "15"
     }
   ]
 }

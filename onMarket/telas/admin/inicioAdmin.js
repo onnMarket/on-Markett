@@ -106,6 +106,10 @@ export default function InicioADM() {
           <Text style={estilos.textoItem}>Relatórios</Text>
         </TouchableOpacity>
         <TouchableOpacity style={estilos.item}>
+          <MaterialIcons name="badge" size={28} color={"#F5F5F5"} />
+          <Text style={estilos.textoItem}>Membros</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={estilos.item}>
           <MaterialIcons name="home" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Início</Text>
         </TouchableOpacity>
