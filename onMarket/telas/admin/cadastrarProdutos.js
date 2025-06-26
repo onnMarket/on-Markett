@@ -1,38 +1,63 @@
 import axios from 'axios';
-import React, { useLayoutEffect, useState } from 'react';
-import { TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Text } from 'react-native';
-
+import React, { useState } from 'react';
+import {
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  View,
+  Image,
+} from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function cadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
-  const [foto, setFoto] = useState('');
+  const [foto, setFoto] = useState(null);
   const [categoria, setCategoria] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
   const [validade, setValidade] = useState('');
   const [quantidade, setQuantidade] = useState('');
 
+  const escolherFoto = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: true,
+      },
+      (response) => {
+        if (response.didCancel) {
+          console.log('Usuário cancelou a seleção de imagem');
+        } else if (response.errorCode) {
+          console.error('Erro:', response.errorMessage);
+        } else {
+          const image = response.assets[0];
+          setFoto(image); // Você pode usar image.uri ou image.base64
+        }
+      }
+    );
+  };
 
-  // Função para criar conta
   function cadastrarProduto() {
     axios
-      .post("http://localhost:3000/produtos", { // Mudado para o IP do emulador Android
+      .post('http://localhost:3000/produtos', {
         nome,
-        foto,
+        foto: foto?.base64, // ou foto.uri se for salvar o link
         categoria,
         descricao,
         preco,
         validade,
-        quantidade
+        quantidade,
       })
       .then((response) => {
         console.log(response.data);
-        alert("Produto cadastrado com sucesso!");
-        navigation.navigate('Login'); // Volta para a tela de login
+        alert('Produto cadastrado com sucesso!');
+        navigation.navigate('InicioADM');
       })
       .catch((error) => {
         console.error(error);
-        alert("Erro ao cadastrar Produto.");
+        alert('Erro ao cadastrar Produto.');
       });
   }
 
@@ -44,12 +69,22 @@ export default function cadastrarProdutos({ navigation }) {
         onChangeText={setNome}
         style={styles.input}
       />
-      <TextInput
-        placeholder="Foto"
-        value={categoria}
-        onChangeText={setFoto}
-        style={styles.input}
-      />
+
+      {/* Botão de escolher imagem */}
+      <TouchableOpacity style={styles.botaoFoto} onPress={escolherFoto}>
+        <Text style={styles.textoBotao}>
+          {foto ? 'Alterar Foto' : 'Escolher Foto'}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Exibir imagem selecionada */}
+      {foto && (
+        <Image
+          source={{ uri: foto.uri }}
+          style={styles.imagemPreview}
+        />
+      )}
+
       <TextInput
         placeholder="Categoria"
         value={categoria}
@@ -60,7 +95,6 @@ export default function cadastrarProdutos({ navigation }) {
         placeholder="Descrição"
         value={descricao}
         onChangeText={setDescricao}
-        keyboardType="numeric"
         style={styles.input}
       />
       <TextInput
@@ -84,14 +118,12 @@ export default function cadastrarProdutos({ navigation }) {
         style={styles.input}
       />
 
-
       <TouchableOpacity style={styles.botaoSalvar} onPress={cadastrarProduto}>
         <Text style={styles.textoBotao}>Salvar</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -108,17 +140,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 15,
   },
+  botaoFoto: {
+    backgroundColor: '#2196f3',
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  imagemPreview: {
+    width: '100%',
+    height: 200,
+    marginBottom: 15,
+    borderRadius: 10,
+  },
   botaoSalvar: {
     backgroundColor: '#4caf50',
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
-   
   },
   textoBotao: {
-    color: '#212121',
-    fontSize: 20,
+    color: '#fff',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });
