@@ -1,6 +1,15 @@
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -13,7 +22,7 @@ const categorias = [
   { nome: 'Higiene', icone: 'shower', tipo: 'FontAwesome' },
   { nome: 'Descartáveis', icone: 'trash', tipo: 'FontAwesome' },
   { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
-  { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' }
+  { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' },
 ];
 
 export default function InicioADM() {
@@ -21,12 +30,14 @@ export default function InicioADM() {
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/produtos') // <-- Troque para IP da sua máquina se necessário
-      .then(response => {
+    axios
+      .get('http://localhost:3000/produtos') // 🔁 Troque localhost pelo IP real se for emulador Android
+      .then((response) => {
+        console.log('Produtos:', response.data);
         setProdutos(response.data);
       })
-      .catch(error => {
-        console.error("Erro ao buscar produtos:", error);
+      .catch((error) => {
+        console.error('Erro ao buscar produtos:', error);
       });
   }, []);
 
@@ -77,16 +88,31 @@ export default function InicioADM() {
 
         {/* PRODUTOS EM ESTOQUE */}
         <View style={{ marginTop: 20 }}>
-          <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
-            <MaterialIcons name="add-box" size={28} color="#000000" />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
+              <MaterialIcons name="add-box" size={28} color="#000000" />
+            </TouchableOpacity>
+          </View>
+
           {produtos.length === 0 ? (
             <Text style={{ marginTop: 10 }}>Nenhum produto encontrado.</Text>
           ) : (
-            produtos.map(produto => (
+            produtos.map((produto) => (
               <View key={produto.id} style={estilos.cardRecomendadoVertical}>
                 <View style={{ backgroundColor: '#FFF', padding: 15, borderRadius: 8 }}>
+                  {/* IMAGEM DO PRODUTO */}
+                  {produto.foto && (
+                    <Image
+                      source={{
+                        uri: produto.foto.startsWith('data:') || produto.foto.startsWith('http')
+                          ? produto.foto
+                          : `data:image/jpeg;base64,${produto.foto}`,
+                      }}
+                      style={estilos.imagemProduto}
+                      resizeMode="cover"
+                    />
+                  )}
                   <Text style={estilos.nomeProduto}>{produto.nome}</Text>
                   <Text style={estilos.precoProduto}>R$ {produto.preco}</Text>
                   <Text style={estilos.estrelasProduto}>Qtd: {produto.quantidade}</Text>
@@ -102,11 +128,11 @@ export default function InicioADM() {
       {/* MENU FIXO INFERIOR */}
       <View style={estilos.menu}>
         <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="analytics" size={28} color={"#F5F5F5"} />
+          <MaterialIcons name="analytics" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Relatórios</Text>
         </TouchableOpacity>
         <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="badge" size={28} color={"#F5F5F5"} />
+          <MaterialIcons name="badge" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Membros</Text>
         </TouchableOpacity>
         <TouchableOpacity style={estilos.item}>
@@ -215,6 +241,12 @@ const estilos = StyleSheet.create({
   estrelasProduto: {
     fontSize: 12,
     color: '#777',
+  },
+  imagemProduto: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   cardRecomendadoVertical: {
     marginBottom: 20,
