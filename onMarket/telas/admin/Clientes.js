@@ -5,6 +5,8 @@ import { Table, Row, Rows } from 'react-native-table-component';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import MenuInferiorADM from '../navigation-bar/navigationBar_admin'
+
 const Clientes = () => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,28 +53,7 @@ const Clientes = () => {
     </View>
   </View>
 
-  <View style={styles.menu}>
-    <TouchableOpacity style={styles.item}>
-      <MaterialIcons name="analytics" size={28} color="#F5F5F5" />
-      <Text style={styles.textoItem}>Relatórios</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.item}>
-      <MaterialIcons name="badge" size={28} color="#F5F5F5" />
-      <Text style={styles.textoItem}>Membros</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.item}>
-      <MaterialIcons name="home" size={28} color="#F5F5F5" />
-      <Text style={styles.textoItem}>Início</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.item}>
-      <MaterialIcons name="ballot" size={28} color="#fff" />
-      <Text style={styles.textoItem}>Pedidos</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Clientes')}>
-      <MaterialIcons name="groups" size={28} color="#fff" />
-      <Text style={styles.textoItem}>Clientes</Text>
-    </TouchableOpacity>
-  </View>
+      <MenuInferiorADM navigation={navigation}/>
 </SafeAreaView>
 
   );
