@@ -71,12 +71,8 @@ export default function CadastrarProdutos({ navigation }) {
     }
 
     try {
-<<<<<<<<< Temporary merge branch 1
       // Cadastrar produto
       await axios.post('https://on-markett-2.onrender.com/api/produtos', {
-=========
-      await axios.post('http://10.31.89.242:3000/produtos', {
->>>>>>>>> Temporary merge branch 2
         nome,
         foto: foto?.base64,
         categoria: categoriaFinal,
@@ -92,19 +88,11 @@ export default function CadastrarProdutos({ navigation }) {
       );
 
       if (categoriaExistente) {
-<<<<<<<<< Temporary merge branch 1
         await axios.put(`https://on-markett-2.onrender.com/api/categorias/${categoriaExistente.id}`, {
           quantidade: categoriaExistente.quantidade + 1,
         });
       } else {
         await axios.post('https://on-markett-2.onrender.com/api/categorias', {
-=========
-        await axios.patch(`http://10.31.89.242:3000/categorias/${categoriaExistente.id}`, {
-          quantidade: categoriaExistente.quantidade + 1,
-        });
-      } else {
-        await axios.post('http://10.31.89.242:3000/categorias', {
->>>>>>>>> Temporary merge branch 2
           nome: categoriaFinal,
           quantidade: 1,
           icone: '', // pode ajustar se quiser ícone padrão
