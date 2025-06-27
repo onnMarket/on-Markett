@@ -144,7 +144,7 @@ export default function InicioADM() {
           <MaterialIcons name="ballot" size={28} color="#fff" />
           <Text style={estilos.textoItem}>Pedidos</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={estilos.item}>
+        <TouchableOpacity style={estilos.item} onPress={() => navigation.navigate('Clientes')}>
           <MaterialIcons name="groups" size={28} color="#fff" />
           <Text style={estilos.textoItem}>Clientes</Text>
         </TouchableOpacity>
