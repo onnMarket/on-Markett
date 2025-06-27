@@ -26,7 +26,7 @@ export default function CadastrarProdutos({ navigation }) {
 
   useEffect(() => {
     axios
-      .get('http://192.168.18.114:3000/categorias')
+      .get('http://localhost:3000/categorias')
       .then((response) => setListaCategorias(response.data))
       .catch((error) =>
         console.error('Erro ao carregar categorias:', error)
@@ -71,7 +71,7 @@ export default function CadastrarProdutos({ navigation }) {
     }
 
     try {
-      await axios.post('http://192.168.18.114:3000/produtos', {
+      await axios.post('http://10.31.89.242:3000/produtos', {
         nome,
         foto: foto?.base64,
         categoria: categoriaFinal,
@@ -86,11 +86,11 @@ export default function CadastrarProdutos({ navigation }) {
       );
 
       if (categoriaExistente) {
-        await axios.patch(`http://192.168.18.114:3000/categorias/${categoriaExistente.id}`, {
+        await axios.patch(`http://10.31.89.242:3000/categorias/${categoriaExistente.id}`, {
           quantidade: categoriaExistente.quantidade + 1,
         });
       } else {
-        await axios.post('http://192.168.18.114:3000/categorias', {
+        await axios.post('http://10.31.89.242:3000/categorias', {
           nome: categoriaFinal,
           quantidade: 1,
         });

@@ -10,7 +10,7 @@ const Clientes = () => {
   const tableHead = ['ID', 'Nome completo', 'E-mail', 'CPF'];
 
   useEffect(() => {
-    axios.get('http://192.168.18.114:3000/usuario')
+    axios.get('http://localhost:3000/usuario')
       .then(response => {
         if (Array.isArray(response.data)){
           const usuariosClientes = response.data.filter(usuario => usuario.tipo === 'cliente')

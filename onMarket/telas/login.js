@@ -9,7 +9,7 @@ export default function Login({ navigation }) {
   const [senha, setSenha] = useState('');
 
 function login() {
-  axios.get('http://192.168.18.114:3000/usuario')
+  axios.get('http://localhost:3000/usuario')
     .then((response) => {
       const usuarios = response.data;
       const usuario = usuarios.find((u) => u.email === email && u.senha === senha);

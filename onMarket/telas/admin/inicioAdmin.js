@@ -23,10 +23,10 @@ export default function InicioADM() {
     let produtosData = [];
     let categoriasData = [];
 
-    axios.get('http://192.168.18.114:3000/produtos')
+    axios.get('http://localhost:3000/produtos')
       .then((resProdutos) => {
         produtosData = resProdutos.data;
-        return axios.get('http://192.168.18.114:3000/categorias');
+        return axios.get('http://localhost:3000/categorias');
       })
       .then((resCategorias) => {
         categoriasData = resCategorias.data;

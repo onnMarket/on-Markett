@@ -53,10 +53,10 @@ export default function App() {
     let categoriasData = [];
 
     // Busca produtos e categorias do backend
-    axios.get('http://192.168.18.114:3000/produtos')
+    axios.get('http://localhost:3000/produtos')
       .then((resProdutos) => {
         produtosData = resProdutos.data;
-        return axios.get('http://192.168.18.114:3000/categorias');
+        return axios.get('http://localhost:3000/categorias');
       })
       .then((resCategorias) => {
         categoriasData = resCategorias.data;
