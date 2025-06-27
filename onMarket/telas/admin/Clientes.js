@@ -1,4 +1,4 @@
-/*import axios from 'axios';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
@@ -12,7 +12,12 @@ const Clientes = () => {
   useEffect(() => {
     axios.get('http://192.168.18.114:3000/usuario')
       .then(response => {
-        setClientes(response.data);
+        if (Array.isArray(response.data)){
+          const usuariosClientes = response.data.filter(usuario => usuario.tipo === 'cliente')
+        setClientes(usuariosClientes);
+      }else{
+        console.error("Resposta inesperada:", response.data)
+      }
         setLoading(false);
       })
       .catch(error => {
@@ -51,4 +56,3 @@ const styles = StyleSheet.create({
 });
 
 export default Clientes;
-*/
