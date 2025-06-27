@@ -60,6 +60,15 @@
       "preco": 5,
       "validade": "0",
       "quantidade": 100
+    },
+    {
+      "id": "8ea7",
+      "nome": "Feijão ",
+      "categoria": "Embalados",
+      "descricao": "feijão carioca",
+      "preco": 10,
+      "validade": "15/05/2025",
+      "quantidade": 100
     }
   ],
   "categorias": [
@@ -181,6 +190,13 @@
       "icone": "home",
       "tipo": "MaterialIcons",
       "quantidade": 0
+    },
+    {
+      "id": "18",
+      "nome": "Embalados",
+      "icone": "orders",
+      "tipo": "MaterialIcons",
+      "quantidade": 1
     }
   ]
 }
