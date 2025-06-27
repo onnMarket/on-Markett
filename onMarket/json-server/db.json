@@ -4,72 +4,12 @@
       "id": "8c21",
       "nome": "Mateus Juan",
       "email": "mjhs2@discente.ifpe.edu.br",
-      "tipo": "admin",
+      "tipo": "adm",
       "cpf": "0000000001",
       "senha": "123456789"
-    },
-    {
-      "id": "29f9",
-      "nome": "aaa",
-      "email": "aa",
-      "cpf": "aa",
-      "senha": "a",
-      "tipo": "cliente"
-    },
-    {
-      "id": "692f",
-      "nome": "AL.JUAN",
-      "email": "juanmateus565@gmail.com",
-      "cpf": "00000000002",
-      "senha": "123456789",
-      "tipo": "cliente"
-    },
-    {
-      "id": "20c0",
-      "nome": "oi",
-      "email": "oi@gmail.com",
-      "cpf": "1",
-      "senha": "1",
-      "tipo": "cliente"
     }
   ],
   "produtos": [
-    {
-      "id": "8c47",
-      "nome": "Banana",
-      "categoria": "Frutas",
-      "descricao": "Prata",
-      "preco": 2,
-      "validade": "",
-      "quantidade": 50
-    },
-    {
-      "id": "7a3f",
-      "nome": "Pão de Hambúrguer ",
-      "categoria": "Padaria",
-      "descricao": "Pocote com 9 unidsde",
-      "preco": 18,
-      "validade": "30/07/2025",
-      "quantidade": 100
-    },
-    {
-      "id": "2275",
-      "nome": "Alface",
-      "categoria": "Verduras",
-      "descricao": "Verde",
-      "preco": 5,
-      "validade": "0",
-      "quantidade": 100
-    },
-    {
-      "id": "8ea7",
-      "nome": "Feijão ",
-      "categoria": "Embalados",
-      "descricao": "feijão carioca",
-      "preco": 10,
-      "validade": "15/05/2025",
-      "quantidade": 100
-    }
   ],
   "categorias": [
     {

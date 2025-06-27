@@ -33,10 +33,8 @@ export default function InicioADM() {
       .then((resCategorias) => {
         categoriasData = resCategorias.data;
 
-        // Cria um Set com os nomes das categorias presentes nos produtos
         const nomesCategoriasComProdutos = new Set(produtosData.map(p => p.categoria));
 
-        // Filtra categorias que possuem produtos e ordena alfabeticamente
         const categoriasComProdutos = categoriasData
           .filter(cat => nomesCategoriasComProdutos.has(cat.nome))
           .sort((a, b) => a.nome.localeCompare(b.nome));
@@ -102,10 +100,10 @@ export default function InicioADM() {
           {produtos.length === 0 ? (
             <Text style={{ marginTop: 10 }}>Nenhum produto encontrado.</Text>
           ) : (
-            produtos.map((produto) => (
-              <View key={produto.id} style={estilos.cardRecomendadoVertical}>
-                <View style={{ backgroundColor: '#FFF', padding: 15, borderRadius: 8 }}>
-                  {produto.foto && (
+            <View style={estilos.gridProdutos}>
+              {produtos.map((produto) => (
+                <View key={produto.id} style={estilos.cardProduto}>
+                  {produto.foto ? (
                     <Image
                       source={{
                         uri: produto.foto.startsWith('data:') || produto.foto.startsWith('http')
@@ -115,21 +113,31 @@ export default function InicioADM() {
                       style={estilos.imagemProduto}
                       resizeMode="cover"
                     />
+                  ) : (
+                    <View
+                      style={[
+                        estilos.imagemProduto,
+                        { backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' },
+                      ]}
+                    >
+                      <Text>Sem imagem</Text>
+                    </View>
                   )}
-                  <Text style={estilos.nomeProduto}>{produto.nome}</Text>
-                  <Text style={estilos.precoProduto}>R$ {produto.preco}</Text>
-                  <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
-                  <Text style={estilos.estrelasProduto}>Validade: {produto.validade}</Text>
-                  <Text style={estilos.estrelasProduto}>{produto.descricao}</Text>
+                  <View style={estilos.infoCard}>
+                    <Text style={estilos.nomeProduto}>{produto.nome}</Text>
+                    <Text style={estilos.precoProduto}>R$ {parseFloat(produto.preco).toFixed(2)}</Text>
+                    <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
+                    <Text style={estilos.estrelasProduto}>Validade: {produto.validade}</Text>
+                  </View>
                 </View>
-              </View>
-            ))
+              ))}
+            </View>
           )}
         </View>
       </ScrollView>
 
       {/* MENU FIXO INFERIOR */}
-      <MenuInferiorADM navigation={navigation}/>
+      <MenuInferiorADM navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -171,11 +179,6 @@ const estilos = StyleSheet.create({
     color: '#000',
     marginRight: 10,
   },
-  notificacao: {
-    position: 'relative',
-    padding: 10,
-    borderRadius: 50,
-  },
   conteudo: {
     padding: 20,
     marginBottom: 100,
@@ -211,28 +214,38 @@ const estilos = StyleSheet.create({
     fontSize: 14,
     color: '#000',
   },
+  gridProdutos: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  cardProduto: {
+    width: '48%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 15,
+    overflow: 'hidden',
+    elevation: 2,
+  },
+  imagemProduto: {
+    width: '100%',
+    height: 150,
+  },
+  infoCard: {
+    padding: 10,
+  },
   nomeProduto: {
     fontWeight: 'bold',
     fontSize: 14,
+    marginBottom: 4,
   },
   precoProduto: {
     color: '#2AAA53',
-    fontSize: 12,
-    marginVertical: 4,
-  },
-  imagemProduto: {
-    width: '60%',
-    height: 250,
-    borderRadius: 8,
-    marginBottom: 10,
+    fontSize: 13,
+    marginBottom: 4,
   },
   estrelasProduto: {
     fontSize: 12,
-    color: '#555',
-  },
-  cardRecomendadoVertical: {
-    marginBottom: 20,
-    borderRadius: 8,
-    overflow: 'hidden',
+    color: '#777',
   },
 });
