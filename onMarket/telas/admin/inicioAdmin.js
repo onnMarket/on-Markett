@@ -1,18 +1,18 @@
-import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
+  Image,
   SafeAreaView,
-  View,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  Image,
+  View,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin'
 
@@ -25,10 +25,10 @@ export default function InicioADM() {
     let produtosData = [];
     let categoriasData = [];
 
-    axios.get('http://localhost:3000/produtos')
+    axios.get('https://on-markett-2.onrender.com/api/produtos')
       .then((resProdutos) => {
         produtosData = resProdutos.data;
-        return axios.get('http://localhost:3000/categorias');
+        return axios.get('https://on-markett-2.onrender.com/api/categorias');
       })
       .then((resCategorias) => {
         categoriasData = resCategorias.data;
@@ -118,7 +118,7 @@ export default function InicioADM() {
                   )}
                   <Text style={estilos.nomeProduto}>{produto.nome}</Text>
                   <Text style={estilos.precoProduto}>R$ {produto.preco}</Text>
-                  <Text style={estilos.estrelasProduto}>Qtd: {produto.quantidade}</Text>
+                  <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
                   <Text style={estilos.estrelasProduto}>Validade: {produto.validade}</Text>
                   <Text style={estilos.estrelasProduto}>{produto.descricao}</Text>
                 </View>
@@ -193,12 +193,12 @@ const estilos = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start', // alinhado à esquerda para itens mais próximos
+    justifyContent: 'flex-start',
   },
   itemCategoria: {
     width: '22%',
     alignItems: 'center',
-    marginBottom: 8, // diminui o espaçamento vertical entre categorias
+    marginBottom: 8,
   },
   circuloIcone: {
     backgroundColor: '#FF9800',

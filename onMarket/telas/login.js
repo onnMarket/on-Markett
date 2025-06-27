@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -8,30 +8,33 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-function login() {
-  axios.get('http://localhost:3000/usuario')
-    .then((response) => {
-      const usuarios = response.data;
-      const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
-      
-      if (usuario) {
-        if (usuario.tipo === 'admin') {
-          navigation.navigate('InicioADM'); // redireciona para tela do admin
-        } else if (usuario.tipo === 'cliente') {
-          navigation.navigate('Inicio'); // redireciona para tela do cliente
-        } else {
-          Alert.alert('Erro', 'Tipo de usuário desconhecido!');
-        }
-      } else {
-        Alert.alert('Erro', 'Email ou senha inválidos!');
-      }
-    })
-    .catch((error) => {
-      console.error('Erro ao conectar com o servidor:', error.message);
-      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
-    });
-}
+  async function login() {
+    if (!email || !senha) {
+      Alert.alert('Erro', 'Preencha todos os campos.');
+      return;
+    }
 
+    try {
+      const response = await axios.post('https://on-markett-2.onrender.com/api/login', {
+        email,
+        senha,
+      });
+
+      const { user } = response.data;
+
+      if (user.tipo === 'adm') {
+        navigation.navigate('InicioADM');
+      } else if (user.tipo === 'cliente') {
+        navigation.navigate('Inicio');
+      } else {
+        Alert.alert('Erro', 'Tipo de usuário desconhecido!');
+      }
+    } catch (error) {
+      const mensagem = error?.response?.data?.error || 'Erro ao realizar login.';
+      Alert.alert('Erro', mensagem);
+      console.error('Erro no login:', mensagem);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>

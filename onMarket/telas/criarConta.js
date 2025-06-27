@@ -1,7 +1,13 @@
 import axios from 'axios';
-import React, { useLayoutEffect, useState } from 'react';
-import { TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Text } from 'react-native';
-
+import { useState } from 'react';
+import {
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 
 export default function CriarConta({ navigation }) {
   const [nome, setNome] = useState('');
@@ -9,26 +15,34 @@ export default function CriarConta({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  // Validação básica antes de enviar
+  const validarCampos = () => {
+    if (!nome || !cpf || !email || !senha) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      return false;
+    }
+    return true;
+  };
 
-  // Função para criar conta
-  function criarConta() {
-    axios
-      .post("http://localhost:3000/usuario", { // Mudado para o IP do emulador Android
+  async function criarConta() {
+    if (!validarCampos()) return;
+
+    try {
+      const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
         nome,
         email,
         cpf,
         senha,
-        tipo: 'cliente', // Definindo o tipo como cliente
-      })
-      .then((response) => {
-        console.log(response.data);
-        alert("Usuário cadastrado com sucesso!");
-        navigation.navigate('Login'); // Volta para a tela de login
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Erro ao cadastrar usuário.");
+        tipo: 'cliente',
       });
+
+      console.log(response.data);
+      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error("Erro no cadastro:", error?.response?.data || error.message);
+      Alert.alert("Erro", error?.response?.data?.error || "Erro ao cadastrar usuário.");
+    }
   }
 
   return (
@@ -45,6 +59,7 @@ export default function CriarConta({ navigation }) {
         onChangeText={setEmail}
         keyboardType="email-address"
         style={styles.input}
+        autoCapitalize="none"
       />
       <TextInput
         placeholder="CPF"
@@ -61,14 +76,12 @@ export default function CriarConta({ navigation }) {
         style={styles.input}
       />
 
-
       <TouchableOpacity style={styles.botaoSalvar} onPress={criarConta}>
         <Text style={styles.textoBotao}>Salvar</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -84,18 +97,18 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 15,
+    backgroundColor: '#fff',
   },
   botaoSalvar: {
     backgroundColor: '#4caf50',
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
-   
   },
   textoBotao: {
-    color: '#212121',
-    fontSize: 20,
+    color: '#fff',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });
