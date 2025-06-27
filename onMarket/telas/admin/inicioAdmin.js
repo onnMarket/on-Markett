@@ -127,7 +127,6 @@ export default function InicioADM() {
                     <Text style={estilos.nomeProduto}>{produto.nome}</Text>
                     <Text style={estilos.precoProduto}>R$ {parseFloat(produto.preco).toFixed(2)}</Text>
                     <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
-                    <Text style={estilos.estrelasProduto}>Validade: {produto.validade}</Text>
                   </View>
                 </View>
               ))}

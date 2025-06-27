@@ -9,6 +9,7 @@ import Inicio from "./telas/inicio";
 import InicioADM from "./telas/admin/inicioAdmin";
 import CadastrarProdutos from "./telas/admin/cadastrarProdutos";
 import Clientes from "./telas/admin/Clientes";
+import Membros from "./telas/admin/Membros";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,11 @@ export default function App() {
         <Stack.Screen
           name="Clientes"
           component={Clientes}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Membros"
+          component={Membros}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
