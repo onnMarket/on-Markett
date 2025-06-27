@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
-import MenuInferiorADM from '../navigation-bar/navigationBar_admin'
+import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
 
 export default function InicioADM() {
   const navigation = useNavigation();
