@@ -1,71 +1,49 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function RecuperacaoSenha({ navigation }) {
   const [email, setEmail] = useState('');
-  const [novaSenha, setNovaSenha] = useState('');
-  const [repetirSenha, setRepetirSenha] = useState('');
 
-  const atualizarSenha = async () => {
-    // 🔴 ALERTA caso as senhas sejam diferentes
-    if (novaSenha !== repetirSenha) {
-      Alert.alert('Senhas diferentes', 'A senha e a confirmação não coincidem.');
+  const enviarRecuperacao = async () => {
+    if (!email) {
+      Alert.alert('Erro', 'Por favor, informe seu e-mail.');
       return;
     }
 
     try {
-      const response = await axios.get('http://192.168.18.114:3000/usuario');
-      const usuarios = response.data;
-      const usuario = usuarios.find(u => u.email === email);
-
-      if (!usuario) {
-        alert('Erro', 'Usuário não encontrado.');
-        return;
-      }
-
-      await axios.patch(`http://192.168.18.114:3000/usuario/${usuario.id}`, {
-        senha: novaSenha
+      const response = await axios.post('https://on-markett-2.onrender.com/api/users/resetSenha', {
+        email
       });
 
-      alert('Sucesso', 'Senha atualizada com sucesso!');
-      navigation.navigate('Login');
+      Alert.alert(
+        'Sucesso',
+        'Uma nova senha foi enviada para seu e-mail.',
+        [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+      );
     } catch (error) {
-      console.error(error);
-      alert('Erro', 'Erro ao atualizar a senha.');
+      console.error('Erro ao enviar recuperação de senha:', error);
+      const errorMsg = error?.response?.data?.error || 'Erro ao enviar a nova senha.';
+      Alert.alert('Erro', errorMsg);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Input
-        placeholder="Email"
+        placeholder="Digite seu e-mail"
         leftIcon={<MaterialIcons name="email" size={24} color="black" />}
         containerStyle={styles.inputContainer}
         value={email}
         onChangeText={setEmail}
-      />
-      <Input
-        placeholder="Nova senha"
-        leftIcon={<MaterialIcons name="lock" size={24} color="black" />}
-        containerStyle={styles.inputContainer}
-        secureTextEntry
-        value={novaSenha}
-        onChangeText={setNovaSenha}
-      />
-      <Input
-        placeholder="Repita a nova senha"
-        leftIcon={<MaterialIcons name="lock" size={24} color="black" />}
-        containerStyle={styles.inputContainer}
-        secureTextEntry
-        value={repetirSenha}
-        onChangeText={setRepetirSenha}
+        autoCapitalize="none"
+        keyboardType="email-address"
       />
 
-      <TouchableOpacity style={styles.botao_1} onPress={atualizarSenha}>
-        <Text style={styles.texto}>Redefinir Senha</Text>
+      <TouchableOpacity style={styles.botao_1} onPress={enviarRecuperacao}>
+        <Text style={styles.texto}>Enviar Nova Senha</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -90,8 +68,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   texto: {
-    color: '#212121',
+    color: '#fff',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 18,
   },
 });

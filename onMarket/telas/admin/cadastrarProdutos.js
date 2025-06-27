@@ -1,16 +1,16 @@
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Text,
   View,
-  Image,
-  ScrollView,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function CadastrarProdutos({ navigation }) {
@@ -26,7 +26,7 @@ export default function CadastrarProdutos({ navigation }) {
 
   useEffect(() => {
     axios
-      .get('http://192.168.18.114:3000/categorias')
+      .get('https://on-markett-2.onrender.com/api/categorias') // rota corrigida
       .then((response) => setListaCategorias(response.data))
       .catch((error) =>
         console.error('Erro ao carregar categorias:', error)
@@ -71,28 +71,32 @@ export default function CadastrarProdutos({ navigation }) {
     }
 
     try {
-      await axios.post('http://192.168.18.114:3000/produtos', {
+      // Cadastrar produto
+      await axios.post('https://on-markett-2.onrender.com/api/produtos', {
         nome,
         foto: foto?.base64,
         categoria: categoriaFinal,
         descricao,
         preco: parseFloat(preco),
         validade,
-        quantidade: parseInt(quantidade),
+        quantidade_estoque: parseInt(quantidade),  // conforme seu modelo backend
       });
 
+      // Verificar se categoria existe para atualizar quantidade
       const categoriaExistente = listaCategorias.find(
         (cat) => cat.nome.toLowerCase() === categoriaFinal.toLowerCase()
       );
 
       if (categoriaExistente) {
-        await axios.patch(`http://192.168.18.114:3000/categorias/${categoriaExistente.id}`, {
+        await axios.put(`https://on-markett-2.onrender.com/api/categorias/${categoriaExistente.id}`, {
           quantidade: categoriaExistente.quantidade + 1,
         });
       } else {
-        await axios.post('http://192.168.18.114:3000/categorias', {
+        await axios.post('https://on-markett-2.onrender.com/api/categorias', {
           nome: categoriaFinal,
           quantidade: 1,
+          icone: '', // pode ajustar se quiser ícone padrão
+          tipo: '',  // pode ajustar se quiser tipo padrão
         });
       }
 
