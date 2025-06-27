@@ -13,7 +13,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 
-export default function cadastrarProdutos({ navigation }) {
+export default function CadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
   const [foto, setFoto] = useState(null);
   const [categoria, setCategoria] = useState('');
@@ -60,15 +60,25 @@ export default function cadastrarProdutos({ navigation }) {
       return;
     }
 
+    if (!quantidade || isNaN(quantidade)) {
+      alert('Informe a quantidade em estoque corretamente.');
+      return;
+    }
+
+    if (!preco || isNaN(preco)) {
+      alert('Informe o preço corretamente.');
+      return;
+    }
+
     try {
       await axios.post('http://192.168.18.114:3000/produtos', {
         nome,
         foto: foto?.base64,
         categoria: categoriaFinal,
         descricao,
-        preco,
+        preco: parseFloat(preco),
         validade,
-        quantidade,
+        quantidade: parseInt(quantidade),
       });
 
       const categoriaExistente = listaCategorias.find(

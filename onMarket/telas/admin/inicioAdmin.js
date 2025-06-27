@@ -14,30 +14,36 @@ import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
-const categorias = [
-  { nome: 'Frutas', icone: 'apple', tipo: 'FontAwesome' },
-  { nome: 'Verduras', icone: 'leaf', tipo: 'FontAwesome' },
-  { nome: 'Frios', icone: 'snowflake-o', tipo: 'FontAwesome' },
-  { nome: 'Casa', icone: 'home', tipo: 'MaterialIcons' },
-  { nome: 'Higiene', icone: 'shower', tipo: 'FontAwesome' },
-  { nome: 'Descartáveis', icone: 'trash', tipo: 'FontAwesome' },
-  { nome: 'Bebidas', icone: 'glass', tipo: 'FontAwesome' },
-  { nome: 'Veja mais', icone: 'ellipsis-h', tipo: 'FontAwesome' },
-];
-
 export default function InicioADM() {
   const navigation = useNavigation();
   const [produtos, setProdutos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('http://192.168.18.114:3000/produtos') // 🔁 Troque localhost pelo IP real se for emulador Android
-      .then((response) => {
-        console.log('Produtos:', response.data);
-        setProdutos(response.data);
+    let produtosData = [];
+    let categoriasData = [];
+
+    axios.get('http://192.168.18.114:3000/produtos')
+      .then((resProdutos) => {
+        produtosData = resProdutos.data;
+        return axios.get('http://192.168.18.114:3000/categorias');
+      })
+      .then((resCategorias) => {
+        categoriasData = resCategorias.data;
+
+        // Cria um Set com os nomes das categorias presentes nos produtos
+        const nomesCategoriasComProdutos = new Set(produtosData.map(p => p.categoria));
+
+        // Filtra categorias que possuem produtos e ordena alfabeticamente
+        const categoriasComProdutos = categoriasData
+          .filter(cat => nomesCategoriasComProdutos.has(cat.nome))
+          .sort((a, b) => a.nome.localeCompare(b.nome));
+
+        setProdutos(produtosData);
+        setCategorias(categoriasComProdutos);
       })
       .catch((error) => {
-        console.error('Erro ao buscar produtos:', error);
+        console.error('Erro ao buscar dados:', error);
       });
   }, []);
 
@@ -59,16 +65,13 @@ export default function InicioADM() {
             />
             <MaterialIcons name="search" size={24} color="gray" />
           </View>
-          <TouchableOpacity style={estilos.notificacao}>
-            <MaterialIcons name="shopping-cart" size={28} color="#fff" />
-          </TouchableOpacity>
         </View>
       </View>
 
       {/* CONTEÚDO PRINCIPAL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
-          <Text style={estilos.conteudo_principal}>Produtos Cadastrados</Text>
+          <Text style={estilos.conteudo_principal}>Categorias</Text>
         </View>
 
         <View style={estilos.grid}>
@@ -86,7 +89,6 @@ export default function InicioADM() {
           ))}
         </View>
 
-        {/* PRODUTOS EM ESTOQUE */}
         <View style={{ marginTop: 20 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
@@ -101,7 +103,6 @@ export default function InicioADM() {
             produtos.map((produto) => (
               <View key={produto.id} style={estilos.cardRecomendadoVertical}>
                 <View style={{ backgroundColor: '#FFF', padding: 15, borderRadius: 8 }}>
-                  {/* IMAGEM DO PRODUTO */}
                   {produto.foto && (
                     <Image
                       source={{
@@ -211,12 +212,12 @@ const estilos = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start', // alinhado à esquerda para itens mais próximos
   },
   itemCategoria: {
     width: '22%',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 8, // diminui o espaçamento vertical entre categorias
   },
   circuloIcone: {
     backgroundColor: '#FF9800',
@@ -243,6 +244,10 @@ const estilos = StyleSheet.create({
     height: 250,
     borderRadius: 8,
     marginBottom: 10,
+  },
+  estrelasProduto: {
+    fontSize: 12,
+    color: '#555',
   },
   cardRecomendadoVertical: {
     marginBottom: 20,
