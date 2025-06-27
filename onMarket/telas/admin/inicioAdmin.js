@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
+import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+
 export default function InicioADM() {
   const navigation = useNavigation();
   const [produtos, setProdutos] = useState([]);
@@ -127,28 +129,7 @@ export default function InicioADM() {
       </ScrollView>
 
       {/* MENU FIXO INFERIOR */}
-      <View style={estilos.menu}>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="analytics" size={28} color="#F5F5F5" />
-          <Text style={estilos.textoItem}>Relatórios</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="badge" size={28} color="#F5F5F5" />
-          <Text style={estilos.textoItem}>Membros</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="home" size={28} color="#F5F5F5" />
-          <Text style={estilos.textoItem}>Início</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="ballot" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Pedidos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="groups" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Clientes</Text>
-        </TouchableOpacity>
-      </View>
+      <MenuInferiorADM navigation={navigation}/>
     </SafeAreaView>
   );
 }
@@ -253,23 +234,5 @@ const estilos = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 8,
     overflow: 'hidden',
-  },
-  menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#4CAF50',
-    paddingVertical: 10,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  item: {
-    alignItems: 'center',
-  },
-  textoItem: {
-    color: '#fff',
-    fontSize: 10,
   },
 });

@@ -51,6 +51,24 @@
       "preco": 18,
       "validade": "30/07/2025",
       "quantidade": 100
+    },
+    {
+      "id": "2275",
+      "nome": "Alface",
+      "categoria": "Verduras",
+      "descricao": "Verde",
+      "preco": 5,
+      "validade": "0",
+      "quantidade": 100
+    },
+    {
+      "id": "8ea7",
+      "nome": "Feijão ",
+      "categoria": "Embalados",
+      "descricao": "feijão carioca",
+      "preco": 10,
+      "validade": "15/05/2025",
+      "quantidade": 100
     }
   ],
   "categorias": [
@@ -58,7 +76,7 @@
       "id": "1",
       "nome": "Frutas",
       "icone": "apple",
-      "tipo": "FontAwesome",
+      "tipo": "MaterialIcons",
       "quantidade": 1
     },
     {
@@ -66,13 +84,13 @@
       "nome": "Verduras",
       "icone": "leaf",
       "tipo": "FontAwesome",
-      "quantidade": 0
+      "quantidade": 1
     },
     {
       "id": "3",
       "nome": "Frios",
-      "icone": "snowflake-o",
-      "tipo": "FontAwesome",
+      "icone": "mode-cool",
+      "tipo": "MaterialIcons",
       "quantidade": 0
     },
     {
@@ -172,6 +190,13 @@
       "icone": "home",
       "tipo": "MaterialIcons",
       "quantidade": 0
+    },
+    {
+      "id": "18",
+      "nome": "Embalados",
+      "icone": "orders",
+      "tipo": "MaterialIcons",
+      "quantidade": 1
     }
   ]
 }

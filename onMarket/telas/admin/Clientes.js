@@ -1,23 +1,26 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Table, Row, Rows } from 'react-native-table-component';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Row, Rows, Table } from 'react-native-table-component';
 
-const Clientes = () => {
+import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+
+const Clientes = ({ navigation }) => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const tableHead = ['ID', 'Nome completo', 'E-mail', 'CPF'];
 
   useEffect(() => {
-    axios.get('http://192.168.18.114:3000/usuario')
+    axios.get('https://on-markett-2.onrender.com/api/users')
       .then(response => {
-        if (Array.isArray(response.data)){
-          const usuariosClientes = response.data.filter(usuario => usuario.tipo === 'cliente')
-        setClientes(usuariosClientes);
-      }else{
-        console.error("Resposta inesperada:", response.data)
-      }
+        if (Array.isArray(response.data)) {
+          const usuariosClientes = response.data.filter(usuario => usuario.tipo === 'cliente');
+          setClientes(usuariosClientes);
+        } else {
+          console.error("Resposta inesperada:", response.data);
+        }
         setLoading(false);
       })
       .catch(error => {
@@ -34,22 +37,27 @@ const Clientes = () => {
   ]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lista de Clientes</Text>
-      {loading ? (
-        <Text>Carregando...</Text>
-      ) : (
-        <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
-          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={tableData} textStyle={styles.text} />
-        </Table>
-      )}
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingBottom: 70 }}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Lista de Clientes</Text>
+          {loading ? (
+            <Text>Carregando...</Text>
+          ) : (
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
+              <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+              <Rows data={tableData} textStyle={styles.text} />
+            </Table>
+          )}
+        </View>
+      </View>
+      <MenuInferiorADM navigation={navigation} />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 16, backgroundColor: '#F5F5F5' },
   title: { fontSize: 18, fontWeight: 'bold', marginBottom: 12 },
   head: { height: 40, backgroundColor: '#f1f8ff' },
   text: { margin: 6, textAlign: 'center' },
