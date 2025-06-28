@@ -32,7 +32,6 @@ export default function App() {
       .catch(err => console.error('Erro ao buscar produtos:', err));
   }, []);
 
-  // Filtra produtos por categoria selecionada e busca
   const produtosFiltrados = produtos.filter(prod => {
     const pertenceCategoria = categoriaSelecionada ? prod.categoria === categoriaSelecionada : true;
     const contemBusca = prod.nome.toLowerCase().includes(busca.toLowerCase());
@@ -111,7 +110,11 @@ export default function App() {
             <View key={item.id} style={estilos.cardProduto}>
               {item.foto ? (
                 <Image
-                  source={{ uri: `data:image/jpeg;base64,${item.foto}` }}
+                  source={{
+                    uri: item.foto.length < 100
+                      ? `https://drive.google.com/uc?export=view&id=${item.foto}`
+                      : `data:image/jpeg;base64,${item.foto}`,
+                  }}
                   style={estilos.imagemProduto}
                   resizeMode="cover"
                 />

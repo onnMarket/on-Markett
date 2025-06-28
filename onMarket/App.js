@@ -8,6 +8,7 @@ import RecuperacaoSenha from "./telas/recuperacaoSenha";
 import Inicio from "./telas/inicio";
 import InicioADM from "./telas/admin/inicioAdmin";
 import CadastrarProdutos from "./telas/admin/cadastrarProdutos";
+import AtualizarProduto from "./telas/admin/AtualizarProduto";
 import Clientes from "./telas/admin/Clientes";
 import Membros from "./telas/admin/Membros";
 
@@ -25,6 +26,11 @@ export default function App() {
         <Stack.Screen
           name="CadastroUsuario"
           component={CriarConta}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AtualizarProduto"
+          component={AtualizarProduto}
           options={{ headerShown: false }}
         />
         <Stack.Screen

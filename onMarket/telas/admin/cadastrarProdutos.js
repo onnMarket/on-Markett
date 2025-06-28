@@ -11,11 +11,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function CadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
-  const [foto, setFoto] = useState(null);
+  const [fotoUrl, setFotoUrl] = useState('');
   const [categoria, setCategoria] = useState('');
   const [novaCategoria, setNovaCategoria] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -26,30 +25,15 @@ export default function CadastrarProdutos({ navigation }) {
 
   useEffect(() => {
     axios
-      .get('https://on-markett-2.onrender.com/api/categorias') // rota corrigida
+      .get('https://on-markett-2.onrender.com/api/categorias')
       .then((response) => setListaCategorias(response.data))
-      .catch((error) =>
-        console.error('Erro ao carregar categorias:', error)
-      );
+      .catch((error) => console.error('Erro ao carregar categorias:', error));
   }, []);
 
-  const escolherFoto = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        includeBase64: true,
-      },
-      (response) => {
-        if (response.didCancel) {
-          console.log('Usuário cancelou a seleção de imagem');
-        } else if (response.errorCode) {
-          console.error('Erro:', response.errorMessage);
-        } else {
-          const image = response.assets[0];
-          setFoto(image);
-        }
-      }
-    );
+  const extrairIdDrive = (url) => {
+    const regex = /(?:\/d\/|id=)([a-zA-Z0-9_-]{10,})/;
+    const match = url.match(regex);
+    return match ? match[1] : url.trim();
   };
 
   const cadastrarProduto = async () => {
@@ -70,19 +54,19 @@ export default function CadastrarProdutos({ navigation }) {
       return;
     }
 
+    const idImagem = extrairIdDrive(fotoUrl);
+
     try {
-      // Cadastrar produto
       await axios.post('https://on-markett-2.onrender.com/api/produtos', {
         nome,
-        foto: foto?.base64,
+        foto: idImagem,
         categoria: categoriaFinal,
         descricao,
         preco: parseFloat(preco),
         validade,
-        quantidade_estoque: parseInt(quantidade),  // conforme seu modelo backend
+        quantidade_estoque: parseInt(quantidade),
       });
 
-      // Verificar se categoria existe para atualizar quantidade
       const categoriaExistente = listaCategorias.find(
         (cat) => cat.nome.toLowerCase() === categoriaFinal.toLowerCase()
       );
@@ -95,8 +79,8 @@ export default function CadastrarProdutos({ navigation }) {
         await axios.post('https://on-markett-2.onrender.com/api/categorias', {
           nome: categoriaFinal,
           quantidade: 1,
-          icone: '', // pode ajustar se quiser ícone padrão
-          tipo: '',  // pode ajustar se quiser tipo padrão
+          icone: '',
+          tipo: '',
         });
       }
 
@@ -119,15 +103,19 @@ export default function CadastrarProdutos({ navigation }) {
             style={styles.input}
           />
 
-          <TouchableOpacity style={styles.botaoFoto} onPress={escolherFoto}>
-            <Text style={styles.textoBotao}>
-              {foto ? 'Alterar Foto' : 'Escolher Foto'}
-            </Text>
-          </TouchableOpacity>
+          <TextInput
+            placeholder="URL da imagem (Drive ou outro)"
+            value={fotoUrl}
+            onChangeText={setFotoUrl}
+            style={styles.input}
+          />
 
-          {foto && (
-            <Image source={{ uri: foto.uri }} style={styles.imagemPreview} />
-          )}
+          {fotoUrl ? (
+            <Image
+              source={{ uri: `https://drive.google.com/uc?export=view&id=${extrairIdDrive(fotoUrl)}` }}
+              style={styles.imagemPreview}
+            />
+          ) : null}
 
           <View style={styles.input}>
             <Picker
@@ -209,13 +197,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     fontSize: 16,
-    marginBottom: 15,
-  },
-  botaoFoto: {
-    backgroundColor: '#2196f3',
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: 'center',
     marginBottom: 15,
   },
   imagemPreview: {

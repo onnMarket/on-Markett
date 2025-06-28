@@ -102,13 +102,18 @@ export default function InicioADM() {
           ) : (
             <View style={estilos.gridProdutos}>
               {produtos.map((produto) => (
-                <View key={produto.id} style={estilos.cardProduto}>
+                <TouchableOpacity
+                  key={produto.id}
+                  style={estilos.cardProduto}
+                  onPress={() => navigation.navigate('AtualizarProduto', { produto })}
+                >
                   {produto.foto ? (
                     <Image
                       source={{
-                        uri: produto.foto.startsWith('data:') || produto.foto.startsWith('http')
-                          ? produto.foto
-                          : `data:image/jpeg;base64,${produto.foto}`,
+                        uri:
+                          produto.foto.startsWith('http') || produto.foto.startsWith('data:')
+                            ? produto.foto
+                            : `https://drive.google.com/uc?export=view&id=${produto.foto}`,
                       }}
                       style={estilos.imagemProduto}
                       resizeMode="cover"
@@ -128,7 +133,7 @@ export default function InicioADM() {
                     <Text style={estilos.precoProduto}>R$ {parseFloat(produto.preco).toFixed(2)}</Text>
                     <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )}
