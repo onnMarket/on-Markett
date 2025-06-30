@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Row, Rows, Table } from 'react-native-table-component';
+import { Row, Table } from 'react-native-table-component';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
 
@@ -29,25 +30,54 @@ const Membros = ({ navigation }) => {
       });
   }, []);
 
-  const tableData = membros.map(membro => [
-    membro.id || '',
-    membro.nome || '',
-    membro.email || '',
-    membro.cpf || ''
-  ]);
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, paddingBottom: 70 }}>
         <View style={styles.container}>
-          <Text style={styles.title}>Lista de Membros</Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.title}>Lista de Membros</Text>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => navigation.navigate('CadastrarMembro')}
+            >
+              <MaterialIcons name="add-box" size={28} color="#000000" />
+            </TouchableOpacity>
+          </View>
+
           {loading ? (
             <Text>Carregando...</Text>
           ) : (
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
-              <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-              <Rows data={tableData} textStyle={styles.text} />
-            </Table>
+            <View style={styles.tableWrapper}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
+                <Row
+                  data={tableHead}
+                  style={styles.head}
+                  textStyle={styles.headerText}
+                  flexArr={[1, 2, 2, 2]}
+                />
+              </Table>
+              {membros.map((membro) => (
+                <TouchableOpacity
+                  key={membro.id}
+                  onPress={() => navigation.navigate('AtualizarMembro', { membro })}
+                  style={styles.rowTouchable}
+                >
+                  <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
+                    <Row
+                      data={[
+                        membro.id || '',
+                        membro.nome || '',
+                        membro.email || '',
+                        membro.cpf || ''
+                      ]}
+                      style={styles.row}
+                      textStyle={styles.cellText}
+                      flexArr={[1, 2, 2, 2]}
+                    />
+                  </Table>
+                </TouchableOpacity>
+              ))}
+            </View>
           )}
         </View>
       </View>
@@ -62,19 +92,47 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#F5F5F5',
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 12,
+  },
+  addButton: {
+    padding: 4,
+  },
+  tableWrapper: {
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   head: {
     height: 40,
     backgroundColor: '#f1f8ff',
   },
-  text: {
+  headerText: {
     margin: 6,
     textAlign: 'center',
+    fontWeight: 'bold',
+    borderRightWidth: 1,
+    borderColor: '#ccc',
   },
+  rowTouchable: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  row: {
+    height: 40,
+    backgroundColor: '#fff',
+  },
+cellText: {
+  margin: 6,
+  textAlign: 'center',
+},
+
 });
 
 export default Membros;

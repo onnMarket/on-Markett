@@ -11,6 +11,8 @@ import CadastrarProdutos from "./telas/admin/cadastrarProdutos";
 import AtualizarProduto from "./telas/admin/AtualizarProduto";
 import Clientes from "./telas/admin/Clientes";
 import Membros from "./telas/admin/Membros";
+import CadastrarMembro from "./telas/admin/cadastrarMembro";
+import AtualizarMembro from "./telas/admin/AtualizarMembro";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +63,16 @@ export default function App() {
         <Stack.Screen
           name="Membros"
           component={Membros}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CadastrarMembro"
+          component={CadastrarMembro}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AtualizarMembro"
+          component={AtualizarMembro}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
