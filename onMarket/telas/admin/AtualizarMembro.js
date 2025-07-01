@@ -9,7 +9,7 @@ import {
   Alert,
   View,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // <- Adicionado para o campo tipo
+import { Picker } from '@react-native-picker/picker';
 
 export default function AtualizarMembro({ route, navigation }) {
   const { membro } = route.params;
@@ -17,21 +17,24 @@ export default function AtualizarMembro({ route, navigation }) {
   const [nome, setNome] = useState(membro.nome);
   const [email, setEmail] = useState(membro.email);
   const [cpf, setCpf] = useState(membro.cpf);
-  const [tipo, setTipo] = useState(membro.tipo); // <- Novo campo
+  const [tipo, setTipo] = useState(membro.tipo);
+  const senha = membro.senha
 
   const atualizar = async () => {
+    const dadosAtualizados = {
+      nome,
+      email,
+      cpf,
+      tipo,
+    };
+
     try {
-      await axios.put(`https://on-markett-2.onrender.com/api/users/${membro.id}`, {
-        nome,
-        email,
-        cpf,
-        tipo,
-      });
+      await axios.put(`https://on-markett-2.onrender.com/api/users/${membro.id}`, dadosAtualizados);
       Alert.alert("Sucesso", "Membro atualizado com sucesso!");
       navigation.goBack();
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Não foi possível atualizar.");
+      Alert.alert("Erro", "Não foi possível atualizar o membro.");
     }
   };
 
@@ -42,7 +45,7 @@ export default function AtualizarMembro({ route, navigation }) {
       navigation.goBack();
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Não foi possível deletar.");
+      Alert.alert("Erro", "Não foi possível deletar o membro.");
     }
   };
 
@@ -59,6 +62,7 @@ export default function AtualizarMembro({ route, navigation }) {
         onChangeText={setEmail}
         style={styles.input}
         placeholder="Email"
+        keyboardType="email-address"
       />
       <TextInput
         value={cpf}
@@ -67,7 +71,7 @@ export default function AtualizarMembro({ route, navigation }) {
         placeholder="CPF"
         keyboardType="numeric"
       />
-      
+
       <View style={styles.pickerContainer}>
         <Text style={styles.pickerLabel}>Tipo de Conta:</Text>
         <Picker
@@ -84,6 +88,7 @@ export default function AtualizarMembro({ route, navigation }) {
       <TouchableOpacity onPress={atualizar} style={styles.botao}>
         <Text style={styles.textoBotao}>Salvar Alterações</Text>
       </TouchableOpacity>
+
       <TouchableOpacity onPress={deletar} style={[styles.botao, { backgroundColor: 'red' }]}>
         <Text style={styles.textoBotao}>Excluir Membro</Text>
       </TouchableOpacity>
