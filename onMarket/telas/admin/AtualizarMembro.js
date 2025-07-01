@@ -18,7 +18,7 @@ export default function AtualizarMembro({ route, navigation }) {
   const [email, setEmail] = useState(membro.email);
   const [cpf, setCpf] = useState(membro.cpf);
   const [tipo, setTipo] = useState(membro.tipo);
-  const senha = membro.senha
+  //const senha = membro.senha
 
   const atualizar = async () => {
     const dadosAtualizados = {
