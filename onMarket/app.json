@@ -14,7 +14,9 @@
       "favicon": "./image/onMarket_3.png",
       "size": "192x192",
       "backgroundColor": "#ffffff"
-    }
+    },
+    "plugins": [
+      "expo-video"
+    ]
   }
 }
-

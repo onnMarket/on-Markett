@@ -14,8 +14,8 @@ export default function CarregandoApp({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../image/onMarket_3.png')}
-        style={{ width: 500, height: 500, marginTop: 20 }}
+        source={require('../image/onMarket_1.png')}
+        style={{ width: 400, height: 400, marginTop: 20 }}
       />
     </View>
   );
