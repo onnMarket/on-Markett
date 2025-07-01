@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-
+import CarregandoApp from "./telas/CarregandoApp";
 import CriarConta from "./telas/criarConta";
 import Login from "./telas/login";
 import RecuperacaoSenha from "./telas/recuperacaoSenha";
@@ -19,7 +19,12 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="CarregandoApp">
+        <Stack.Screen
+          name="CarregandoApp"
+          component={CarregandoApp}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}

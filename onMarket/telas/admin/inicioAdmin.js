@@ -15,12 +15,13 @@ import {
 import { Avatar } from 'react-native-elements';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
-import cores from '../style/cores'; // Importando o arquivo de cores
+import cores from '../style/cores';
 
 export default function InicioADM() {
   const navigation = useNavigation();
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
 
   useEffect(() => {
     let produtosData = [];
@@ -46,6 +47,10 @@ export default function InicioADM() {
         console.error('Erro ao buscar dados:', error);
       });
   }, []);
+
+  const produtosFiltrados = categoriaSelecionada
+    ? produtos.filter(prod => prod.categoria === categoriaSelecionada)
+    : produtos.filter(prod => prod.quantidade_estoque <= 10);
 
   return (
     <SafeAreaView style={estilos.container}>
@@ -76,7 +81,18 @@ export default function InicioADM() {
 
         <View style={estilos.grid}>
           {categorias.map((item, index) => (
-            <TouchableOpacity key={index} style={estilos.itemCategoria}>
+            <TouchableOpacity
+              key={index}
+              style={[
+                estilos.itemCategoria,
+                categoriaSelecionada === item.nome && estilos.categoriaSelecionada,
+              ]}
+              onPress={() =>
+                setCategoriaSelecionada(
+                  categoriaSelecionada === item.nome ? null : item.nome
+                )
+              }
+            >
               <View style={estilos.circuloIcone}>
                 {item.tipo === 'MaterialIcons' ? (
                   <MaterialIcons name={item.icone} size={28} color={cores.texto} />
@@ -91,17 +107,19 @@ export default function InicioADM() {
 
         <View style={{ marginTop: 20 }}>
           <View style={estilos.linhaTitulo}>
-            <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
+            <Text style={estilos.conteudo_principal}>
+              {categoriaSelecionada ? `Produtos da categoria "${categoriaSelecionada}"` : 'Produtos com baixo estoque'}
+            </Text>
             <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
               <MaterialIcons name="add-box" size={28} color={cores.texto} />
             </TouchableOpacity>
           </View>
 
-          {produtos.length === 0 ? (
+          {produtosFiltrados.length === 0 ? (
             <Text style={{ marginTop: 10 }}>Nenhum produto encontrado.</Text>
           ) : (
             <View style={estilos.gridProdutos}>
-              {produtos.map((produto) => (
+              {produtosFiltrados.map((produto) => (
                 <TouchableOpacity
                   key={produto.id}
                   style={estilos.cardProduto}
@@ -131,7 +149,14 @@ export default function InicioADM() {
                   <View style={estilos.infoCard}>
                     <Text style={estilos.nomeProduto}>{produto.nome}</Text>
                     <Text style={estilos.precoProduto}>R$ {parseFloat(produto.preco).toFixed(2)}</Text>
-                    <Text style={estilos.estrelasProduto}>Estoque: {produto.quantidade_estoque}</Text>
+                    <Text
+                      style={[
+                        estilos.estrelasProduto,
+                        produto.quantidade_estoque <= 10 && { color: cores.alerta },
+                      ]}
+                    >
+                      Estoque: {produto.quantidade_estoque}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               ))}
@@ -208,6 +233,11 @@ const estilos = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
+  categoriaSelecionada: {
+    backgroundColor: '#c8e6c9',
+    borderRadius: 10,
+    padding: 10,
+  },
   circuloIcone: {
     backgroundColor: cores.IconeCategorias,
     borderRadius: 8,
@@ -252,6 +282,6 @@ const estilos = StyleSheet.create({
   },
   estrelasProduto: {
     fontSize: 12,
-    color: '#777', // Opcional: você pode mover isso para cores.js
+    color: '#777',
   },
 });

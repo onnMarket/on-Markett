@@ -11,7 +11,8 @@ const cores = {
   textoClaro: "#fff",
   bordaTabela: "#ccc",
   tituloTabela: "#f1f8ff",
-  btnAdd:'#000000'
+  btnAdd:'#000000',
+  alerta: '#e53935',
 };
 
 export default cores;

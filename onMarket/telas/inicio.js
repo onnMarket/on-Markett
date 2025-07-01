@@ -14,7 +14,6 @@ import {
 import { Avatar } from 'react-native-elements';
 import cores from './style/cores';
 
-
 export default function App() {
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -22,16 +21,33 @@ export default function App() {
   const [busca, setBusca] = useState('');
 
   useEffect(() => {
-    axios.get('https://on-markett-2.onrender.com/api/categorias')
-      .then(res => {
-        setCategorias(res.data);
-        if (res.data.length > 0) setCategoriaSelecionada(res.data[0].nome);
-      })
-      .catch(err => console.error('Erro ao buscar categorias:', err));
+    Promise.all([
+      axios.get('https://on-markett-2.onrender.com/api/categorias'),
+      axios.get('https://on-markett-2.onrender.com/api/produtos')
+    ])
+      .then(([catRes, prodRes]) => {
+        const todasCategorias = catRes.data;
+        const todosProdutos = prodRes.data;
 
-    axios.get('https://on-markett-2.onrender.com/api/produtos')
-      .then(res => setProdutos(res.data))
-      .catch(err => console.error('Erro ao buscar produtos:', err));
+        setProdutos(todosProdutos);
+
+        // Filtra categorias que têm pelo menos 1 produto
+        const categoriasComProdutos = todasCategorias.filter(categoria =>
+          todosProdutos.some(prod => prod.categoria === categoria.nome)
+        );
+
+        // Ordena em ordem alfabética
+        const categoriasOrdenadas = categoriasComProdutos.sort((a, b) =>
+          a.nome.localeCompare(b.nome)
+        );
+
+        setCategorias(categoriasOrdenadas);
+
+        if (categoriasOrdenadas.length > 0) {
+          setCategoriaSelecionada(categoriasOrdenadas[0].nome);
+        }
+      })
+      .catch(err => console.error('Erro ao buscar dados:', err));
   }, []);
 
   const produtosFiltrados = produtos.filter(prod => {
@@ -227,17 +243,21 @@ const estilos = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    rowGap: 15,
+    columnGap: 10,
   },
   itemCategoria: {
-    width: '22%',
+    width: '23%',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    marginRight: 10,
     paddingVertical: 5,
     borderRadius: 10,
   },
   categoriaSelecionada: {
-    backgroundColor: '#c8e6c9', // Se quiser, pode criar cores.categoriaSelecionada
+    backgroundColor: '#c8e6c9',
+    padding: 10,
   },
   circuloIcone: {
     backgroundColor: cores.IconeCategorias,
@@ -304,4 +324,3 @@ const estilos = StyleSheet.create({
     fontSize: 10,
   },
 });
-
