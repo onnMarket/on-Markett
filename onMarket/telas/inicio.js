@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import cores from './style/cores';
+
 
 export default function App() {
   const [produtos, setProdutos] = useState([]);
@@ -168,10 +170,10 @@ export default function App() {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: cores.Secundaria,
   },
   header: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: cores.Principal,
     padding: 20,
     paddingTop: 50,
     borderBottomLeftRadius: 25,
@@ -190,7 +192,7 @@ const estilos = StyleSheet.create({
   caixaBusca: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: cores.Secundaria,
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -199,7 +201,7 @@ const estilos = StyleSheet.create({
   },
   input: {
     flex: 1,
-    color: '#000',
+    color: cores.texto,
     marginRight: 10,
   },
   notificacao: {
@@ -220,6 +222,7 @@ const estilos = StyleSheet.create({
   conteudo_principal: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: cores.texto,
   },
   grid: {
     flexDirection: 'row',
@@ -234,10 +237,10 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
   },
   categoriaSelecionada: {
-    backgroundColor: '#c8e6c9',
+    backgroundColor: '#c8e6c9', // Se quiser, pode criar cores.categoriaSelecionada
   },
   circuloIcone: {
-    backgroundColor: '#FF9800',
+    backgroundColor: cores.IconeCategorias,
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
@@ -245,7 +248,7 @@ const estilos = StyleSheet.create({
   textoCategoria: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#000',
+    color: cores.texto,
   },
   gridProdutos: {
     flexDirection: 'row',
@@ -254,7 +257,7 @@ const estilos = StyleSheet.create({
   },
   cardProduto: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
     borderRadius: 10,
     marginBottom: 15,
     overflow: 'hidden',
@@ -271,9 +274,10 @@ const estilos = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 4,
+    color: cores.texto,
   },
   precoProduto: {
-    color: '#2AAA53',
+    color: cores.Preco,
     fontSize: 13,
     marginBottom: 4,
   },
@@ -284,7 +288,7 @@ const estilos = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#4CAF50',
+    backgroundColor: cores.Principal,
     paddingVertical: 10,
     position: 'absolute',
     bottom: 0,
@@ -296,7 +300,8 @@ const estilos = StyleSheet.create({
     alignItems: 'center',
   },
   textoItem: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 10,
   },
 });
+

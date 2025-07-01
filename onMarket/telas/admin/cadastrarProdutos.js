@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 
+import cores from '../style/cores'
+
 export default function CadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
@@ -178,7 +180,7 @@ export default function CadastrarProdutos({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: cores.bordaTabela,
     borderRadius: 10,
     padding: 12,
     fontSize: 16,
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   botaoSalvar: {
-    backgroundColor: '#4caf50',
+    backgroundColor: cores.botaoEnviar,
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   textoBotao: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
   },

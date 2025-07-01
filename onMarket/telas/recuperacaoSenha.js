@@ -4,6 +4,8 @@ import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-n
 import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import cores from './style/cores';
+
 export default function RecuperacaoSenha({ navigation }) {
   const [email, setEmail] = useState('');
 
@@ -14,10 +16,7 @@ export default function RecuperacaoSenha({ navigation }) {
     }
 
     try {
-      const response = await axios.post('https://on-markett-2.onrender.com/api/users/resetSenha', {
-        email
-      });
-
+      await axios.post('https://on-markett-2.onrender.com/api/users/resetSenha', { email });
       Alert.alert(
         'Sucesso',
         'Uma nova senha foi enviada para seu e-mail.',
@@ -34,7 +33,7 @@ export default function RecuperacaoSenha({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Input
         placeholder="Digite seu e-mail"
-        leftIcon={<MaterialIcons name="email" size={24} color="black" />}
+        leftIcon={<MaterialIcons name="email" size={24} color={cores.texto} />}
         containerStyle={styles.inputContainer}
         value={email}
         onChangeText={setEmail}
@@ -42,8 +41,8 @@ export default function RecuperacaoSenha({ navigation }) {
         keyboardType="email-address"
       />
 
-      <TouchableOpacity style={styles.botao_1} onPress={enviarRecuperacao}>
-        <Text style={styles.texto}>Enviar Nova Senha</Text>
+      <TouchableOpacity style={styles.botao} onPress={enviarRecuperacao}>
+        <Text style={styles.textoBotao}>Enviar Nova Senha</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -52,7 +51,7 @@ export default function RecuperacaoSenha({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -60,15 +59,15 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
   },
-  botao_1: {
-    backgroundColor: '#4caf50',
-    marginTop: 10,
-    paddingVertical: 10,
+  botao: {
+    backgroundColor: cores.botaoEnviar,
+    marginTop: 20,
+    paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
   },
-  texto: {
-    color: '#fff',
+  textoBotao: {
+    color: cores.textoClaro,
     fontWeight: 'bold',
     fontSize: 18,
   },

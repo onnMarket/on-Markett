@@ -9,13 +9,14 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import cores from './style/cores';
+
 export default function CriarConta({ navigation }) {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  // Validação básica antes de enviar
   const validarCampos = () => {
     if (!nome || !cpf || !email || !senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
@@ -86,7 +87,7 @@ export default function CriarConta({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
@@ -97,17 +98,18 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
+    color: cores.texto,
   },
   botaoSalvar: {
-    backgroundColor: '#4caf50',
+    backgroundColor: cores.botaoEnviar,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
   },
   textoBotao: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
   },

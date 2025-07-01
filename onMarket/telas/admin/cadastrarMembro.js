@@ -9,6 +9,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import cores from '../style/cores'
+
 export default function CriarConta({ navigation }) {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
@@ -86,28 +88,28 @@ export default function CriarConta({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: cores.bordaTabela,
     borderRadius: 10,
     padding: 12,
     fontSize: 16,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
   },
   botaoSalvar: {
-    backgroundColor: '#4caf50',
+    backgroundColor: cores.botaoEnviar,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
   },
   textoBotao: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
   },

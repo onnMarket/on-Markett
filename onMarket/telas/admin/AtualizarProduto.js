@@ -11,6 +11,8 @@ import {
   Alert,
 } from 'react-native';
 
+import cores from '../style/cores'
+
 function formatDateToISO(dateStr) {
   if (!dateStr) return dateStr;
   if (dateStr.includes('-')) return dateStr; // já no formato ISO
@@ -149,7 +151,7 @@ export default function AtualizarProduto({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -170,28 +172,28 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: cores.bordaTabela,
     borderRadius: 10,
     padding: 12,
     fontSize: 16,
     marginBottom: 15,
   },
   botaoEditar: {
-    backgroundColor: '#fbbc04',
+    backgroundColor: cores.botaoEditar,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 10,
   },
   botaoDeletar: {
-    backgroundColor: '#e53935',
+    backgroundColor: cores.botaoDeletar,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 30,
   },
   textoBotao: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
   },

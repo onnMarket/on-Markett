@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Row, Rows, Table } from 'react-native-table-component';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+import cores from '../style/cores';
 
 const Clientes = ({ navigation }) => {
   const [clientes, setClientes] = useState([]);
@@ -57,9 +58,9 @@ const Clientes = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, padding: 16, backgroundColor: cores.Secundaria },
   title: { fontSize: 18, fontWeight: 'bold', marginBottom: 12 },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
+  head: { height: 40, backgroundColor: cores.tituloTabela },
   text: { margin: 6, textAlign: 'center' },
 });
 

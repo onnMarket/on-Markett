@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import cores from '../style/cores';
 
 export default function AtualizarMembro({ route, navigation }) {
   const { membro } = route.params;
@@ -100,43 +101,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
     justifyContent: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: cores.bordaTabela,
     borderRadius: 10,
     padding: 12,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
   },
   pickerContainer: {
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: cores.bordaTabela,
   },
   pickerLabel: {
     marginLeft: 12,
     marginTop: 10,
     fontWeight: '600',
-    color: '#444',
+    color: cores.textoClaro,
   },
   picker: {
     height: 50,
     width: '100%',
   },
   botao: {
-    backgroundColor: '#4caf50',
+    backgroundColor: cores.botaoEditar,
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
   },
   textoBotao: {
-    color: '#fff',
+    color: cores.textoClaro,
     fontSize: 16,
   },
 });

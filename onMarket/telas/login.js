@@ -4,6 +4,8 @@ import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-n
 import { Input } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import cores from './style/cores'; // ajuste conforme sua estrutura de pastas
+
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -40,7 +42,7 @@ export default function Login({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Input
         placeholder="Email"
-        leftIcon={<MaterialIcons name="email" size={24} color="black" />}
+        leftIcon={<MaterialIcons name="email" size={24} color={cores.texto} />}
         containerStyle={styles.inputContainer}
         value={email}
         onChangeText={setEmail}
@@ -50,7 +52,7 @@ export default function Login({ navigation }) {
 
       <Input
         placeholder="Senha"
-        leftIcon={<MaterialIcons name="lock" size={24} color="black" />}
+        leftIcon={<MaterialIcons name="lock" size={24} color={cores.texto} />}
         secureTextEntry
         containerStyle={styles.inputContainer}
         value={senha}
@@ -62,7 +64,7 @@ export default function Login({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.botao_1} onPress={login}>
-        <Text style={styles.texto}>Login</Text>
+        <Text style={styles.textoClaro}>Login</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.botao_2} onPress={() => navigation.navigate('CadastroUsuario')}>
@@ -75,7 +77,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: cores.Secundaria,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   botao_1: {
-    backgroundColor: '#4caf50',
+    backgroundColor: cores.botaoEnviar,
     marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 40,
@@ -97,12 +99,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   texto: {
-    color: '#212121',
+    color: cores.texto,
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  textoClaro: {
+    color: cores.Secundaria,
     fontWeight: 'bold',
     fontSize: 20,
   },
   recuperarSenha: {
-    color: 'black',
+    color: cores.texto,
     marginBottom: 10,
     textAlign: 'center',
   },

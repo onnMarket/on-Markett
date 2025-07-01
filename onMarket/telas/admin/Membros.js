@@ -6,6 +6,7 @@ import { Row, Table } from 'react-native-table-component';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+import cores from '../style/cores'
 
 const Membros = ({ navigation }) => {
   const [membros, setMembros] = useState([]);
@@ -40,7 +41,7 @@ const Membros = ({ navigation }) => {
               style={styles.addButton}
               onPress={() => navigation.navigate('CadastrarMembro')}
             >
-              <MaterialIcons name="add-box" size={28} color="#000000" />
+              <MaterialIcons name="add-box" size={28} color={cores.btnAdd} />
             </TouchableOpacity>
           </View>
 
@@ -48,7 +49,7 @@ const Membros = ({ navigation }) => {
             <Text>Carregando...</Text>
           ) : (
             <View style={styles.tableWrapper}>
-              <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: cores.bordaTabela }}>
                 <Row
                   data={tableHead}
                   style={styles.head}
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: cores.Secundaria,
   },
   headerRow: {
     flexDirection: 'row',
@@ -107,26 +108,28 @@ const styles = StyleSheet.create({
   },
   tableWrapper: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: cores.bordaTabela,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff',
+    backgroundColor: cores.tituloTabela,
   },
   headerText: {
     margin: 6,
     textAlign: 'center',
     fontWeight: 'bold',
     borderRightWidth: 1,
-    borderColor: '#ccc',
+    borderColor: cores.bordaTabela,
   },
   rowTouchable: {
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: cores.bordaTabela,
   },
   row: {
     height: 40,
-    backgroundColor: '#fff',
+    backgroundColor: cores.Secundaria,
   },
 cellText: {
   margin: 6,

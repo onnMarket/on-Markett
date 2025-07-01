@@ -15,6 +15,7 @@ import {
 import { Avatar } from 'react-native-elements';
 
 import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+import cores from '../style/cores'; // Importando o arquivo de cores
 
 export default function InicioADM() {
   const navigation = useNavigation();
@@ -34,7 +35,6 @@ export default function InicioADM() {
         categoriasData = resCategorias.data;
 
         const nomesCategoriasComProdutos = new Set(produtosData.map(p => p.categoria));
-
         const categoriasComProdutos = categoriasData
           .filter(cat => nomesCategoriasComProdutos.has(cat.nome))
           .sort((a, b) => a.nome.localeCompare(b.nome));
@@ -79,9 +79,9 @@ export default function InicioADM() {
             <TouchableOpacity key={index} style={estilos.itemCategoria}>
               <View style={estilos.circuloIcone}>
                 {item.tipo === 'MaterialIcons' ? (
-                  <MaterialIcons name={item.icone} size={28} color="#212121" />
+                  <MaterialIcons name={item.icone} size={28} color={cores.texto} />
                 ) : (
-                  <FontAwesome name={item.icone} size={28} color="#212121" />
+                  <FontAwesome name={item.icone} size={28} color={cores.texto} />
                 )}
               </View>
               <Text style={estilos.textoCategoria}>{item.nome}</Text>
@@ -90,10 +90,10 @@ export default function InicioADM() {
         </View>
 
         <View style={{ marginTop: 20 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={estilos.linhaTitulo}>
             <Text style={estilos.conteudo_principal}>Produtos em Estoque</Text>
             <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
-              <MaterialIcons name="add-box" size={28} color="#000000" />
+              <MaterialIcons name="add-box" size={28} color={cores.texto} />
             </TouchableOpacity>
           </View>
 
@@ -149,10 +149,10 @@ export default function InicioADM() {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: cores.Secundaria,
   },
   header: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: cores.Principal,
     padding: 20,
     paddingTop: 50,
     borderBottomLeftRadius: 25,
@@ -171,7 +171,7 @@ const estilos = StyleSheet.create({
   caixaBusca: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: cores.Secundaria,
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -196,6 +196,7 @@ const estilos = StyleSheet.create({
   conteudo_principal: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: cores.texto,
   },
   grid: {
     flexDirection: 'row',
@@ -208,7 +209,7 @@ const estilos = StyleSheet.create({
     marginBottom: 8,
   },
   circuloIcone: {
-    backgroundColor: '#FF9800',
+    backgroundColor: cores.IconeCategorias,
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
@@ -216,7 +217,7 @@ const estilos = StyleSheet.create({
   textoCategoria: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#000',
+    color: cores.texto,
   },
   gridProdutos: {
     flexDirection: 'row',
@@ -225,7 +226,7 @@ const estilos = StyleSheet.create({
   },
   cardProduto: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: cores.cardProdutos,
     borderRadius: 10,
     marginBottom: 15,
     overflow: 'hidden',
@@ -242,14 +243,15 @@ const estilos = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 4,
+    color: cores.texto,
   },
   precoProduto: {
-    color: '#2AAA53',
+    color: cores.Preco,
     fontSize: 13,
     marginBottom: 4,
   },
   estrelasProduto: {
     fontSize: 12,
-    color: '#777',
+    color: '#777', // Opcional: você pode mover isso para cores.js
   },
 });
