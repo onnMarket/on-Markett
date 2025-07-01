@@ -1,10 +1,17 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Input } from 'react-native-elements';
+import {
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import cores from './style/cores'; // ajuste conforme sua estrutura de pastas
+import cores from './style/cores';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -40,24 +47,32 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Input
-        placeholder="Email"
-        leftIcon={<MaterialIcons name="email" size={24} color={cores.texto} />}
-        containerStyle={styles.inputContainer}
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
+      {/* Campo de email */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#999"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+      </View>
 
-      <Input
-        placeholder="Senha"
-        leftIcon={<MaterialIcons name="lock" size={24} color={cores.texto} />}
-        secureTextEntry
-        containerStyle={styles.inputContainer}
-        value={senha}
-        onChangeText={setSenha}
-      />
+      {/* Campo de senha */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="lock" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="Senha"
+          placeholderTextColor="#999"
+          style={styles.input}
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
+      </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('RecuperacaoSenha')}>
         <Text style={styles.recuperarSenha}>Esqueceu a senha?</Text>
@@ -80,10 +95,25 @@ const styles = StyleSheet.create({
     backgroundColor: cores.Secundaria,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   inputContainer: {
-    width: '80%',
-    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    width: '100%',
+    marginBottom: 15,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    color: cores.texto,
+    fontSize: 16,
   },
   botao_1: {
     backgroundColor: cores.botaoEnviar,

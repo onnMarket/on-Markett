@@ -12,9 +12,10 @@ import {
   View,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import cores from './style/cores';
+import cores from '../style/cores';
+import MenuInferiorCliente from '../navigation-bar/navigationBar_cliente';
 
-export default function App() {
+export default function Inicio({ navigation }) {
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -64,7 +65,7 @@ export default function App() {
           <Avatar
             rounded
             size="large"
-            source={require('../image/onMarket_3.png')}
+            source={require('../../image/onMarket_3.png')}
           />
           <View style={estilos.caixaBusca}>
             <TextInput
@@ -163,22 +164,7 @@ export default function App() {
       </ScrollView>
 
       {/* MENU FIXO INFERIOR */}
-      <View style={estilos.menu}>
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="home" size={28} color="#F5F5F5" />
-          <Text style={estilos.textoItem}>Início</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="shopping-bag" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Histórico</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={estilos.item}>
-          <MaterialIcons name="person" size={28} color="#fff" />
-          <Text style={estilos.textoItem}>Perfil</Text>
-        </TouchableOpacity>
-      </View>
+      <MenuInferiorCliente navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -304,23 +290,5 @@ const estilos = StyleSheet.create({
   quantidadeProduto: {
     fontSize: 12,
     color: '#777',
-  },
-  menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: cores.Principal,
-    paddingVertical: 10,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  item: {
-    alignItems: 'center',
-  },
-  textoItem: {
-    color: cores.textoClaro,
-    fontSize: 10,
-  },
+  }
 });

@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#aaa',
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 15,
-    backgroundColor: cores.cardProdutos,
-    color: cores.texto,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    width: '100%',
+    marginBottom: 15
   },
   botaoSalvar: {
     backgroundColor: cores.botaoEnviar,

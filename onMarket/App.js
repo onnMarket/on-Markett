@@ -5,7 +5,7 @@ import CarregandoApp from "./telas/CarregandoApp";
 import CriarConta from "./telas/criarConta";
 import Login from "./telas/login";
 import RecuperacaoSenha from "./telas/recuperacaoSenha";
-import Inicio from "./telas/inicio";
+import Inicio from "./telas/cliente/inicio";
 import InicioADM from "./telas/admin/inicioAdmin";
 import CadastrarProdutos from "./telas/admin/cadastrarProdutos";
 import AtualizarProduto from "./telas/admin/AtualizarProduto";
