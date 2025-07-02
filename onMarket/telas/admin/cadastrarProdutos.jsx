@@ -136,8 +136,11 @@ export default function CadastrarProdutos({ navigation }) {
                 style={styles.picker}
               >
                 <Picker.Item label="Selecione uma categoria" value="" />
-                {listaCategorias.map((cat) => (
-                  <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
+                {listaCategorias
+                  .slice() // cria cópia para não mutar o estado original
+                  .sort((a, b) => a.nome.localeCompare(b.nome))
+                  .map((cat) => (
+                    <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
                 ))}
                 <Picker.Item label="Criar nova categoria..." value="__nova__" />
               </Picker>
@@ -271,5 +274,5 @@ const styles = StyleSheet.create({
     color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
-  },
+  }
 });
