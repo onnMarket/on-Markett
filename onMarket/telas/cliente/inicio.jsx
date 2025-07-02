@@ -11,8 +11,8 @@ import {
   View,
 } from 'react-native';
 import cores from '../style/cores';
-import MenuInferiorCliente from '../navigation-bar/navigationBar_cliente';
-import BarraPesquisaClientes from '../navigation-bar/baraPesquisa_clientes';
+import MenuInferiorCliente from '../navigation/navigationBar_cliente';
+import BarraPesquisaClientes from '../navigation/baraPesquisa_clientes';
 
 export default function Inicio({ navigation }) {
   const [produtos, setProdutos] = useState([]);

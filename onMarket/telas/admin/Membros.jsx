@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Row, Table } from 'react-native-table-component';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+import MenuInferiorADM from '../navigation/navigationBar_admin';
 import cores from '../style/cores'
 
 const Membros = ({ navigation }) => {

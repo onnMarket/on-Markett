@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Row, Rows, Table } from 'react-native-table-component';
 
-import MenuInferiorADM from '../navigation-bar/navigationBar_admin';
+import MenuInferiorADM from '../navigation/navigationBar_admin';
 import cores from '../style/cores';
 
 const Clientes = ({ navigation }) => {
