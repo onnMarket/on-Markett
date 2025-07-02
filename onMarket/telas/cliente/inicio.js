@@ -125,6 +125,7 @@ export default function Inicio({ navigation }) {
         )}
 
         <View style={estilos.gridProdutos}>
+        <TouchableOpacity style={{width: '100%'}} onPress={navigation.navigate('Produto')}>
           {produtosFiltrados.map((item) => (
             <View key={item.id} style={estilos.cardProduto}>
               {item.foto ? (
@@ -159,6 +160,7 @@ export default function Inicio({ navigation }) {
               </View>
             </View>
           ))}
+          </TouchableOpacity>
         </View>
         <View style={{ height: 100 }} />
       </ScrollView>
