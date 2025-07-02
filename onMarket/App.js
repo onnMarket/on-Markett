@@ -14,6 +14,7 @@ import Membros from "./telas/admin/Membros";
 import CadastrarMembro from "./telas/admin/cadastrarMembro";
 import AtualizarMembro from "./telas/admin/AtualizarMembro";
 import Produto from "./telas/cliente/Produto";
+import Perfil from "./telas/cliente/Perfil";
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,11 @@ export default function App() {
           component={Produto}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="Perfil"
+          component={Perfil}
+          options={{headerShown: false}}
+          />
       </Stack.Navigator>
     </NavigationContainer>
   );

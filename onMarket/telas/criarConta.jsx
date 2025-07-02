@@ -24,6 +24,21 @@ export default function CriarConta({ navigation }) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return false;
     }
+
+    // Validação simples de email
+    const regexEmail = /^\S+@\S+\.\S+$/;
+    if (!regexEmail.test(email)) {
+      Alert.alert("Erro", "Por favor, insira um email válido.");
+      return false;
+    }
+
+    // Limpa CPF e verifica se tem 11 números
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      Alert.alert("Erro", "CPF deve conter 11 números.");
+      return false;
+    }
+
     return true;
   };
 
@@ -31,10 +46,11 @@ export default function CriarConta({ navigation }) {
     if (!validarCampos()) return;
 
     try {
+      const cpfLimpo = cpf.replace(/\D/g, '');
       const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
         nome,
         email,
-        cpf,
+        cpf: cpfLimpo,
         senha,
         tipo: 'cliente',
       });
@@ -43,8 +59,8 @@ export default function CriarConta({ navigation }) {
       Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
       navigation.navigate('Login');
     } catch (error) {
-      console.error("Erro no cadastro:", error?.response?.data || error.message);
-      Alert.alert("Erro", error?.response?.data?.error || "Erro ao cadastrar usuário.");
+      console.error("Erro no cadastro:", error.response ? error.response.data : error.message);
+      Alert.alert("Erro", error.response?.data?.error || "Erro ao cadastrar usuário.");
     }
   }
 
@@ -86,6 +102,7 @@ export default function CriarConta({ navigation }) {
           onChangeText={setCpf}
           keyboardType="numeric"
           style={styles.input}
+          maxLength={14} // permite CPF com máscara, tipo 000.000.000-00
         />
       </View>
 

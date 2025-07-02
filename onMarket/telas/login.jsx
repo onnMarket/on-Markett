@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -10,6 +10,7 @@ import {
   View
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import cores from './style/cores';
 
@@ -31,6 +32,13 @@ export default function Login({ navigation }) {
       });
 
       const { user } = response.data;
+
+      console.log('User recebido da API:', user);
+
+      // Salva a senha digitada junto com os dados do usuário
+      const userComSenha = { ...user, senha };
+
+      await AsyncStorage.setItem('@usuario', JSON.stringify(userComSenha));
 
       if (user.tipo === 'adm') {
         navigation.navigate('InicioADM');

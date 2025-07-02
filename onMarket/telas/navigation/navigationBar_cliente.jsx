@@ -15,7 +15,7 @@ export default function MenuInferiorADM({ navigation }) {
           <Text style={estilos.textoItem}>Histórico</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={estilos.item}>
+        <TouchableOpacity style={estilos.item} onPress={() => navigation.navigate('Perfil')}>
           <MaterialIcons name="person" size={28} color="#fff" />
           <Text style={estilos.textoItem}>Perfil</Text>
         </TouchableOpacity>
