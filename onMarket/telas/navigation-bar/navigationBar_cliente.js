@@ -1,13 +1,11 @@
-import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import cores from '../style/cores';
 
 export default function MenuInferiorADM({ navigation }) {
   return (
       <View style={estilos.menu}>
-        <TouchableOpacity style={estilos.item}>
+        <TouchableOpacity style={estilos.item} onPress={() => navigation.navigate('Inicio')}>
           <MaterialIcons name="home" size={28} color="#F5F5F5" />
           <Text style={estilos.textoItem}>Início</Text>
         </TouchableOpacity>

@@ -1,97 +1,111 @@
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import {
-    Image,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { useState } from 'react';
+import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import cores from '../style/cores';
-import MenuInferiorCliente from '../navigation-bar/navigationBar_cliente';
 
 export default function Produto({ navigation, route }) {
+  const { item } = route.params || {};
+  const [quantidade, setQuantidade] = useState('');
 
+  if (!item) {
     return (
-        <SafeAreaView style={estilos.container}>
-            {/* HEADER */}
-            <View style={estilos.header}>
-                <View style={estilos.caixaCabecalho}>
-                    <Avatar
-                        rounded
-                        size="large"
-                        source={require('../../image/onMarket_3.png')}
-                    />
-                    <View style={estilos.caixaBusca}>
-                        <TextInput
-                            placeholder="Pesquise aqui..."
-                            placeholderTextColor="#aaa"
-                            style={estilos.input}
-                            value={busca}
-                            onChangeText={setBusca}
-                        />
-                        <MaterialIcons name="search" size={24} color="gray" />
-                    </View>
-                    <TouchableOpacity style={estilos.notificacao}>
-                        <TouchableOpacity style={estilos.item}>
-                            <MaterialIcons name="shopping-cart" size={28} color="#fff" />
-                        </TouchableOpacity>
-                    </TouchableOpacity>
-                </View>
-            </View>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Produto não encontrado.</Text>
+      </View>
+    );
+  }
 
-            {/*Produto*/}
-            <View key={item.id}>
-                {item.foto ? (
-                    <Image
-                        source={{
-                            uri: item.foto.length < 100
-                                ? `https://drive.google.com/uc?export=view&id=${item.foto}`
-                                : `data:image/jpeg;base64,${item.foto}`,
-                        }}
-                        style={estilos.imagemProduto}
-                        resizeMode="cover"
-                    />
-                ) : (
-                    <View
-                        style={[
-                            estilos.imagemProduto,
-                            { backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' },
-                        ]}
-                    >
-                        <Text>Sem imagem</Text>
-                    </View>
-                )}
-                <View>
-                    <Text style={estilos.nomeProduto}>{item.nome}</Text>
-                    <Text style={estilos.precoProduto}>
-                        R${' '}
-                        {typeof item.preco === 'number'
-                        ? item.preco.toFixed(2)
-                        : parseFloat(item.preco)?.toFixed(2) || '0.00'}
-                    </Text>
-                    <Text style={estilos.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>
-                    <Text>Quantidade</Text> <TextInput placeholder='0'></TextInput>
-                    </View>
+  return (
+    <SafeAreaView style={styles.container}>
 
-                    <TouchableOpacity placeholder="Adicionar ao carrinho" style={{backgroundColor:"green"}}></TouchableOpacity >
-            </View>
+      {/* PRODUTO */}
+      <View style={styles.produtoContainer}>
+        {item.foto ? (
+          <Image
+            source={{
+              uri:
+                item.foto.length < 100
+                  ? `https://drive.google.com/uc?export=view&id=${item.foto}`
+                  : `data:image/jpeg;base64,${item.foto}`,
+            }}
+            style={styles.imagemProduto}
+            resizeMode="contain"
+          />
+        ) : (
+          <View
+            style={[
+              styles.imagemProduto,
+              { backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' },
+            ]}
+          >
+            <Text>Sem imagem</Text>
+          </View>
+        )}
+        <View style={{ padding: 20 }}>
+          <Text style={styles.nomeProduto}>{item.nome}</Text>
+          <Text style={styles.precoProduto}>
+            R${typeof item.preco === 'number'
+              ? item.preco.toFixed(2)
+              : parseFloat(item.preco)?.toFixed(2) || '0.00'}
+          </Text>
+          <Text style={styles.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>
 
-            {/* MENU FIXO INFERIOR */}
-            <MenuInferiorCliente navigation={navigation} />
-        </SafeAreaView>
-    )
+          <Text style={{ marginTop: 15 }}>Quantidade</Text>
+          <TextInput
+            placeholder="0"
+            keyboardType="numeric"
+            value={quantidade}
+            onChangeText={setQuantidade}
+            style={{
+              borderWidth: 1,
+              borderColor: '#ccc',
+              borderRadius: 8,
+              padding: 8,
+              marginTop: 5,
+            }}
+          />
+
+          <TouchableOpacity
+            style={{
+              marginTop: 20,
+              backgroundColor: 'green',
+              padding: 15,
+              borderRadius: 8,
+            }}
+          >
+            <Text style={{ color: '#fff', textAlign: 'center' }}>Adicionar ao carrinho</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: cores.Secundaria,
-    }
-})
-
+  container: {
+    flex: 1,
+    backgroundColor: cores.Secundaria,
+  },
+  produtoContainer: {
+    marginTop: 30,
+  },
+  imagemProduto: {
+    width: '100%',
+    height: 300, // altura maior para caber a imagem inteira
+    backgroundColor: '#fff',
+  },
+  nomeProduto: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: cores.texto,
+    marginBottom: 10,
+  },
+  precoProduto: {
+    fontSize: 18,
+    color: cores.Preco,
+    marginBottom: 5,
+  },
+  quantidadeProduto: {
+    fontSize: 14,
+    color: '#777',
+  },
+});
