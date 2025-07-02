@@ -16,6 +16,7 @@ import cores from './style/cores';
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   async function login() {
     if (!email || !senha) {
@@ -47,7 +48,6 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Campo de email */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
@@ -61,17 +61,23 @@ export default function Login({ navigation }) {
         />
       </View>
 
-      {/* Campo de senha */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="lock" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
           placeholder="Senha"
           placeholderTextColor="#999"
           style={styles.input}
-          secureTextEntry
+          secureTextEntry={!mostrarSenha}
           value={senha}
           onChangeText={setSenha}
         />
+        <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
+          <MaterialIcons
+            name={mostrarSenha ? 'visibility' : 'visibility-off'}
+            size={24}
+            color={cores.texto}
+          />
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('RecuperacaoSenha')}>

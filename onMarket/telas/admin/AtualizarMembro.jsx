@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import cores from '../style/cores';
 
 export default function AtualizarMembro({ route, navigation }) {
@@ -19,15 +20,9 @@ export default function AtualizarMembro({ route, navigation }) {
   const [email, setEmail] = useState(membro.email);
   const [cpf, setCpf] = useState(membro.cpf);
   const [tipo, setTipo] = useState(membro.tipo);
-  //const senha = membro.senha
 
   const atualizar = async () => {
-    const dadosAtualizados = {
-      nome,
-      email,
-      cpf,
-      tipo,
-    };
+    const dadosAtualizados = { nome, email, cpf, tipo };
 
     try {
       await axios.put(`https://on-markett-2.onrender.com/api/users/${membro.id}`, dadosAtualizados);
@@ -52,37 +47,51 @@ export default function AtualizarMembro({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-        placeholder="Nome"
-      />
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-      />
-      <TextInput
-        value={cpf}
-        onChangeText={setCpf}
-        style={styles.input}
-        placeholder="CPF"
-        keyboardType="numeric"
-      />
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="person" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+          placeholder="Nome"
+          placeholderTextColor="#999"
+        />
+      </View>
 
-      <View style={styles.pickerContainer}>
-        <Text style={styles.pickerLabel}>Tipo de Conta:</Text>
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#999"
+          keyboardType="email-address"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="badge" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          value={cpf}
+          onChangeText={setCpf}
+          style={styles.input}
+          placeholder="CPF"
+          placeholderTextColor="#999"
+          keyboardType="numeric"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="supervisor-account" size={24} color={cores.texto} style={styles.icon} />
         <Picker
           selectedValue={tipo}
           onValueChange={(itemValue) => setTipo(itemValue)}
           style={styles.picker}
+          dropdownIconColor={cores.texto}
         >
           <Picker.Item label="Administrador" value="adm" />
           <Picker.Item label="Cliente" value="cliente" />
-          <Picker.Item label="Outro" value="outro" />
         </Picker>
       </View>
 
@@ -90,7 +99,7 @@ export default function AtualizarMembro({ route, navigation }) {
         <Text style={styles.textoBotao}>Salvar Alterações</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={deletar} style={[styles.botao, { backgroundColor: 'red' }]}>
+      <TouchableOpacity onPress={deletar} style={[styles.botao, { backgroundColor: cores.botaoDeletar }]}>
         <Text style={styles.textoBotao}>Excluir Membro</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -104,30 +113,27 @@ const styles = StyleSheet.create({
     backgroundColor: cores.Secundaria,
     justifyContent: 'center',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    marginBottom: 15,
+  },
+  icon: {
+    marginRight: 10,
+  },
   input: {
-    borderWidth: 1,
-    borderColor: cores.bordaTabela,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 15,
-    backgroundColor: cores.cardProdutos,
-  },
-  pickerContainer: {
-    marginBottom: 15,
-    backgroundColor: cores.cardProdutos,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: cores.bordaTabela,
-  },
-  pickerLabel: {
-    marginLeft: 12,
-    marginTop: 10,
-    fontWeight: '600',
-    color: cores.textoClaro,
+    flex: 1,
+    fontSize: 16,
+    color: cores.texto,
   },
   picker: {
-    height: 50,
-    width: '100%',
+    flex: 1,
+    color: cores.texto,
+    backgroundColor: 'transparent',
   },
   botao: {
     backgroundColor: cores.botaoEditar,
@@ -139,5 +145,6 @@ const styles = StyleSheet.create({
   textoBotao: {
     color: cores.textoClaro,
     fontSize: 16,
+    fontWeight: 'bold',
   },
 });

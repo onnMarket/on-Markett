@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-import cores from '../style/cores'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import cores from '../style/cores';
 
 export default function CadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
@@ -98,19 +98,27 @@ export default function CadastrarProdutos({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.formWrapper}>
-          <TextInput
-            placeholder="Nome"
-            value={nome}
-            onChangeText={setNome}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="shopping-bag" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Nome"
+              placeholderTextColor="#999"
+              value={nome}
+              onChangeText={setNome}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="URL da imagem (Drive ou outro)"
-            value={fotoUrl}
-            onChangeText={setFotoUrl}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="image" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="URL da imagem (Drive ou outro)"
+              placeholderTextColor="#999"
+              value={fotoUrl}
+              onChangeText={setFotoUrl}
+              style={styles.input}
+            />
+          </View>
 
           {fotoUrl ? (
             <Image
@@ -119,54 +127,81 @@ export default function CadastrarProdutos({ navigation }) {
             />
           ) : null}
 
-          <View style={styles.input}>
-            <Picker
-              selectedValue={categoria}
-              onValueChange={(itemValue) => setCategoria(itemValue)}
-            >
-              <Picker.Item label="Selecione uma categoria" value="" />
-              {listaCategorias.map((cat) => (
-                <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
-              ))}
-              <Picker.Item label="Criar nova categoria..." value="__nova__" />
-            </Picker>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="category" size={24} color={cores.texto} style={styles.icon} />
+            <View style={styles.pickerWrapper}>
+              <Picker
+                selectedValue={categoria}
+                onValueChange={(itemValue) => setCategoria(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Selecione uma categoria" value="" />
+                {listaCategorias.map((cat) => (
+                  <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
+                ))}
+                <Picker.Item label="Criar nova categoria..." value="__nova__" />
+              </Picker>
+            </View>
           </View>
 
           {categoria === '__nova__' && (
-            <TextInput
-              placeholder="Nova Categoria"
-              value={novaCategoria}
-              onChangeText={setNovaCategoria}
-              style={styles.input}
-            />
+            <View style={styles.inputContainer}>
+              <MaterialIcons name="edit" size={24} color={cores.texto} style={styles.icon} />
+              <TextInput
+                placeholder="Nova Categoria"
+                placeholderTextColor="#999"
+                value={novaCategoria}
+                onChangeText={setNovaCategoria}
+                style={styles.input}
+              />
+            </View>
           )}
 
-          <TextInput
-            placeholder="Descrição"
-            value={descricao}
-            onChangeText={setDescricao}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Preço"
-            value={preco}
-            onChangeText={setPreco}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Validade: xx/xx/xxxx"
-            value={validade}
-            onChangeText={setValidade}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Quantidade no Estoque"
-            value={quantidade}
-            onChangeText={setQuantidade}
-            keyboardType="numeric"
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="description" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Descrição"
+              placeholderTextColor="#999"
+              value={descricao}
+              onChangeText={setDescricao}
+              style={styles.input}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="attach-money" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Preço"
+              placeholderTextColor="#999"
+              value={preco}
+              onChangeText={setPreco}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="calendar-today" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Validade: xx/xx/xxxx"
+              placeholderTextColor="#999"
+              value={validade}
+              onChangeText={setValidade}
+              style={styles.input}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="inventory" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Quantidade no Estoque"
+              placeholderTextColor="#999"
+              value={quantidade}
+              onChangeText={setQuantidade}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={cadastrarProduto}>
             <Text style={styles.textoBotao}>Salvar</Text>
@@ -193,13 +228,30 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: cores.bordaTabela,
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 16,
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     marginBottom: 15,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: cores.texto,
+  },
+  pickerWrapper: {
+    flex: 1,
+  },
+  picker: {
+    color: cores.texto,
+    backgroundColor: 'transparent',
+    width: '100%',
   },
   imagemPreview: {
     width: '100%',

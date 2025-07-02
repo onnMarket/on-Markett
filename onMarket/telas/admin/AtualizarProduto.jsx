@@ -10,14 +10,14 @@ import {
   View,
   Alert,
 } from 'react-native';
-
-import cores from '../style/cores'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import cores from '../style/cores';
 
 function formatDateToISO(dateStr) {
   if (!dateStr) return dateStr;
   if (dateStr.includes('-')) return dateStr; // já no formato ISO
   const parts = dateStr.split('/');
-  if (parts.length !== 3) return dateStr; // formato inesperado, retorna original
+  if (parts.length !== 3) return dateStr;
   const [day, month, year] = parts;
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
@@ -84,56 +84,84 @@ export default function AtualizarProduto({ route, navigation }) {
         <View style={styles.formWrapper}>
           <Text style={styles.titulo}>Atualizar Produto</Text>
 
-          <TextInput
-            placeholder="Nome"
-            value={nome}
-            onChangeText={setNome}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="shopping-bag" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Nome"
+              placeholderTextColor="#999"
+              value={nome}
+              onChangeText={setNome}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Foto"
-            value={foto}
-            onChangeText={setFoto}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="image" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Foto"
+              placeholderTextColor="#999"
+              value={foto}
+              onChangeText={setFoto}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Categoria"
-            value={categoria}
-            onChangeText={setCategoria}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="category" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Categoria"
+              placeholderTextColor="#999"
+              value={categoria}
+              onChangeText={setCategoria}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Descrição"
-            value={descricao}
-            onChangeText={setDescricao}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="description" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Descrição"
+              placeholderTextColor="#999"
+              value={descricao}
+              onChangeText={setDescricao}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Preço"
-            value={preco}
-            onChangeText={setPreco}
-            keyboardType="numeric"
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="attach-money" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Preço"
+              placeholderTextColor="#999"
+              value={preco}
+              onChangeText={setPreco}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Validade (dd/MM/yyyy)"
-            value={validade}
-            onChangeText={setValidade}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="calendar-today" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Validade (dd/MM/yyyy)"
+              placeholderTextColor="#999"
+              value={validade}
+              onChangeText={setValidade}
+              style={styles.input}
+            />
+          </View>
 
-          <TextInput
-            placeholder="Quantidade no Estoque"
-            value={quantidade}
-            onChangeText={setQuantidade}
-            keyboardType="numeric"
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="inventory" size={24} color={cores.texto} style={styles.icon} />
+            <TextInput
+              placeholder="Quantidade no Estoque"
+              placeholderTextColor="#999"
+              value={quantidade}
+              onChangeText={setQuantidade}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
 
           <TouchableOpacity style={styles.botaoEditar} onPress={atualizarProduto}>
             <Text style={styles.textoBotao}>Editar</Text>
@@ -170,13 +198,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: cores.bordaTabela,
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 16,
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     marginBottom: 15,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: cores.texto,
   },
   botaoEditar: {
     backgroundColor: cores.botaoEditar,

@@ -6,9 +6,10 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import cores from './style/cores';
 
 export default function CriarConta({ navigation }) {
@@ -16,6 +17,7 @@ export default function CriarConta({ navigation }) {
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const validarCampos = () => {
     if (!nome || !cpf || !email || !senha) {
@@ -48,35 +50,66 @@ export default function CriarConta({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="CPF"
-        value={cpf}
-        onChangeText={setCpf}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-        style={styles.input}
-      />
+      {/* Campo Nome */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="person" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="Nome"
+          placeholderTextColor="#999"
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+        />
+      </View>
 
+      {/* Campo Email */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#999"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
+      </View>
+
+      {/* Campo CPF */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="badge" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="CPF"
+          placeholderTextColor="#999"
+          value={cpf}
+          onChangeText={setCpf}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+      </View>
+
+      {/* Campo Senha com ver/ocultar */}
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="lock" size={24} color={cores.texto} style={styles.icon} />
+        <TextInput
+          placeholder="Senha"
+          placeholderTextColor="#999"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry={!mostrarSenha}
+          style={styles.input}
+        />
+        <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
+          <MaterialIcons
+            name={mostrarSenha ? 'visibility' : 'visibility-off'}
+            size={24}
+            color={cores.texto}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Botão de salvar */}
       <TouchableOpacity style={styles.botaoSalvar} onPress={criarConta}>
         <Text style={styles.textoBotao}>Salvar</Text>
       </TouchableOpacity>
@@ -91,15 +124,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
-  input: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: cores.input,
     borderRadius: 8,
     paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingVertical: 8,
     width: '100%',
-    marginBottom: 15
+    marginBottom: 15,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: cores.texto,
   },
   botaoSalvar: {
     backgroundColor: cores.botaoEnviar,
