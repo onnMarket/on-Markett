@@ -8,14 +8,8 @@ import {
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const cores = {
-  Secundaria: '#f0f0f0',
-  cardProdutos: '#fff',
-  texto: '#333',
-  botaoDeletar: '#d9534f',
-  textoClaro: '#fff',
-};
+import axios from 'axios';
+import cores from '../style/cores';
 
 export default function Perfil({ navigation }) {
   const [usuario, setUsuario] = useState(null);
@@ -58,6 +52,37 @@ export default function Perfil({ navigation }) {
     );
   };
 
+  const editarConta = () => {
+    navigation.navigate('EditarConta', { usuario });
+  };
+
+  const excluirConta = () => {
+    Alert.alert(
+      'Excluir Conta',
+      'Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              // Requisição para deletar o usuário na API
+              await axios.delete(`https://on-markett-2.onrender.com/api/users/${usuario.id}`);
+
+              await AsyncStorage.removeItem('@usuario');
+              Alert.alert('Conta excluída', 'Sua conta foi removida com sucesso.');
+              navigation.replace('Login');
+            } catch (error) {
+              console.error('Erro ao excluir conta:', error);
+              Alert.alert('Erro', 'Não foi possível excluir a conta.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   if (!usuario) {
     return (
       <SafeAreaView style={styles.container}>
@@ -85,6 +110,14 @@ export default function Perfil({ navigation }) {
 
         <Text style={styles.label}>Senha:</Text>
         <Text style={styles.valor}>{usuario.senha || '-'}</Text>
+
+        <TouchableOpacity style={styles.botaoEditar} onPress={editarConta}>
+          <Text style={styles.textoBotao}>Editar Conta</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.botaoExcluir} onPress={excluirConta}>
+          <Text style={styles.textoBotao}>Excluir Conta</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.botaoLogout} onPress={logout}>
           <Text style={styles.textoBotao}>Sair</Text>
@@ -125,9 +158,23 @@ const styles = StyleSheet.create({
     color: cores.texto,
     marginTop: 2,
   },
-  botaoLogout: {
+  botaoEditar: {
+    backgroundColor: cores.botaoEditar,
+    marginTop: 20,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  botaoExcluir: {
     backgroundColor: cores.botaoDeletar,
-    marginTop: 30,
+    marginTop: 10,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  botaoLogout: {
+    backgroundColor: cores.botaoSair,
+    marginTop: 10,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',

@@ -7,6 +7,7 @@ const cores = {
   botaoEditar: "#fbbc04",
   botaoDeletar: "#e53935",
   botaoEnviar: "#4caf50",
+  botaoSair: "#6c757d",
   texto: "#212121",
   textoClaro: "#fff",
   bordaTabela: "#ccc",
