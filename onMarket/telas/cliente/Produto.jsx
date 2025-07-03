@@ -48,7 +48,7 @@ export default function Produto({ navigation, route }) {
               : parseFloat(item.preco)?.toFixed(2) || '0.00'}
           </Text>
           <Text style={styles.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>
-
+          <Text style={styles.descricaoProduto}>{item.descricao}</Text>
           <Text style={{ marginTop: 15 }}>Quantidade</Text>
           <TextInput
             placeholder="0"
@@ -81,6 +81,12 @@ export default function Produto({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+descricaoProduto: {
+  fontSize: 14,
+  color: cores.texto,
+  marginTop: 10,
+  lineHeight: 20,
+},
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
