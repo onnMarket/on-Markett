@@ -16,6 +16,7 @@ import AtualizarMembro from "./telas/admin/AtualizarMembro";
 import Produto from "./telas/cliente/Produto";
 import Perfil from "./telas/cliente/Perfil";
 import EditarConta from "./telas/cliente/EditarConta";
+import Carrinho from "./telas/cliente/Carrinho";
 
 const Stack = createNativeStackNavigator();
 
@@ -96,6 +97,11 @@ export default function App() {
         <Stack.Screen
           name="EditarConta"
           component={EditarConta}
+          options={{headerShown: false}}
+          />
+          <Stack.Screen
+          name="Carrinho"
+          component={Carrinho}
           options={{headerShown: false}}
           />
       </Stack.Navigator>

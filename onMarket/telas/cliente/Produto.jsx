@@ -71,6 +71,8 @@ export default function Produto({ navigation, route }) {
               padding: 15,
               borderRadius: 8,
             }}
+
+            //onPress={() => navigation.navigate('Carrinho',{item, quantidade})}
           >
             <Text style={{ color: '#fff', textAlign: 'center' }}>Adicionar ao carrinho</Text>
           </TouchableOpacity>
