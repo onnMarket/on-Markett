@@ -14,14 +14,14 @@ import cores from '../style/cores';
 import MenuInferiorCliente from '../navigation/navigationBar_cliente';
 import BarraPesquisaClientes from '../navigation/baraPesquisa_clientes';
 
-export default function Inicio({ navigation }) {
+export default function Inicio({ navigation, route }) {
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [busca, setBusca] = useState('');
-  const {item, quantidade} = route.params;
+  const {item, quantidade} = route.params || {};
 
-  useEffect(() => {
+  /*useEffect(() => {
     Promise.all([
       axios.get('https://on-markett-2.onrender.com/api/categorias'),
       axios.get('https://on-markett-2.onrender.com/api/produtos')
@@ -53,7 +53,7 @@ export default function Inicio({ navigation }) {
     const pertenceCategoria = categoriaSelecionada ? prod.categoria === categoriaSelecionada : true;
     const contemBusca = prod.nome.toLowerCase().includes(busca.toLowerCase());
     return pertenceCategoria && contemBusca;
-  });
+  });*/
 
   return (
     <SafeAreaView style={estilos.container}>
@@ -63,11 +63,9 @@ export default function Inicio({ navigation }) {
       {/* CONTEÚDO PRINCIPAL */}
       <ScrollView>
         <View style={estilos.gridProdutos}>
-          {produtosFiltrados.map((item) => (
             <TouchableOpacity
               key={item.id}
               style={estilos.cardProduto}
-              onPress={() => navigation.navigate('Produto', { item })}
             >
               {item.foto ? (
                 <Image
@@ -102,7 +100,6 @@ export default function Inicio({ navigation }) {
                 <Text style={estilos.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>
               </View>
             </TouchableOpacity>
-          ))}
         </View>
         <View style={{ height: 100 }} />
       </ScrollView>

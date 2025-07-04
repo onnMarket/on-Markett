@@ -48,12 +48,12 @@ export default function CriarConta({ navigation }) {
     try {
       const cpfLimpo = cpf.replace(/\D/g, '');
       const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
-        nome,
-        email,
-        cpf: cpfLimpo,
-        senha,
-        tipo: 'cliente',
-      });
+          nome,
+          email,
+          cpf: cpfLimpo,
+          senha,
+          tipo: "cliente",
+        });
 
       console.log(response.data);
       Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
