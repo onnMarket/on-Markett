@@ -10,6 +10,16 @@
     }
   ],
   "produtos": [
+    {
+      "id": "97f5",
+      "nome": "Mateus Juan",
+      "foto": "1n0QmJQ3C8u2CyOVL6Ih13S4JZmgWhvg6",
+      "categoria": "Casa",
+      "descricao": "lindo",
+      "preco": 10,
+      "validade": "10/10/2025",
+      "quantidade_estoque": 1
+    }
   ],
   "categorias": [
     {
@@ -17,14 +27,14 @@
       "nome": "Frutas",
       "icone": "apple",
       "tipo": "MaterialIcons",
-      "quantidade": 1
+      "quantidade": 0
     },
     {
       "id": "2",
       "nome": "Verduras",
       "icone": "leaf",
       "tipo": "FontAwesome",
-      "quantidade": 1
+      "quantidade": 0
     },
     {
       "id": "3",
@@ -52,7 +62,7 @@
       "nome": "Padaria",
       "icone": "bakery-dining",
       "tipo": "MaterialIcons",
-      "quantidade": 1
+      "quantidade": 0
     },
     {
       "id": "7",
@@ -125,18 +135,11 @@
       "quantidade": 0
     },
     {
-      "id": "17",
-      "nome": "Casa",
-      "icone": "home",
-      "tipo": "MaterialIcons",
-      "quantidade": 0
-    },
-    {
       "id": "18",
       "nome": "Embalados",
       "icone": "orders",
       "tipo": "MaterialIcons",
-      "quantidade": 1
+      "quantidade": 0
     }
   ]
 }

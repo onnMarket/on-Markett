@@ -22,12 +22,14 @@ export default function InicioADM() {
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     let produtosData = [];
     let categoriasData = [];
 
-    axios.get('https://on-markett-2.onrender.com/api/produtos')
+    axios
+      .get('https://on-markett-2.onrender.com/api/produtos')
       .then((resProdutos) => {
         produtosData = resProdutos.data;
         return axios.get('https://on-markett-2.onrender.com/api/categorias');
@@ -45,12 +47,15 @@ export default function InicioADM() {
       })
       .catch((error) => {
         console.error('Erro ao buscar dados:', error);
+      })
+      .finally(() => {
+        setCarregando(false);
       });
   }, []);
 
   const produtosFiltrados = categoriaSelecionada
     ? produtos.filter(prod => prod.categoria === categoriaSelecionada)
-    : produtos.filter(prod => prod.quantidade_estoque <= 10);
+    : produtos;
 
   return (
     <SafeAreaView style={estilos.container}>
@@ -77,9 +82,28 @@ export default function InicioADM() {
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categorias</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CadastrarCategoria')}>
+            <MaterialIcons name="add-box" size={28} color={cores.texto} />
+          </TouchableOpacity>
         </View>
 
+        {/* Categorias com botão "Todos" */}
         <View style={estilos.grid}>
+          {/* Botão "Todos" */}
+          <TouchableOpacity
+            style={[
+              estilos.itemCategoria,
+              categoriaSelecionada === null && estilos.categoriaSelecionada,
+            ]}
+            onPress={() => setCategoriaSelecionada(null)}
+          >
+            <View style={estilos.circuloIcone}>
+              <MaterialIcons name="apps" size={28} color={cores.texto} />
+            </View>
+            <Text style={estilos.textoCategoria}>Todos</Text>
+          </TouchableOpacity>
+
+          {/* Demais categorias */}
           {categorias.map((item, index) => (
             <TouchableOpacity
               key={index}
@@ -108,14 +132,18 @@ export default function InicioADM() {
         <View style={{ marginTop: 20 }}>
           <View style={estilos.linhaTitulo}>
             <Text style={estilos.conteudo_principal}>
-              {categoriaSelecionada ? `Produtos da categoria "${categoriaSelecionada}"` : 'Produtos com baixo estoque'}
+              {categoriaSelecionada
+                ? `Produtos da categoria "${categoriaSelecionada}"`
+                : 'Todos os Produtos:'}
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('CadastrarProdutos')}>
               <MaterialIcons name="add-box" size={28} color={cores.texto} />
             </TouchableOpacity>
           </View>
 
-          {produtosFiltrados.length === 0 ? (
+          {carregando ? (
+            <Text>Carregando produtos...</Text>
+          ) : produtosFiltrados.length === 0 ? (
             <Text style={{ marginTop: 10 }}>Nenhum produto encontrado.</Text>
           ) : (
             <View style={estilos.gridProdutos}>
@@ -148,7 +176,9 @@ export default function InicioADM() {
                   )}
                   <View style={estilos.infoCard}>
                     <Text style={estilos.nomeProduto}>{produto.nome}</Text>
-                    <Text style={estilos.precoProduto}>R$ {parseFloat(produto.preco).toFixed(2)}</Text>
+                    <Text style={estilos.precoProduto}>
+                      R$ {parseFloat(produto.preco).toFixed(2)}
+                    </Text>
                     <Text
                       style={[
                         estilos.estrelasProduto,
@@ -234,9 +264,11 @@ const estilos = StyleSheet.create({
     marginBottom: 8,
   },
   categoriaSelecionada: {
-    backgroundColor: '#c8e6c9',
+    backgroundColor: '#a5d6a7',
     borderRadius: 10,
     padding: 10,
+    borderWidth: 2,
+    borderColor: cores.Principal,
   },
   circuloIcone: {
     backgroundColor: cores.IconeCategorias,
