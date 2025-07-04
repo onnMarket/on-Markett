@@ -47,8 +47,7 @@ export default function CriarConta({ navigation }) {
 
     try {
       const cpfLimpo = cpf.replace(/\D/g, '');
-      //const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
-        const response = await axios.post("http://localhost:3000/usuario", {
+      const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
           nome,
           email,
           cpf: cpfLimpo,
