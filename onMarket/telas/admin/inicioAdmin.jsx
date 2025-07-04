@@ -82,6 +82,9 @@ export default function InicioADM() {
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categorias</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CadastrarCategoria')}>
+            <MaterialIcons name="add-box" size={28} color={cores.texto} />
+          </TouchableOpacity>
         </View>
 
         {/* Categorias com botão "Todos" */}
