@@ -18,7 +18,6 @@ export default function CadastrarProdutos({ navigation }) {
   const [nome, setNome] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
   const [categoria, setCategoria] = useState('');
-  const [novaCategoria, setNovaCategoria] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
   const [validade, setValidade] = useState('');
@@ -39,10 +38,8 @@ export default function CadastrarProdutos({ navigation }) {
   };
 
   const cadastrarProduto = async () => {
-    const categoriaFinal = categoria === '__nova__' ? novaCategoria.trim() : categoria;
-
-    if (!categoriaFinal) {
-      alert('Selecione ou digite uma categoria válida.');
+    if (!categoria) {
+      alert('Selecione uma categoria válida.');
       return;
     }
 
@@ -62,27 +59,21 @@ export default function CadastrarProdutos({ navigation }) {
       await axios.post('https://on-markett-2.onrender.com/api/produtos', {
         nome,
         foto: idImagem,
-        categoria: categoriaFinal,
+        categoria,
         descricao,
         preco: parseFloat(preco),
         validade,
         quantidade_estoque: parseInt(quantidade),
       });
 
+      // Atualiza a quantidade da categoria cadastrada
       const categoriaExistente = listaCategorias.find(
-        (cat) => cat.nome.toLowerCase() === categoriaFinal.toLowerCase()
+        (cat) => cat.nome.toLowerCase() === categoria.toLowerCase()
       );
 
       if (categoriaExistente) {
         await axios.put(`https://on-markett-2.onrender.com/api/categorias/${categoriaExistente.id}`, {
           quantidade: categoriaExistente.quantidade + 1,
-        });
-      } else {
-        await axios.post('https://on-markett-2.onrender.com/api/categorias', {
-          nome: categoriaFinal,
-          quantidade: 1,
-          icone: '',
-          tipo: '',
         });
       }
 
@@ -137,28 +128,14 @@ export default function CadastrarProdutos({ navigation }) {
               >
                 <Picker.Item label="Selecione uma categoria" value="" />
                 {listaCategorias
-                  .slice() // cria cópia para não mutar o estado original
+                  .slice()
                   .sort((a, b) => a.nome.localeCompare(b.nome))
                   .map((cat) => (
                     <Picker.Item key={cat.id} label={cat.nome} value={cat.nome} />
-                ))}
-                <Picker.Item label="Criar nova categoria..." value="__nova__" />
+                  ))}
               </Picker>
             </View>
           </View>
-
-          {categoria === '__nova__' && (
-            <View style={styles.inputContainer}>
-              <MaterialIcons name="edit" size={24} color={cores.texto} style={styles.icon} />
-              <TextInput
-                placeholder="Nova Categoria"
-                placeholderTextColor="#999"
-                value={novaCategoria}
-                onChangeText={setNovaCategoria}
-                style={styles.input}
-              />
-            </View>
-          )}
 
           <View style={styles.inputContainer}>
             <MaterialIcons name="description" size={24} color={cores.texto} style={styles.icon} />

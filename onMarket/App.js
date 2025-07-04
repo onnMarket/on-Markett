@@ -17,6 +17,7 @@ import Produto from "./telas/cliente/Produto";
 import Perfil from "./telas/cliente/Perfil";
 import EditarConta from "./telas/cliente/EditarConta";
 import Carrinho from "./telas/cliente/Carrinho";
+import CadastrarCategoria from "./telas/admin/CadastrarCateogia";
 
 const Stack = createNativeStackNavigator();
 
@@ -103,6 +104,11 @@ export default function App() {
           name="Carrinho"
           component={Carrinho}
           options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CadastrarCategoria"
+            component={CadastrarCategoria}
+            options={{headerShown: false}}  
           />
       </Stack.Navigator>
     </NavigationContainer>
