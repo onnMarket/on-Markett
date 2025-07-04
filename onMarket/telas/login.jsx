@@ -26,7 +26,8 @@ export default function Login({ navigation }) {
     }
 
     try {
-      const response = await axios.post('https://on-markett-2.onrender.com/api/login', {
+      /*const response = await axios.post('https://on-markett-2.onrender.com/api/login',*/
+      const response = await axios.post('http://localhost:3000/usuario', {
         email,
         senha,
       });
