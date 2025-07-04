@@ -3,14 +3,14 @@ import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import cores from '../style/cores';
 
-export default function BarraPesquisaClientes({ busca, setBusca }) {
+export default function BarraPesquisaClientes({ busca, setBusca, navigation }) {
   return (
     <View style={estilos.header}>
       <View style={estilos.caixaCabecalho}>
         <Avatar
           rounded
           size="large"
-          source={require('../../image/onMarket_3.png')}
+          source={require("../../image/onMarket_3.png")}
         />
         <View style={estilos.caixaBusca}>
           <TextInput
@@ -23,7 +23,10 @@ export default function BarraPesquisaClientes({ busca, setBusca }) {
           <MaterialIcons name="search" size={24} color="gray" />
         </View>
         <TouchableOpacity style={estilos.notificacao}>
-          <TouchableOpacity style={estilos.item}>
+          <TouchableOpacity
+            style={estilos.item}
+            onPress={() => navigation.navigate("Carrinho")}
+          >
             <MaterialIcons name="shopping-cart" size={28} color="#fff" />
           </TouchableOpacity>
         </TouchableOpacity>

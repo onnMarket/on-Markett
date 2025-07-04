@@ -19,7 +19,9 @@ export default function Inicio({ navigation, route }) {
   const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [busca, setBusca] = useState('');
-  const {item, quantidade} = route.params || {};
+  const { item, quantidade } = route.params || {};
+  const soma = (item?.preco || 0) * (quantidade || 0);
+
 
   /*useEffect(() => {
     Promise.all([
@@ -92,20 +94,17 @@ export default function Inicio({ navigation, route }) {
                 <Text>Quantidade: {quantidade}</Text>
                 <Text style={estilos.precoProduto}>
                   R${' '}
-                  soma = {item.preco} * {quantidade}
                   {typeof soma === 'number'
                     ? soma.toFixed(2)
                     : parseFloat(soma)?.toFixed(2) || '0.00'}
                 </Text>
-                <Text style={estilos.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>
+              {/*<Text style={estilos.quantidadeProduto}>Estoque: {item.quantidade_estoque}</Text>*/}
               </View>
             </TouchableOpacity>
         </View>
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* MENU FIXO INFERIOR */}
-      <MenuInferiorCliente navigation={navigation} />
     </SafeAreaView>
   );
 }
