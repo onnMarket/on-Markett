@@ -38,17 +38,17 @@ export default function App() {
         <Stack.Screen
           name="CadastroUsuario"
           component={CriarConta}
-          options={{ headerShown: false }}
+          options={{ headerShown:true }}
         />
         <Stack.Screen
           name="AtualizarProduto"
           component={AtualizarProduto}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="RecuperacaoSenha"
           component={RecuperacaoSenha}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="Inicio"
@@ -63,7 +63,7 @@ export default function App() {
         <Stack.Screen
           name="CadastrarProdutos"
           component={CadastrarProdutos}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="Clientes"
@@ -78,27 +78,27 @@ export default function App() {
         <Stack.Screen
           name="CadastrarMembro"
           component={CadastrarMembro}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
         />
         <Stack.Screen
           name="AtualizarMembro"
           component={AtualizarMembro}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
         />
         <Stack.Screen
           name="Produto"
           component={Produto}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
         />
         <Stack.Screen
           name="Perfil"
           component={Perfil}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
           />
         <Stack.Screen
           name="EditarConta"
           component={EditarConta}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
           />
           <Stack.Screen
           name="Carrinho"
