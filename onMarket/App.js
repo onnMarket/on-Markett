@@ -39,17 +39,17 @@ export default function App() {
         <Stack.Screen
           name="CadastroUsuario"
           component={CriarConta}
-          options={{ headerShown:true }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="AtualizarProduto"
           component={AtualizarProduto}
-          options={{ headerShown: true }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="RecuperacaoSenha"
           component={RecuperacaoSenha}
-          options={{ headerShown: true }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="Inicio"
@@ -64,58 +64,58 @@ export default function App() {
         <Stack.Screen
           name="CadastrarProdutos"
           component={CadastrarProdutos}
-          options={{ headerShown: true }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="Clientes"
           component={Clientes}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Membros"
           component={Membros}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CadastrarMembro"
           component={CadastrarMembro}
-          options={{headerShown: true}}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="AtualizarMembro"
           component={AtualizarMembro}
-          options={{headerShown: true}}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="Produto"
           component={Produto}
-          options={{headerShown: true}}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen
           name="Perfil"
           component={Perfil}
-          options={{headerShown: true}}
-          />
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
         <Stack.Screen
           name="EditarConta"
           component={EditarConta}
-          options={{headerShown: true}}
-          />
-          <Stack.Screen
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen
           name="Carrinho"
           component={Carrinho}
-          options={{headerShown: true}}
-          />
-          <Stack.Screen
-            name="CadastrarCategoria"
-            component={CadastrarCategoria}
-            options={{headerShown: true}}
-          />
-          <Stack.Screen
-            name="VisualizarCliente"
-            component={VisualizarCliente}
-            options={{headerShown: true}}
-          />
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen
+          name="CadastrarCategoria"
+          component={CadastrarCategoria}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen
+          name="VisualizarCliente"
+          component={VisualizarCliente}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
