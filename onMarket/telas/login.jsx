@@ -33,9 +33,7 @@ export default function Login({ navigation }) {
 
       const { user } = response.data;
 
-      console.log('User recebido da API:', user);
 
-      // Salva a senha digitada junto com os dados do usuário
       const userComSenha = { ...user, senha };
 
       await AsyncStorage.setItem('@usuario', JSON.stringify(userComSenha));
