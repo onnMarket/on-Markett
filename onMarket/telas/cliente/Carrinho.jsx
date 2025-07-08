@@ -8,25 +8,35 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import cores from "../style/cores";
 
 export default function Carrinho({ navigation }) {
-  const compradorId = 1; // substituir depois pelo ID real do usuário
   const [itens, setItens] = useState([]);
+  const [usuarioId, setUsuarioId] = useState(null);
 
   useEffect(() => {
-    async function carregarCarrinho() {
+    async function carregarUsuarioEItens() {
       try {
-        const res = await axios.get(
-          `https://on-markett-2.onrender.com/api/carrinho/${compradorId}`
-        );
+        const usuarioSalvo = await AsyncStorage.getItem("@usuario");
+        const usuario = JSON.parse(usuarioSalvo);
+        const id = usuario?.id;
+
+        if (!id) {
+          console.warn("Usuário não encontrado no AsyncStorage.");
+          return;
+        }
+
+        setUsuarioId(id);
+
+        const res = await axios.get(`https://on-markett-2.onrender.com/api/carrinho/${id}`);
         setItens(res.data.itens || []);
       } catch (error) {
         console.error("Erro ao carregar carrinho:", error);
       }
     }
 
-    const unsubscribe = navigation.addListener("focus", carregarCarrinho);
+    const unsubscribe = navigation.addListener("focus", carregarUsuarioEItens);
     return unsubscribe;
   }, [navigation]);
 

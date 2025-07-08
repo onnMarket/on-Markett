@@ -14,7 +14,9 @@ const cores = {
   tituloTabela: "#f1f8ff",
   btnAdd:'#000000',
   alerta: '#e53935',
-  input: '#f1f1f1'
+  input: '#f1f1f1',
+  mais_menos: '#ddd',
+  impossibilitar: '#eee',
 };
 
 export default cores;

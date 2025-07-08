@@ -40,10 +40,6 @@ export default function Inicio({ navigation }) {
         );
 
         setCategorias(categoriasOrdenadas);
-
-        if (categoriasOrdenadas.length > 0) {
-          setCategoriaSelecionada(categoriasOrdenadas[0].nome);
-        }
       })
       .catch(err => console.error('Erro ao buscar dados:', err));
   }, []);
@@ -57,7 +53,7 @@ export default function Inicio({ navigation }) {
   return (
     <SafeAreaView style={estilos.container}>
       {/* HEADER */}
-      <BarraPesquisaClientes />
+      <BarraPesquisaClientes setBusca={setBusca} busca={busca} />
 
       {/* CONTEÚDO PRINCIPAL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
@@ -66,6 +62,21 @@ export default function Inicio({ navigation }) {
           <Text style={estilos.conteudo_principal}>Categorias</Text>
         </View>
         <View style={estilos.grid}>
+          {/* Botão "Todos" */}
+          <TouchableOpacity
+            style={[
+              estilos.itemCategoria,
+              categoriaSelecionada === null && estilos.categoriaSelecionada,
+            ]}
+            onPress={() => setCategoriaSelecionada(null)}
+          >
+            <View style={estilos.circuloIcone}>
+              <MaterialIcons name="apps" size={28} color="#212121" />
+            </View>
+            <Text style={estilos.textoCategoria}>Todos</Text>
+          </TouchableOpacity>
+
+          {/* Demais categorias */}
           {categorias.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -73,7 +84,11 @@ export default function Inicio({ navigation }) {
                 estilos.itemCategoria,
                 categoriaSelecionada === item.nome && estilos.categoriaSelecionada,
               ]}
-              onPress={() => setCategoriaSelecionada(item.nome)}
+              onPress={() =>
+                setCategoriaSelecionada(
+                  categoriaSelecionada === item.nome ? null : item.nome
+                )
+              }
             >
               <View style={estilos.circuloIcone}>
                 {item.tipo === 'MaterialIcons' ? (

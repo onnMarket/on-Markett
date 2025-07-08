@@ -37,6 +37,24 @@ export default function CadastrarProdutos({ navigation }) {
     return match ? match[1] : url.trim();
   };
 
+  const formatarPreco = (valor) => {
+    let precoFormatado = valor.replace(/\D/g, ''); // Remove tudo que não for número
+    if (precoFormatado.length <= 2) {
+      precoFormatado = precoFormatado.padStart(3, '0');
+    }
+
+    const parteInteira = precoFormatado.slice(0, -2);
+    const parteDecimal = precoFormatado.slice(-2);
+    return `${parseInt(parteInteira).toString()},${parteDecimal}`;
+  };
+
+  const formatarData = (texto) => {
+    let data = texto.replace(/\D/g, ''); // remove tudo que não for número
+    if (data.length > 2) data = data.slice(0, 2) + '/' + data.slice(2);
+    if (data.length > 5) data = data.slice(0, 5) + '/' + data.slice(5, 9);
+    return data;
+  };
+
   const cadastrarProduto = async () => {
     if (!categoria) {
       alert('Selecione uma categoria válida.');
@@ -48,7 +66,8 @@ export default function CadastrarProdutos({ navigation }) {
       return;
     }
 
-    if (!preco || isNaN(preco)) {
+    const precoNumerico = parseFloat(preco.replace(',', '.'));
+    if (!preco || isNaN(precoNumerico)) {
       alert('Informe o preço corretamente.');
       return;
     }
@@ -61,12 +80,11 @@ export default function CadastrarProdutos({ navigation }) {
         foto: idImagem,
         categoria,
         descricao,
-        preco: parseFloat(preco),
+        preco: precoNumerico,
         validade,
         quantidade_estoque: parseInt(quantidade),
       });
 
-      // Atualiza a quantidade da categoria cadastrada
       const categoriaExistente = listaCategorias.find(
         (cat) => cat.nome.toLowerCase() === categoria.toLowerCase()
       );
@@ -154,7 +172,7 @@ export default function CadastrarProdutos({ navigation }) {
               placeholder="Preço"
               placeholderTextColor="#999"
               value={preco}
-              onChangeText={setPreco}
+              onChangeText={(text) => setPreco(formatarPreco(text))}
               keyboardType="numeric"
               style={styles.input}
             />
@@ -163,10 +181,11 @@ export default function CadastrarProdutos({ navigation }) {
           <View style={styles.inputContainer}>
             <MaterialIcons name="calendar-today" size={24} color={cores.texto} style={styles.icon} />
             <TextInput
-              placeholder="Validade: xx/xx/xxxx"
+              placeholder="Validade: dd/mm/aaaa"
               placeholderTextColor="#999"
               value={validade}
-              onChangeText={setValidade}
+              onChangeText={(text) => setValidade(formatarData(text))}
+              keyboardType="numeric"
               style={styles.input}
             />
           </View>
@@ -251,5 +270,5 @@ const styles = StyleSheet.create({
     color: cores.textoClaro,
     fontSize: 18,
     fontWeight: 'bold',
-  }
+  },
 });

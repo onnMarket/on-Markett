@@ -15,11 +15,28 @@ import cores from '../style/cores';
 
 function formatDateToISO(dateStr) {
   if (!dateStr) return dateStr;
-  if (dateStr.includes('-')) return dateStr; // já no formato ISO
+  if (dateStr.includes('-')) return dateStr;
   const parts = dateStr.split('/');
   if (parts.length !== 3) return dateStr;
   const [day, month, year] = parts;
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+function formatarData(texto) {
+  let data = texto.replace(/\D/g, '');
+  if (data.length > 2) data = data.slice(0, 2) + '/' + data.slice(2);
+  if (data.length > 5) data = data.slice(0, 5) + '/' + data.slice(5, 9);
+  return data;
+}
+
+function formatarPreco(valor) {
+  let precoFormatado = valor.replace(/\D/g, '');
+  if (precoFormatado.length <= 2) {
+    precoFormatado = precoFormatado.padStart(3, '0');
+  }
+  const parteInteira = precoFormatado.slice(0, -2);
+  const parteDecimal = precoFormatado.slice(-2);
+  return `${parseInt(parteInteira).toString()},${parteDecimal}`;
 }
 
 export default function AtualizarProduto({ route, navigation }) {
@@ -29,18 +46,20 @@ export default function AtualizarProduto({ route, navigation }) {
   const [foto, setFoto] = useState(produto.foto);
   const [categoria, setCategoria] = useState(produto.categoria);
   const [descricao, setDescricao] = useState(produto.descricao);
-  const [preco, setPreco] = useState(produto.preco.toString());
-  const [validade, setValidade] = useState(produto.validade);
+  const [preco, setPreco] = useState(formatarPreco(produto.preco.toString()));
+  const [validade, setValidade] = useState(produto.validade.includes('-') ? produto.validade.split('-').reverse().join('/') : produto.validade);
   const [quantidade, setQuantidade] = useState(produto.quantidade_estoque.toString());
 
   const atualizarProduto = async () => {
     try {
+      const precoNumerico = parseFloat(preco.replace(',', '.'));
+
       await axios.put(`https://on-markett-2.onrender.com/api/produtos/${produto.id}`, {
         nome,
         foto,
         categoria,
         descricao,
-        preco: parseFloat(preco),
+        preco: precoNumerico,
         validade: formatDateToISO(validade),
         quantidade_estoque: parseInt(quantidade),
       });
@@ -134,7 +153,7 @@ export default function AtualizarProduto({ route, navigation }) {
               placeholder="Preço"
               placeholderTextColor="#999"
               value={preco}
-              onChangeText={setPreco}
+              onChangeText={(text) => setPreco(formatarPreco(text))}
               keyboardType="numeric"
               style={styles.input}
             />
@@ -146,7 +165,8 @@ export default function AtualizarProduto({ route, navigation }) {
               placeholder="Validade (dd/MM/yyyy)"
               placeholderTextColor="#999"
               value={validade}
-              onChangeText={setValidade}
+              onChangeText={(text) => setValidade(formatarData(text))}
+              keyboardType="numeric"
               style={styles.input}
             />
           </View>

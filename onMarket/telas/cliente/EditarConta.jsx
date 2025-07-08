@@ -38,11 +38,16 @@ export default function EditarConta({ route, navigation }) {
         tipo: usuario.tipo,
       };
 
+      // Atualiza o usuário na API
       await axios.put(`https://on-markett-2.onrender.com/api/users/${usuario.id}`, atualizado);
+
+      // Salva localmente no AsyncStorage
       await AsyncStorage.setItem('@usuario', JSON.stringify({ ...usuario, ...atualizado }));
 
       Alert.alert('Sucesso', 'Conta atualizada com sucesso!');
-      navigation.goBack();
+
+      // Navega para a tela de Perfil com os dados atualizados
+      navigation.navigate('Perfil');
     } catch (error) {
       console.error('Erro ao atualizar conta:', error);
       Alert.alert('Erro', 'Não foi possível atualizar a conta.');

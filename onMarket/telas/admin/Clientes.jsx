@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Row, Rows, Table } from 'react-native-table-component';
+import { Row, Table } from 'react-native-table-component';
 
 import MenuInferiorADM from '../navigation/navigationBar_admin';
 import cores from '../style/cores';
@@ -10,45 +10,73 @@ import cores from '../style/cores';
 const Clientes = ({ navigation }) => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const tableHead = ['ID', 'Nome completo', 'E-mail', 'CPF'];
 
   useEffect(() => {
-    axios.get('https://on-markett-2.onrender.com/api/users')
-      .then(response => {
+    axios
+      .get('https://on-markett-2.onrender.com/api/users')
+      .then((response) => {
         if (Array.isArray(response.data)) {
-          const usuariosClientes = response.data.filter(usuario => usuario.tipo === 'cliente');
+          const usuariosClientes = response.data.filter(
+            (usuario) => usuario.tipo === 'cliente'
+          );
           setClientes(usuariosClientes);
         } else {
-          console.error("Resposta inesperada:", response.data);
+          console.error('Resposta inesperada:', response.data);
         }
         setLoading(false);
       })
-      .catch(error => {
-        console.error("Erro ao buscar clientes:", error);
+      .catch((error) => {
+        console.error('Erro ao buscar clientes:', error);
         setLoading(false);
       });
   }, []);
-
-  const tableData = clientes.map(cliente => [
-    cliente.id || '',
-    cliente.nome || '',
-    cliente.email || '',
-    cliente.cpf || ''
-  ]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, paddingBottom: 70 }}>
         <View style={styles.container}>
-          <Text style={styles.title}>Lista de Clientes</Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.title}>Lista de Clientes</Text>
+            {/* Se quiser, pode adicionar botão de adicionar cliente aqui */}
+          </View>
+
           {loading ? (
             <Text>Carregando...</Text>
           ) : (
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#ccc' }}>
-              <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-              <Rows data={tableData} textStyle={styles.text} />
-            </Table>
+            <View style={styles.tableWrapper}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: cores.bordaTabela }}>
+                <Row
+                  data={tableHead}
+                  style={styles.head}
+                  textStyle={styles.headerText}
+                  flexArr={[1, 2, 2, 2]}
+                />
+              </Table>
+              <ScrollView>
+                {clientes.map((cliente) => (
+                  <TouchableOpacity
+                    key={cliente.id}
+                    onPress={() => navigation.navigate('VisualizarCliente', { cliente })}
+                    style={styles.rowTouchable}
+                  >
+                    <Table borderStyle={{ borderWidth: 1, borderColor: cores.bordaTabela }}>
+                      <Row
+                        data={[
+                          cliente.id || '',
+                          cliente.nome || '',
+                          cliente.email || '',
+                          cliente.cpf || '',
+                        ]}
+                        style={styles.row}
+                        textStyle={styles.cellText}
+                        flexArr={[1, 2, 2, 2]}
+                      />
+                    </Table>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           )}
         </View>
       </View>
@@ -58,10 +86,50 @@ const Clientes = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: cores.Secundaria },
-  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 12 },
-  head: { height: 40, backgroundColor: cores.tituloTabela },
-  text: { margin: 6, textAlign: 'center' },
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: cores.Secundaria,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  tableWrapper: {
+    borderWidth: 1,
+    borderColor: cores.bordaTabela,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  head: {
+    height: 40,
+    backgroundColor: cores.tituloTabela,
+  },
+  headerText: {
+    margin: 6,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    borderRightWidth: 1,
+    borderColor: cores.bordaTabela,
+  },
+  rowTouchable: {
+    borderBottomWidth: 1,
+    borderColor: cores.bordaTabela,
+  },
+  row: {
+    height: 40,
+    backgroundColor: cores.Secundaria,
+  },
+  cellText: {
+    margin: 6,
+    textAlign: 'center',
+  },
 });
 
 export default Clientes;

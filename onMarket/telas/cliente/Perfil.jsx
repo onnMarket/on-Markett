@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,28 +10,30 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import cores from '../style/cores';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Perfil({ navigation }) {
   const [usuario, setUsuario] = useState(null);
 
-  useEffect(() => {
-    const carregarUsuario = async () => {
-      try {
-        const usuarioStr = await AsyncStorage.getItem('@usuario');
-        if (usuarioStr) {
-          const usuarioObj = JSON.parse(usuarioStr);
-          console.log('Usuário carregado:', usuarioObj);
-          setUsuario(usuarioObj);
-        } else {
-          navigation.replace('Login');
+  useFocusEffect(
+    useCallback(() => {
+      const carregarUsuario = async () => {
+        try {
+          const usuarioStr = await AsyncStorage.getItem('@usuario');
+          if (usuarioStr) {
+            const usuarioObj = JSON.parse(usuarioStr);
+            setUsuario(usuarioObj);
+          } else {
+            navigation.replace('Login');
+          }
+        } catch (error) {
+          console.error('Erro ao carregar usuário:', error);
         }
-      } catch (error) {
-        console.error('Erro ao carregar usuário:', error);
-      }
-    };
+      };
 
-    carregarUsuario();
-  }, []);
+      carregarUsuario();
+    }, [])
+  );
 
   const logout = async () => {
     Alert.alert(
@@ -67,9 +69,7 @@ export default function Perfil({ navigation }) {
           style: 'destructive',
           onPress: async () => {
             try {
-              // Requisição para deletar o usuário na API
               await axios.delete(`https://on-markett-2.onrender.com/api/users/${usuario.id}`);
-
               await AsyncStorage.removeItem('@usuario');
               Alert.alert('Conta excluída', 'Sua conta foi removida com sucesso.');
               navigation.replace('Login');

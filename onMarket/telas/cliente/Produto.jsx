@@ -13,8 +13,8 @@ import axios from "axios";
 import cores from "../style/cores";
 
 export default function Produto({ navigation, route }) {
-  const { item, compradorId } = route.params || {}; // <- compradorId vem da tela anterior
-  const [quantidade, setQuantidade] = useState("");
+  const { item, compradorId } = route.params || {};
+  const [quantidade, setQuantidade] = useState("1");
 
   if (!item) {
     return (
@@ -25,8 +25,9 @@ export default function Produto({ navigation, route }) {
   }
 
   const adicionarAoCarrinho = async () => {
-    if (!quantidade || isNaN(quantidade) || Number(quantidade) <= 0) {
-      Alert.alert("Erro", "Digite uma quantidade válida");
+    const qtd = parseInt(quantidade);
+    if (!qtd || isNaN(qtd) || qtd <= 0 || qtd > item.quantidade_estoque) {
+      Alert.alert("Erro", "Digite uma quantidade válida e dentro do estoque.");
       return;
     }
 
@@ -36,12 +37,12 @@ export default function Produto({ navigation, route }) {
         {
           compradorId,
           produtoId: item.id,
-          quantidade: parseInt(quantidade),
+          quantidade: qtd,
         }
       );
 
       Alert.alert("Sucesso", "Produto adicionado ao carrinho!");
-      navigation.navigate("Carrinho", { compradorId }); // envia compradorId para o Carrinho também
+      navigation.navigate("Carrinho", { compradorId });
     } catch (error) {
       Alert.alert(
         "Erro",
@@ -49,6 +50,22 @@ export default function Produto({ navigation, route }) {
       );
     }
   };
+
+  const atualizarQuantidade = (valor) => {
+    const numero = parseInt(valor.replace(/[^0-9]/g, ""));
+    if (isNaN(numero)) {
+      setQuantidade("");
+    } else if (numero > item.quantidade_estoque) {
+      setQuantidade(item.quantidade_estoque.toString());
+    } else if (numero <= 0) {
+      setQuantidade("1");
+    } else {
+      setQuantidade(numero.toString());
+    }
+  };
+
+  const qtdAtual = parseInt(quantidade || "1");
+  const estoqueMax = item.quantidade_estoque;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,6 +95,7 @@ export default function Produto({ navigation, route }) {
             <Text>Sem imagem</Text>
           </View>
         )}
+
         <View style={{ padding: 20 }}>
           <Text style={styles.nomeProduto}>{item.nome}</Text>
           <Text style={styles.precoProduto}>
@@ -90,20 +108,62 @@ export default function Produto({ navigation, route }) {
             Estoque: {item.quantidade_estoque}
           </Text>
           <Text style={styles.descricaoProduto}>{item.descricao}</Text>
+
           <Text style={{ marginTop: 15 }}>Quantidade</Text>
-          <TextInput
-            placeholder="0"
-            keyboardType="numeric"
-            value={quantidade}
-            onChangeText={setQuantidade}
-            style={{
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 8,
-              padding: 8,
-              marginTop: 5,
-            }}
-          />
+          <View style={styles.quantidadeContainer}>
+            {/* Botão "-" */}
+            <TouchableOpacity
+              style={[
+                styles.botaoQtd,
+                qtdAtual <= 1 && styles.botaoQtdDesabilitado,
+              ]}
+              onPress={() => {
+                const novaQtd = Math.max(1, qtdAtual - 1);
+                setQuantidade(novaQtd.toString());
+              }}
+              disabled={qtdAtual <= 1}
+            >
+              <Text
+                style={[
+                  styles.textoBotaoQtd,
+                  qtdAtual <= 1 && styles.textoBotaoQtdDesabilitado,
+                ]}
+              >
+                −
+              </Text>
+            </TouchableOpacity>
+
+            {/* Campo de entrada */}
+            <TextInput
+              style={styles.inputQuantidade}
+              keyboardType="numeric"
+              value={quantidade}
+              onChangeText={atualizarQuantidade}
+            />
+
+            {/* Botão "+" */}
+            <TouchableOpacity
+              style={[
+                styles.botaoQtd,
+                qtdAtual >= estoqueMax && styles.botaoQtdDesabilitado,
+              ]}
+              onPress={() => {
+                if (qtdAtual < estoqueMax) {
+                  setQuantidade((qtdAtual + 1).toString());
+                }
+              }}
+              disabled={qtdAtual >= estoqueMax}
+            >
+              <Text
+                style={[
+                  styles.textoBotaoQtd,
+                  qtdAtual >= estoqueMax && styles.textoBotaoQtdDesabilitado,
+                ]}
+              >
+                +
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={{
@@ -125,12 +185,6 @@ export default function Produto({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  descricaoProduto: {
-    fontSize: 14,
-    color: cores.texto,
-    marginTop: 10,
-    lineHeight: 20,
-  },
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
@@ -141,7 +195,7 @@ const styles = StyleSheet.create({
   imagemProduto: {
     width: "100%",
     height: 300,
-    backgroundColor: "#fff",
+    backgroundColor: cores.cardProdutos,
   },
   nomeProduto: {
     fontSize: 20,
@@ -157,5 +211,45 @@ const styles = StyleSheet.create({
   quantidadeProduto: {
     fontSize: 14,
     color: "#777",
+  },
+  descricaoProduto: {
+    fontSize: 14,
+    color: cores.texto,
+    marginTop: 10,
+    lineHeight: 20,
+  },
+  quantidadeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  botaoQtd: {
+    backgroundColor: cores.mais_menos,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  botaoQtdDesabilitado: {
+    backgroundColor: cores.impossibilitar,
+    opacity: 0.6,
+  },
+  textoBotaoQtd: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: cores.texto,
+  },
+  textoBotaoQtdDesabilitado: {
+    color: cores.impossibilitar,
+  },
+  inputQuantidade: {
+    borderWidth: 1,
+    borderColor: cores.bordaTabela,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginHorizontal: 10,
+    minWidth: 50,
+    textAlign: "center",
+    backgroundColor: cores.cardProdutos,
   },
 });

@@ -1,9 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';  // import
+
 import cores from '../style/cores';
 
-export default function BarraPesquisaClientes({ busca, setBusca, navigation }) {
+export default function BarraPesquisaClientes({ busca, setBusca }) {
+  const navigation = useNavigation(); // hook aqui
+
   return (
     <View style={estilos.header}>
       <View style={estilos.caixaCabecalho}>
@@ -22,13 +26,11 @@ export default function BarraPesquisaClientes({ busca, setBusca, navigation }) {
           />
           <MaterialIcons name="search" size={24} color="gray" />
         </View>
-        <TouchableOpacity style={estilos.notificacao}>
-          <TouchableOpacity
-            style={estilos.item}
-            onPress={() => navigation.navigate("Carrinho")}
-          >
-            <MaterialIcons name="shopping-cart" size={28} color="#fff" />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={estilos.notificacao}
+          onPress={() => navigation.navigate("Carrinho")}
+        >
+          <MaterialIcons name="shopping-cart" size={28} color="#fff" />
         </TouchableOpacity>
       </View>
     </View>
