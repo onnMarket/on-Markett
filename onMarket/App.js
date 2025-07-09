@@ -21,6 +21,7 @@ import CadastrarCategoria from "./telas/admin/CadastrarCateogia";
 import VisualizarCliente from "./telas/admin/VisualizarCliente";
 import Pedidos from "./telas/admin/Pedidos";
 import DetalhesPedido from "./telas/admin/DetalhesPedido";
+import Pagamento from "./telas/cliente/Pagamento";
 
 const Stack = createNativeStackNavigator();
 
@@ -127,6 +128,11 @@ export default function App() {
           name="DetalhesPedido"
           component={DetalhesPedido}
           options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen
+          name="Pagamento"
+          component={Pagamento}
+          options={{headerBackTitleVisible: false, title: ''}}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -61,7 +61,7 @@ export default function Pagamento({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  const calcularTotal = () => {
+  /*const calcularTotal = () => {
     return itens.reduce((total, item) => {
       const preco = item.Produto?.preco || 0;
       return total + preco * item.quantidade;
@@ -84,7 +84,7 @@ export default function Pagamento({ navigation }) {
       console.error("Erro ao remover item:", error);
       Alert.alert("Erro", "Não foi possível remover o item.");
     }
-  };
+  };*/
 
   const finalizarCompra = async () => {
     if (!usuarioId) {
@@ -187,7 +187,7 @@ export default function Pagamento({ navigation }) {
                 )
               }
             >
-              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }} /*navigation.navigate("Pagamentos") */>
+              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
                 Finalizar Compra
               </Text>
             </TouchableOpacity>
@@ -257,7 +257,7 @@ export default function Pagamento({ navigation }) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const estilos = StyleSheet.create({
   container: {
@@ -305,4 +305,4 @@ const estilos = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
   },
-});
+})

@@ -69,35 +69,7 @@ export default function Carrinho({ navigation }) {
       Alert.alert("Erro", "Não foi possível remover o item.");
     }
   };
-
-  const finalizarCompra = async () => {
-    if (!usuarioId) {
-      Alert.alert("Erro", "Usuário inválido.");
-      return;
-    }
-
-    if (itens.length === 0) {
-      Alert.alert("Carrinho vazio", "Adicione produtos antes de finalizar a compra.");
-      return;
-    }
-
-    try {
-      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar`, {
-        compradorId: usuarioId,
-        formaPagamento: "dinheiro", // você pode modificar para permitir escolher a forma
-      });
-
-      setItens([]);
-      Alert.alert("Compra finalizada", "Obrigado pela sua compra!");
-
-      // Opcional: navegar para outra tela após finalizar
-      // navigation.navigate("Home"); 
-    } catch (error) {
-      console.error("Erro ao finalizar compra:", error);
-      Alert.alert("Erro", error.response?.data?.error || "Não foi possível finalizar a compra.");
-    }
-  };
-
+  
   return (
     <SafeAreaView style={estilos.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -166,12 +138,21 @@ export default function Carrinho({ navigation }) {
                   `Total a pagar: R$ ${calcularTotal().toFixed(2)}\nConfirmar compra?`,
                   [
                     { text: "Cancelar", style: "cancel" },
-                    { text: "Confirmar", onPress: finalizarCompra },
+                    
+                    { 
+                    
+                      text: "Confirmar", 
+                      onPress: async () => {
+                        await finalizarCompra();
+                        navigation.navigate('Pagamento')
+                      }
+                      
+                    },
                   ]
                 )
-              }
+              } 
             >
-              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }} /*navigation.navigate("Pagamentos") */>
+              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
                 Finalizar Compra
               </Text>
             </TouchableOpacity>
