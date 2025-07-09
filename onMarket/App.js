@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+
 import CarregandoApp from "./telas/CarregandoApp";
 import CriarConta from "./telas/criarConta";
 import Login from "./telas/login";
