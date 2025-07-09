@@ -16,6 +16,7 @@ import cores from "../style/cores";
 export default function Carrinho({ navigation }) {
   const [itens, setItens] = useState([]);
   const [usuarioId, setUsuarioId] = useState(null);
+  const [carrinhoId, setCarrinhoId] = useState(null);
 
   useEffect(() => {
     async function carregarUsuarioEItens() {
@@ -25,16 +26,18 @@ export default function Carrinho({ navigation }) {
         const id = usuario?.id;
 
         if (!id) {
-          console.warn("Usuário não encontrado no AsyncStorage.");
+          Alert.alert("Erro", "Usuário não encontrado. Faça login novamente.");
           return;
         }
 
         setUsuarioId(id);
 
         const res = await axios.get(`https://on-markett-2.onrender.com/api/carrinho/${id}`);
+        setCarrinhoId(res.data.carrinhoId);
         setItens(res.data.itens || []);
       } catch (error) {
         console.error("Erro ao carregar carrinho:", error);
+        Alert.alert("Erro", "Não foi possível carregar o carrinho.");
       }
     }
 
@@ -49,10 +52,17 @@ export default function Carrinho({ navigation }) {
     }, 0);
   };
 
-  const removerItem = async (itemId) => {
+  const removerItem = async (produtoId) => {
+    if (!carrinhoId) {
+      Alert.alert("Erro", "Carrinho inválido.");
+      return;
+    }
+
     try {
-      await axios.delete(`https://on-markett-2.onrender.com/api/carrinho/remover/${itemId}`);
-      setItens((prev) => prev.filter((item) => item.id !== itemId));
+      await axios.delete(`https://on-markett-2.onrender.com/api/carrinho/${carrinhoId}/${produtoId}`);
+
+      setItens((prev) => prev.filter((item) => item.produtoId !== produtoId));
+
       Alert.alert("Sucesso", "Item removido do carrinho.");
     } catch (error) {
       console.error("Erro ao remover item:", error);
@@ -61,14 +71,30 @@ export default function Carrinho({ navigation }) {
   };
 
   const finalizarCompra = async () => {
+    if (!usuarioId) {
+      Alert.alert("Erro", "Usuário inválido.");
+      return;
+    }
+
+    if (itens.length === 0) {
+      Alert.alert("Carrinho vazio", "Adicione produtos antes de finalizar a compra.");
+      return;
+    }
+
     try {
-      // Aqui estamos simulando o POST para finalizar (adicione no seu backend depois)
-      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar/${usuarioId}`);
+      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar`, {
+        compradorId: usuarioId,
+        formaPagamento: "dinheiro", // você pode modificar para permitir escolher a forma
+      });
+
       setItens([]);
       Alert.alert("Compra finalizada", "Obrigado pela sua compra!");
+
+      // Opcional: navegar para outra tela após finalizar
+      // navigation.navigate("Home"); 
     } catch (error) {
       console.error("Erro ao finalizar compra:", error);
-      Alert.alert("Erro", "Não foi possível finalizar a compra.");
+      Alert.alert("Erro", error.response?.data?.error || "Não foi possível finalizar a compra.");
     }
   };
 
@@ -97,10 +123,18 @@ export default function Carrinho({ navigation }) {
                   R$ {(item.Produto?.preco * item.quantidade).toFixed(2)}
                 </Text>
 
-                {/* Botão Remover */}
                 <TouchableOpacity
                   style={estilos.botaoRemover}
-                  onPress={() => removerItem(item.id)}
+                  onPress={() =>
+                    Alert.alert(
+                      "Confirmar",
+                      "Deseja remover esse item do carrinho?",
+                      [
+                        { text: "Cancelar", style: "cancel" },
+                        { text: "Remover", onPress: () => removerItem(item.produtoId) },
+                      ]
+                    )
+                  }
                 >
                   <Text style={{ color: "#fff", textAlign: "center" }}>
                     Remover
@@ -124,10 +158,18 @@ export default function Carrinho({ navigation }) {
               Total: R$ {calcularTotal().toFixed(2)}
             </Text>
 
-            {/* Botão Finalizar Compra */}
             <TouchableOpacity
               style={estilos.botaoFinalizar}
-              onPress={finalizarCompra}
+              onPress={() =>
+                Alert.alert(
+                  "Finalizar Compra",
+                  `Total a pagar: R$ ${calcularTotal().toFixed(2)}\nConfirmar compra?`,
+                  [
+                    { text: "Cancelar", style: "cancel" },
+                    { text: "Confirmar", onPress: finalizarCompra },
+                  ]
+                )
+              }
             >
               <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
                 Finalizar Compra
