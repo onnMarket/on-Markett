@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,6 +18,7 @@ export default function Produto({ navigation, route }) {
   const { item } = route.params || {};
   const [quantidade, setQuantidade] = useState("1");
   const [compradorId, setCompradorId] = useState(route.params?.compradorId);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function buscarCompradorId() {
@@ -31,14 +33,13 @@ export default function Produto({ navigation, route }) {
           }
         } catch (e) {
           console.error("Erro ao carregar compradorId:", e);
+          Alert.alert("Erro", "Falha ao carregar dados do usuário.");
         }
       }
     }
 
     buscarCompradorId();
   }, []);
-
-  console.log("compradorId recebido ou carregado:", compradorId);
 
   if (!item) {
     return (
@@ -60,6 +61,8 @@ export default function Produto({ navigation, route }) {
       return;
     }
 
+    setLoading(true);
+
     try {
       await axios.post(
         "https://on-markett-2.onrender.com/api/carrinho/adicionar",
@@ -73,10 +76,13 @@ export default function Produto({ navigation, route }) {
       Alert.alert("Sucesso", "Produto adicionado ao carrinho!");
       navigation.navigate("Carrinho", { compradorId });
     } catch (error) {
+      console.error("Erro ao adicionar ao carrinho:", error);
       Alert.alert(
         "Erro",
         error.response?.data?.error || "Erro ao adicionar ao carrinho"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,7 +155,7 @@ export default function Produto({ navigation, route }) {
                 const novaQtd = Math.max(1, qtdAtual - 1);
                 setQuantidade(novaQtd.toString());
               }}
-              disabled={qtdAtual <= 1}
+              disabled={qtdAtual <= 1 || loading}
             >
               <Text
                 style={[
@@ -166,6 +172,7 @@ export default function Produto({ navigation, route }) {
               keyboardType="numeric"
               value={quantidade}
               onChangeText={atualizarQuantidade}
+              editable={!loading}
             />
 
             <TouchableOpacity
@@ -178,7 +185,7 @@ export default function Produto({ navigation, route }) {
                   setQuantidade((qtdAtual + 1).toString());
                 }
               }}
-              disabled={qtdAtual >= estoqueMax}
+              disabled={qtdAtual >= estoqueMax || loading}
             >
               <Text
                 style={[
@@ -194,15 +201,21 @@ export default function Produto({ navigation, route }) {
           <TouchableOpacity
             style={{
               marginTop: 20,
-              backgroundColor: "green",
+              backgroundColor: loading ? "#999" : "green",
               padding: 15,
               borderRadius: 8,
+              opacity: loading ? 0.7 : 1,
             }}
             onPress={adicionarAoCarrinho}
+            disabled={loading}
           >
-            <Text style={{ color: "#fff", textAlign: "center" }}>
-              Adicionar ao carrinho
-            </Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={{ color: "#fff", textAlign: "center" }}>
+                Adicionar ao carrinho
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
