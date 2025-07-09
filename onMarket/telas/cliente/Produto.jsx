@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Alert,
   Image,
@@ -10,11 +10,35 @@ import {
   View,
 } from "react-native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import cores from "../style/cores";
 
 export default function Produto({ navigation, route }) {
-  const { item, compradorId } = route.params || {};
+  const { item } = route.params || {};
   const [quantidade, setQuantidade] = useState("1");
+  const [compradorId, setCompradorId] = useState(route.params?.compradorId);
+
+  useEffect(() => {
+    async function buscarCompradorId() {
+      if (!compradorId) {
+        try {
+          const usuarioSalvo = await AsyncStorage.getItem("@usuario");
+          const usuario = JSON.parse(usuarioSalvo);
+          if (usuario?.id) {
+            setCompradorId(usuario.id);
+          } else {
+            Alert.alert("Erro", "Usuário não encontrado.");
+          }
+        } catch (e) {
+          console.error("Erro ao carregar compradorId:", e);
+        }
+      }
+    }
+
+    buscarCompradorId();
+  }, []);
+
+  console.log("compradorId recebido ou carregado:", compradorId);
 
   if (!item) {
     return (
@@ -31,9 +55,14 @@ export default function Produto({ navigation, route }) {
       return;
     }
 
+    if (!compradorId) {
+      Alert.alert("Erro", "ID do comprador não encontrado.");
+      return;
+    }
+
     try {
       await axios.post(
-        "https://on-markett-2.onrender.com/api/carrinho/adicionarItem",
+        "https://on-markett-2.onrender.com/api/carrinho/adicionar",
         {
           compradorId,
           produtoId: item.id,
@@ -111,7 +140,6 @@ export default function Produto({ navigation, route }) {
 
           <Text style={{ marginTop: 15 }}>Quantidade</Text>
           <View style={styles.quantidadeContainer}>
-            {/* Botão "-" */}
             <TouchableOpacity
               style={[
                 styles.botaoQtd,
@@ -133,7 +161,6 @@ export default function Produto({ navigation, route }) {
               </Text>
             </TouchableOpacity>
 
-            {/* Campo de entrada */}
             <TextInput
               style={styles.inputQuantidade}
               keyboardType="numeric"
@@ -141,7 +168,6 @@ export default function Produto({ navigation, route }) {
               onChangeText={atualizarQuantidade}
             />
 
-            {/* Botão "+" */}
             <TouchableOpacity
               style={[
                 styles.botaoQtd,

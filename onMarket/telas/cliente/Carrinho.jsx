@@ -7,6 +7,8 @@ import {
   Image,
   StyleSheet,
   SafeAreaView,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import cores from "../style/cores";
@@ -47,6 +49,29 @@ export default function Carrinho({ navigation }) {
     }, 0);
   };
 
+  const removerItem = async (itemId) => {
+    try {
+      await axios.delete(`https://on-markett-2.onrender.com/api/carrinho/remover/${itemId}`);
+      setItens((prev) => prev.filter((item) => item.id !== itemId));
+      Alert.alert("Sucesso", "Item removido do carrinho.");
+    } catch (error) {
+      console.error("Erro ao remover item:", error);
+      Alert.alert("Erro", "Não foi possível remover o item.");
+    }
+  };
+
+  const finalizarCompra = async () => {
+    try {
+      // Aqui estamos simulando o POST para finalizar (adicione no seu backend depois)
+      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar/${usuarioId}`);
+      setItens([]);
+      Alert.alert("Compra finalizada", "Obrigado pela sua compra!");
+    } catch (error) {
+      console.error("Erro ao finalizar compra:", error);
+      Alert.alert("Erro", "Não foi possível finalizar a compra.");
+    }
+  };
+
   return (
     <SafeAreaView style={estilos.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -71,22 +96,44 @@ export default function Carrinho({ navigation }) {
                 <Text style={estilos.precoProduto}>
                   R$ {(item.Produto?.preco * item.quantidade).toFixed(2)}
                 </Text>
+
+                {/* Botão Remover */}
+                <TouchableOpacity
+                  style={estilos.botaoRemover}
+                  onPress={() => removerItem(item.id)}
+                >
+                  <Text style={{ color: "#fff", textAlign: "center" }}>
+                    Remover
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           ))
         )}
 
         {itens.length > 0 && (
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "bold",
-              textAlign: "right",
-              marginTop: 20,
-            }}
-          >
-            Total: R$ {calcularTotal().toFixed(2)}
-          </Text>
+          <>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "right",
+                marginTop: 20,
+              }}
+            >
+              Total: R$ {calcularTotal().toFixed(2)}
+            </Text>
+
+            {/* Botão Finalizar Compra */}
+            <TouchableOpacity
+              style={estilos.botaoFinalizar}
+              onPress={finalizarCompra}
+            >
+              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
+                Finalizar Compra
+              </Text>
+            </TouchableOpacity>
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -113,6 +160,7 @@ const estilos = StyleSheet.create({
   infoCard: {
     flex: 1,
     padding: 10,
+    justifyContent: "center",
   },
   nomeProduto: {
     fontWeight: "bold",
@@ -123,5 +171,19 @@ const estilos = StyleSheet.create({
   precoProduto: {
     color: cores.Preco,
     fontSize: 13,
+    marginBottom: 8,
+  },
+  botaoRemover: {
+    backgroundColor: "red",
+    padding: 8,
+    borderRadius: 5,
+    marginTop: 5,
+    alignSelf: "flex-start",
+  },
+  botaoFinalizar: {
+    marginTop: 25,
+    backgroundColor: "green",
+    padding: 15,
+    borderRadius: 8,
   },
 });
