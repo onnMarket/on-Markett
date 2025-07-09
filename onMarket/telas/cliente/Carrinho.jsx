@@ -171,7 +171,7 @@ export default function Carrinho({ navigation }) {
                 )
               }
             >
-              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
+              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }} /*navigation.navigate("Pagamentos") */>
                 Finalizar Compra
               </Text>
             </TouchableOpacity>
