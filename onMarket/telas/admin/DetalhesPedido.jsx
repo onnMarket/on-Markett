@@ -105,7 +105,7 @@ export default function DetalhesPedido({ route, navigation }) {
             ))}
 
             <TouchableOpacity style={styles.botao} onPress={concluirPedido}>
-              <Text style={styles.textoBotao}>Concluir Pedido</Text>
+              <Text style={styles.textoBotao}>Mudar Status</Text>
             </TouchableOpacity>
           </>
         ) : (
