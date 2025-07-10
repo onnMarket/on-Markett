@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import cores from '../style/cores'; // Adjust the import path as necessary
 
 export default function MenuInferiorADM({ navigation }) {
+const insets = useSafeAreaInsets();
   return (
-    <View style={estilos.menu}>
+    <View style={[estilos.menu, { paddingBottom: insets.bottom || 10 }]}>
       <TouchableOpacity onPress={() => navigation.navigate('InicioADM')}>
         <MaterialIcons name="home" size={28} color={cores.Secundaria} />
         <Text style={{ color: cores.Secundaria, fontSize: 12, textAlign: 'center' }}>Início</Text>
