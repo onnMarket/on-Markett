@@ -7,22 +7,22 @@ import 'moment/locale/pt-br';
 
 const VisualizarCliente = ({ route }) => {
   const { cliente } = route.params;
-  const [compras, setCompras] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
-    const fetchCompras = async () => {
+    const fetchPedidos = async () => {
       try {
         const response = await fetch(
-          `https://on-markett-2.onrender.com/api/compras/${cliente.id}`//esse é o endpoint que retorna as compras do cliente???
+          `https://on-markett-2.onrender.com/api/pedidos/comprador/${cliente.id}`
         );
         const data = await response.json();
-        setCompras(data);
+        setPedidos(data);
       } catch (error) {
-        console.error('Erro ao buscar compras:', error);
+        console.error('Erro ao buscar pedidos:', error);
       }
     };
 
-    fetchCompras();
+    fetchPedidos();
   }, [cliente.id]);
 
   const dataCadastro = moment(cliente.data_cadastro || cliente.created_at);
@@ -46,17 +46,18 @@ const VisualizarCliente = ({ route }) => {
           <Text>{dataCadastro.format('LL')} ({tempoDeCliente})</Text>
         </View>
 
-        <Text style={styles.titulo}>Compras Realizadas</Text>
-        {compras.length > 0 ? (
-          compras.map((compra, index) => (
+        <Text style={styles.titulo}>Pedidos Realizados</Text>
+        {pedidos.length > 0 ? (
+          pedidos.map((pedido, index) => (
             <View key={index} style={styles.compraItem}>
-              <Text>Data: {moment(compra.data).format('LL')}</Text>
-              <Text>Produtos: {compra.itens.join(', ')}</Text>
-              <Text>Total: R$ {compra.total.toFixed(2)}</Text>
+              <Text>Pedido #{pedido.id}</Text>
+              <Text>Data: {moment(pedido.data).format('LL')}</Text>
+              <Text>Forma de Pagamento: {pedido.formaPagamento}</Text>
+              <Text>Status: {pedido.status}</Text>
             </View>
           ))
         ) : (
-          <Text style={{ marginTop: 10 }}>Nenhuma compra registrada.</Text>
+          <Text style={{ marginTop: 10 }}>Nenhum pedido registrado.</Text>
         )}
       </ScrollView>
     </SafeAreaView>

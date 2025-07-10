@@ -11,23 +11,39 @@ import {
 } from "react-native";
 import axios from "axios";
 import cores from "../style/cores";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DetalhesPedido({ route, navigation }) {
   const { pedidoId } = route.params;
   const [pedido, setPedido] = useState(null);
-  const [itens, setItens] = useState([]);
+  const [itensComProdutos, setItensComProdutos] = useState([]);
 
   useEffect(() => {
     const carregarPedido = async () => {
       try {
-        const res = await axios.get(
+        const resPedido = await axios.get(
           `https://on-markett-2.onrender.com/api/pedidos/${pedidoId}`
         );
-        setPedido(res.data);
-        setItens(res.data.itens || []);
+        const pedidoData = resPedido.data;
+
+        const itens = pedidoData.itens || [];
+
+        // Para cada item do pedido, busca os dados do produto
+        const itensDetalhados = await Promise.all(
+          itens.map(async (item) => {
+            const resProduto = await axios.get(
+              `https://on-markett-2.onrender.com/api/produtos/${item.produtoId}`
+            );
+            return {
+              ...item,
+              produto: resProduto.data,
+            };
+          })
+        );
+
+        setPedido(pedidoData);
+        setItensComProdutos(itensDetalhados);
       } catch (error) {
-        console.error("Erro ao buscar pedido:", error);
+        console.error("Erro ao carregar pedido ou produtos:", error);
         Alert.alert("Erro", "Erro ao carregar detalhes do pedido.");
       }
     };
@@ -62,16 +78,15 @@ export default function DetalhesPedido({ route, navigation }) {
             </Text>
             <Text style={styles.textoNegrito}>Status: {pedido.status}</Text>
 
-            {itens.map((item) => (
+            {itensComProdutos.map((item) => (
               <View key={item.id} style={styles.cardProduto}>
-                {item.Produto?.foto ? (
+                {item.produto?.foto ? (
                   <Image
                     source={{
                       uri:
-                        item.Produto.foto.startsWith("http") ||
-                        item.Produto.foto.startsWith("data:")
-                          ? item.Produto.foto
-                          : `https://drive.google.com/uc?export=view&id=${item.Produto.foto}`,
+                        item.produto.foto.length < 100
+                          ? `https://drive.google.com/uc?export=view&id=${item.produto.foto}`
+                          : item.produto.foto,
                     }}
                     style={styles.imagemProduto}
                     resizeMode="cover"
@@ -92,20 +107,21 @@ export default function DetalhesPedido({ route, navigation }) {
                 )}
 
                 <View style={styles.infoCard}>
-                  <Text style={styles.nomeProduto}>
-                    {item.Produto?.nome || "Produto não encontrado"}
-                  </Text>
+                  <Text style={styles.nomeProduto}>{item.produto?.nome}</Text>
+                  <Text>{item.produto?.descricao}</Text>
                   <Text>Quantidade: {item.quantidade}</Text>
                   <Text style={styles.precoProduto}>
-                    Preço unitário: R${" "}
-                    {parseFloat(item.preco_unitario || 0).toFixed(2)}
+                    Preço unitário: R$ {parseFloat(item.preco_unitario).toFixed(2)}
+                  </Text>
+                  <Text style={styles.totalProduto}>
+                    Total: R$ {(item.quantidade * parseFloat(item.preco_unitario)).toFixed(2)}
                   </Text>
                 </View>
               </View>
             ))}
 
             <TouchableOpacity style={styles.botao} onPress={concluirPedido}>
-              <Text style={styles.textoBotao}>Mudar Status</Text>
+              <Text style={styles.textoBotao}>Concluir Pedido</Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -159,6 +175,12 @@ const styles = StyleSheet.create({
   precoProduto: {
     fontSize: 14,
     color: cores.Preco,
+  },
+  totalProduto: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 4,
+    color: cores.texto,
   },
   botao: {
     backgroundColor: "green",
