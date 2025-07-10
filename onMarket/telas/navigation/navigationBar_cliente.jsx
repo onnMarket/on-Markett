@@ -13,10 +13,14 @@ export default function MenuInferiorADM({ navigation }) {
         <Text style={estilos.textoItem}>Início</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={estilos.item}>
-        <MaterialIcons name="shopping-bag" size={35} color="#fff" />
-        <Text style={estilos.textoItem}>Histórico</Text>
-      </TouchableOpacity>
+     <TouchableOpacity 
+  style={estilos.item}
+  onPress={() => navigation.navigate("HistoricoCompras")}
+>
+  <MaterialIcons name="shopping-bag" size={35} color="#fff" />
+  <Text style={estilos.textoItem}>Histórico</Text>
+</TouchableOpacity>
+
 
       <TouchableOpacity style={estilos.item} onPress={() => navigation.navigate('Perfil')}>
         <MaterialIcons name="person" size={35} color="#fff" />

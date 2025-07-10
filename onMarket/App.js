@@ -22,6 +22,8 @@ import VisualizarCliente from "./telas/admin/VisualizarCliente";
 import Pedidos from "./telas/admin/Pedidos";
 import DetalhesPedido from "./telas/admin/DetalhesPedido";
 import Pagamento from "./telas/cliente/Pagamento";
+import HistoricoCompras from "./telas/cliente/HistoricoPedidos";
+import StatusPedido from "./telas/cliente/StatusPedido";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,17 @@ export default function App() {
           component={Login}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+  name="HistoricoCompras"
+  component={HistoricoCompras}
+  options={{ headerBackTitleVisible: false, title: '' }}
+/>
+<Stack.Screen
+  name="StatusPedido"
+  component={StatusPedido}
+  options={{ headerBackTitleVisible: false, title: '' }}
+/>
+
         <Stack.Screen
           name="CadastroUsuario"
           component={CriarConta}

@@ -26,6 +26,7 @@ export default function Carrinho({ navigation }) {
         const id = usuario?.id;
 
         if (!id) {
+          console.warn("Usuário não encontrado no AsyncStorage.");
           Alert.alert("Erro", "Usuário não encontrado. Faça login novamente.");
           return;
         }
@@ -60,16 +61,41 @@ export default function Carrinho({ navigation }) {
 
     try {
       await axios.delete(`https://on-markett-2.onrender.com/api/carrinho/${carrinhoId}/${produtoId}`);
-
       setItens((prev) => prev.filter((item) => item.produtoId !== produtoId));
-
       Alert.alert("Sucesso", "Item removido do carrinho.");
     } catch (error) {
       console.error("Erro ao remover item:", error);
       Alert.alert("Erro", "Não foi possível remover o item.");
     }
   };
-  
+
+  const finalizarCompra = async () => {
+    if (!usuarioId) {
+      Alert.alert("Erro", "Usuário inválido.");
+      return;
+    }
+
+    if (itens.length === 0) {
+      Alert.alert("Carrinho vazio", "Adicione produtos antes de finalizar a compra.");
+      return;
+    }
+
+    try {
+      // Use a chamada correta de acordo com seu backend:
+      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar`, {
+        compradorId: usuarioId,
+        formaPagamento: "dinheiro", // adapte para permitir outras formas de pagamento
+      });
+
+      setItens([]);
+      Alert.alert("Compra finalizada", "Obrigado pela sua compra!");
+      // navigation.navigate("Home"); // opcional: redirecionar após compra
+    } catch (error) {
+      console.error("Erro ao finalizar compra:", error);
+      Alert.alert("Erro", error.response?.data?.error || "Não foi possível finalizar a compra.");
+    }
+  };
+
   return (
     <SafeAreaView style={estilos.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -78,16 +104,27 @@ export default function Carrinho({ navigation }) {
         ) : (
           itens.map((item) => (
             <View key={item.id} style={estilos.cardProduto}>
-              <Image
-                source={{
-                  uri:
-                    item.Produto?.foto?.length < 100
-                      ? `https://drive.google.com/uc?export=view&id=${item.Produto.foto}`
-                      : `data:image/jpeg;base64,${item.Produto?.foto}`,
-                }}
-                style={estilos.imagemProduto}
-                resizeMode="cover"
-              />
+              {item.Produto?.foto ? (
+                <Image
+                  source={{
+                    uri:
+                      item.Produto.foto.length < 100
+                        ? `https://drive.google.com/uc?export=view&id=${item.Produto.foto}`
+                        : `data:image/jpeg;base64,${item.Produto.foto}`,
+                  }}
+                  style={estilos.imagemProduto}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View
+                  style={[
+                    estilos.imagemProduto,
+                    { backgroundColor: "#ccc", justifyContent: "center", alignItems: "center" },
+                  ]}
+                >
+                  <Text>Sem imagem</Text>
+                </View>
+              )}
               <View style={estilos.infoCard}>
                 <Text style={estilos.nomeProduto}>{item.Produto?.nome}</Text>
                 <Text>Quantidade: {item.quantidade}</Text>
@@ -98,19 +135,13 @@ export default function Carrinho({ navigation }) {
                 <TouchableOpacity
                   style={estilos.botaoRemover}
                   onPress={() =>
-                    Alert.alert(
-                      "Confirmar",
-                      "Deseja remover esse item do carrinho?",
-                      [
-                        { text: "Cancelar", style: "cancel" },
-                        { text: "Remover", onPress: () => removerItem(item.produtoId) },
-                      ]
-                    )
+                    Alert.alert("Confirmar", "Deseja remover esse item do carrinho?", [
+                      { text: "Cancelar", style: "cancel" },
+                      { text: "Remover", onPress: () => removerItem(item.produtoId) },
+                    ])
                   }
                 >
-                  <Text style={{ color: "#fff", textAlign: "center" }}>
-                    Remover
-                  </Text>
+                  <Text style={{ color: "#fff", textAlign: "center" }}>Remover</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -119,38 +150,16 @@ export default function Carrinho({ navigation }) {
 
         {itens.length > 0 && (
           <>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                textAlign: "right",
-                marginTop: 20,
-              }}
-            >
-              Total: R$ {calcularTotal().toFixed(2)}
-            </Text>
+            <Text style={estilos.total}>Total: R$ {calcularTotal().toFixed(2)}</Text>
 
             <TouchableOpacity
               style={estilos.botaoFinalizar}
               onPress={() =>
-                Alert.alert(
-                  "Finalizar Compra",
-                  `Total a pagar: R$ ${calcularTotal().toFixed(2)}\nConfirmar compra?`,
-                  [
-                    { text: "Cancelar", style: "cancel" },
-                    
-                    { 
-                    
-                      text: "Confirmar", 
-                      onPress: async () => {
-                        await finalizarCompra();
-                        navigation.navigate('Pagamento')
-                      }
-                      
-                    },
-                  ]
-                )
-              } 
+                Alert.alert("Finalizar Compra", `Total a pagar: R$ ${calcularTotal().toFixed(2)}\nConfirmar compra?`, [
+                  { text: "Cancelar", style: "cancel" },
+                  { text: "Confirmar", onPress: finalizarCompra },
+                ])
+              }
             >
               <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
                 Finalizar Compra
@@ -208,5 +217,12 @@ const estilos = StyleSheet.create({
     backgroundColor: "green",
     padding: 15,
     borderRadius: 8,
+  },
+  total: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "right",
+    marginTop: 20,
+    marginRight: 10,
   },
 });
