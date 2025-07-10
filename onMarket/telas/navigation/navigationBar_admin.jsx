@@ -12,10 +12,10 @@ const insets = useSafeAreaInsets();
         <MaterialIcons name="home" size={28} color={cores.Secundaria} />
         <Text style={{ color: cores.Secundaria, fontSize: 12, textAlign: 'center' }}>Início</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Relatorios')}>
+      {/*<TouchableOpacity onPress={() => navigation.navigate('Relatorios')}>
         <MaterialIcons name="analytics" size={28} color={cores.Secundaria} />
         <Text style={{ color: cores.Secundaria, fontSize: 12, textAlign: 'center' }}>Relatórios</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
       <TouchableOpacity onPress={() => navigation.navigate('Pedidos')}>
         <MaterialIcons name="ballot" size={28} color={cores.Secundaria} />
         <Text style={{ color: cores.Secundaria, fontSize: 12, textAlign: 'center' }}>Pedidos</Text>
