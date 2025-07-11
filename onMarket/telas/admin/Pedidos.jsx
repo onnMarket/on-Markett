@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import cores from "../style/cores";
+import MenuInferiorADM from '../navigation/navigationBar_admin';
 
 export default function Pedidos({ navigation }) {
   const [pedidos, setPedidos] = useState([]);
@@ -52,6 +53,7 @@ export default function Pedidos({ navigation }) {
         ListEmptyComponent={<Text style={{ textAlign: "center", marginTop: 20 }}>Nenhum pedido pendente.</Text>}
         contentContainerStyle={{ padding: 20 }}
       />
+      <MenuInferiorADM navigation={navigation}/>
     </SafeAreaView>
   );
 }
