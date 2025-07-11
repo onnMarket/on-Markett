@@ -1,24 +1,26 @@
-// Tela: HistoricoPedidos.js
-import { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  Alert,
-} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import cores from "../style/cores";
 
 export default function HistoricoPedidos({ navigation }) {
   const [pedidos, setPedidos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     const carregarPedidos = async () => {
+      setCarregando(true);
       try {
         const usuarioSalvo = await AsyncStorage.getItem("@usuario");
         const usuario = JSON.parse(usuarioSalvo);
@@ -49,6 +51,8 @@ export default function HistoricoPedidos({ navigation }) {
       } catch (error) {
         console.error("Erro ao carregar pedidos:", error);
         Alert.alert("Erro", "Não foi possível carregar o histórico de pedidos.");
+      } finally {
+        setCarregando(false);
       }
     };
 
@@ -66,17 +70,24 @@ export default function HistoricoPedidos({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         <Text style={styles.titulo}>Histórico de Pedidos</Text>
-        {pedidos.length === 0 ? (
+
+        {carregando ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={cores.Primaria} />
+            <Text style={{ marginTop: 10, color: cores.texto }}>Carregando pedidos...</Text>
+          </View>
+        ) : pedidos.length === 0 ? (
           <Text style={{ textAlign: "center" }}>Nenhum pedido encontrado.</Text>
         ) : (
           pedidos.map((pedido, index) => (
             <TouchableOpacity
-  key={pedido.id}
-  style={styles.pedidoContainer}
-  onPress={() => navigation.navigate("StatusPedido", { pedidoId: pedido.id })}
->
-
-              <Text style={styles.dataPedido}>Compra {index + 1} - {new Date(pedido.data).toLocaleDateString()}</Text>
+              key={pedido.id}
+              style={styles.pedidoContainer}
+              onPress={() => navigation.navigate("StatusPedido", { pedidoId: pedido.id })}
+            >
+              <Text style={styles.dataPedido}>
+                Compra {index + 1} - {new Date(pedido.data).toLocaleDateString()}
+              </Text>
               <View style={styles.itensContainer}>
                 {pedido.itens.map((item) => (
                   <Image
@@ -90,10 +101,9 @@ export default function HistoricoPedidos({ navigation }) {
                   />
                 ))}
               </View>
-              <Text style={styles.valorTotal}>Valor Total: R$ {calcularTotal(pedido.itens).toFixed(2)}</Text>
-              <TouchableOpacity style={styles.botaoComentarios}>
-                <Text style={styles.textoBotao}>Comentários</Text>
-              </TouchableOpacity>
+              <Text style={styles.valorTotal}>
+                Valor Total: R$ {calcularTotal(pedido.itens).toFixed(2)}
+              </Text>
             </TouchableOpacity>
           ))
         )}
@@ -112,6 +122,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 15,
     color: cores.texto,
+  },
+  loadingContainer: {
+    marginTop: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
   pedidoContainer: {
     backgroundColor: cores.cardProdutos,
@@ -141,17 +156,5 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: cores.texto,
     fontWeight: "bold",
-  },
-  botaoComentarios: {
-    marginTop: 10,
-    backgroundColor: "orange",
-    padding: 10,
-    borderRadius: 8,
-  },
-  textoBotao: {
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
   },
 });

@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import cores from "../style/cores";
 
 export default function Carrinho({ navigation }) {
   const [itens, setItens] = useState([]);
   const [usuarioId, setUsuarioId] = useState(null);
   const [carrinhoId, setCarrinhoId] = useState(null);
+  const [carregando, setCarregando] = useState(true);  // Estado de carregamento
 
   useEffect(() => {
     async function carregarUsuarioEItens() {
@@ -36,9 +38,11 @@ export default function Carrinho({ navigation }) {
         const res = await axios.get(`https://on-markett-2.onrender.com/api/carrinho/${id}`);
         setCarrinhoId(res.data.carrinhoId);
         setItens(res.data.itens || []);
+        setCarregando(false);  // Definir carregando como false após o carregamento do carrinho
       } catch (error) {
         console.error("Erro ao carregar carrinho:", error);
         Alert.alert("Erro", "Não foi possível carregar o carrinho.");
+        setCarregando(false);  // Definir carregando como false em caso de erro também
       }
     }
 
@@ -99,7 +103,12 @@ export default function Carrinho({ navigation }) {
   return (
     <SafeAreaView style={estilos.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        {itens.length === 0 ? (
+        {carregando ? (  // Mostrar o indicador de carregamento enquanto carregando
+          <View style={estilos.carregandoContainer}>
+            <ActivityIndicator size="large" color={cores.Preco} />
+            <Text style={estilos.textoCarregando}>Carregando carrinho...</Text>
+          </View>
+        ) : itens.length === 0 ? (
           <Text style={{ textAlign: "center" }}>Carrinho vazio.</Text>
         ) : (
           itens.map((item) => (
@@ -176,6 +185,17 @@ const estilos = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
+  },
+  carregandoContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+  textoCarregando: {
+    marginTop: 10,
+    fontSize: 16,
+    color: cores.texto,
   },
   cardProduto: {
     backgroundColor: cores.cardProdutos,

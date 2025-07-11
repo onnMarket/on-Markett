@@ -1,15 +1,14 @@
-// Tela: StatusPedido.js
+import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
+  Alert,
   Image,
   SafeAreaView,
-  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import axios from "axios";
 import cores from "../style/cores";
 
 export default function StatusPedido({ route }) {
@@ -20,7 +19,9 @@ export default function StatusPedido({ route }) {
   useEffect(() => {
     const carregarPedido = async () => {
       try {
-        const resPedido = await axios.get(`https://on-markett-2.onrender.com/api/pedidos/${pedidoId}`);
+        const resPedido = await axios.get(
+          `https://on-markett-2.onrender.com/api/pedidos/${pedidoId}`
+        );
         const dados = resPedido.data;
 
         const itensDetalhados = await Promise.all(
@@ -46,16 +47,24 @@ export default function StatusPedido({ route }) {
     carregarPedido();
   }, []);
 
+  const calcularTotal = () => {
+    return itens.reduce((total, item) => {
+      return total + item.quantidade * parseFloat(item.preco_unitario);
+    }, 0);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         {pedido ? (
           <>
-            <Text style={styles.titulo}>Compra {pedido.id} - {new Date(pedido.data).toLocaleDateString()}:</Text>
+            <Text style={styles.titulo}>
+              Compra {pedido.id} - {new Date(pedido.data).toLocaleDateString()}:
+            </Text>
 
-            <View style={styles.linhaProdutos}>
+            <View style={styles.listaProdutos}>
               {itens.map((item) => (
-                <View key={item.id} style={{ alignItems: "center", marginRight: 15 }}>
+                <View key={item.id} style={styles.itemContainer}>
                   <Image
                     source={{
                       uri: item.produto.foto.length < 100
@@ -64,13 +73,29 @@ export default function StatusPedido({ route }) {
                     }}
                     style={styles.produtoImagem}
                   />
-                  <Text style={styles.produtoNome}>{item.produto.nome}</Text>
+                  <View style={styles.infoProduto}>
+                    <Text style={styles.produtoNome}>{item.produto.nome}</Text>
+                    <Text style={styles.produtoDetalhe}>
+                      Quantidade: {item.quantidade}
+                    </Text>
+                    <Text style={styles.produtoDetalhe}>
+                      Preço unitário: R$ {parseFloat(item.preco_unitario).toFixed(2)}
+                    </Text>
+                    <Text style={styles.produtoSubtotal}>
+                      Subtotal: R$ {(item.quantidade * parseFloat(item.preco_unitario)).toFixed(2)}
+                    </Text>
+                  </View>
                 </View>
               ))}
             </View>
 
             <Text style={styles.statusTitulo}>Status:</Text>
-            <Text style={styles.statusTexto}>{pedido.status.charAt(0).toUpperCase() + pedido.status.slice(1)}</Text>
+            <Text style={styles.statusTexto}>
+              {pedido.status.charAt(0).toUpperCase() + pedido.status.slice(1)}
+            </Text>
+
+            <Text style={styles.totalTitulo}>Total da compra:</Text>
+            <Text style={styles.totalValor}>R$ {calcularTotal().toFixed(2)}</Text>
           </>
         ) : (
           <Text>Carregando...</Text>
@@ -91,29 +116,62 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: cores.texto,
   },
-  linhaProdutos: {
-    flexDirection: "row",
+  listaProdutos: {
     marginBottom: 20,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    marginBottom: 15,
+    backgroundColor: cores.cardProdutos,
+    borderRadius: 8,
+    padding: 10,
   },
   produtoImagem: {
     width: 60,
     height: 60,
     borderRadius: 8,
+    marginRight: 10,
+  },
+  infoProduto: {
+    flex: 1,
+    justifyContent: "center",
   },
   produtoNome: {
-    fontSize: 12,
-    marginTop: 5,
+    fontSize: 14,
+    fontWeight: "bold",
     color: cores.texto,
+  },
+  produtoDetalhe: {
+    fontSize: 12,
+    color: cores.texto,
+  },
+  produtoSubtotal: {
+    fontSize: 12,
+    color: cores.texto,
+    fontWeight: "bold",
+    marginTop: 4,
   },
   statusTitulo: {
     fontSize: 16,
     fontWeight: "bold",
     color: cores.texto,
+    marginTop: 10,
     marginBottom: 4,
   },
   statusTexto: {
     fontSize: 16,
     color: cores.texto,
     marginBottom: 15,
+  },
+  totalTitulo: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: cores.texto,
+  },
+  totalValor: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "green",
+    marginBottom: 20,
   },
 });

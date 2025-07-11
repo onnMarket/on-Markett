@@ -1,25 +1,39 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
   Alert,
+  Image,
   SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import axios from "axios";
 import cores from "../style/cores";
+
+// Função para buscar o usuário pelo ID
+const buscarUsuario = async (usuarioId) => {
+  try {
+    // Requisição para pegar os dados do usuário
+    const response = await axios.get(`https://on-markett-2.onrender.com/api/users/${usuarioId}`);
+    return response.data;  // Retorna o objeto de usuário diretamente
+  } catch (error) {
+    console.error("Erro ao buscar usuário:", error);
+    throw new Error("Não foi possível carregar as informações do usuário.");
+  }
+};
 
 export default function DetalhesPedido({ route, navigation }) {
   const { pedidoId } = route.params;
   const [pedido, setPedido] = useState(null);
   const [itensComProdutos, setItensComProdutos] = useState([]);
+  const [usuario, setUsuario] = useState(null); // Estado para armazenar os dados do usuário
 
   useEffect(() => {
     const carregarPedido = async () => {
       try {
+        // Carregando o pedido
         const resPedido = await axios.get(
           `https://on-markett-2.onrender.com/api/pedidos/${pedidoId}`
         );
@@ -42,14 +56,20 @@ export default function DetalhesPedido({ route, navigation }) {
 
         setPedido(pedidoData);
         setItensComProdutos(itensDetalhados);
+
+        // Carregar informações do usuário, utilizando o usuarioId do pedido
+        if (pedidoData.compradorId) {
+          const usuarioData = await buscarUsuario(pedidoData.compradorId);
+          setUsuario(usuarioData);  // Atualiza o estado com os dados do usuário
+        }
       } catch (error) {
         console.error("Erro ao carregar pedido ou produtos:", error);
         Alert.alert("Erro", "Erro ao carregar detalhes do pedido.");
       }
     };
 
-    carregarPedido();
-  }, []);
+    carregarPedido();  // Chama a função para carregar o pedido
+  }, [pedidoId]); // Recarregar a cada mudança no pedidoId
 
   const concluirPedido = async () => {
     try {
@@ -57,7 +77,7 @@ export default function DetalhesPedido({ route, navigation }) {
         `https://on-markett-2.onrender.com/api/pedidos/${pedidoId}/status`
       );
       Alert.alert("Sucesso", res.data.message);
-      navigation.goBack();
+      navigation.goBack();  // Voltar para a tela anterior
     } catch (error) {
       console.error("Erro ao atualizar status:", error);
       Alert.alert(
@@ -73,6 +93,16 @@ export default function DetalhesPedido({ route, navigation }) {
         {pedido ? (
           <>
             <Text style={styles.titulo}>Detalhes do Pedido #{pedido.id}</Text>
+
+            {/* Exibir o nome do usuário (cliente) */}
+            {usuario ? (
+              <Text style={styles.textoNegrito}>
+                Nome do Cliente: {usuario.nome}
+              </Text>
+            ) : (
+              <Text style={styles.textoNegrito}>Carregando nome do cliente...</Text>
+            )}
+
             <Text style={styles.textoNegrito}>
               Forma de Pagamento: {pedido.formaPagamento}
             </Text>
@@ -121,7 +151,7 @@ export default function DetalhesPedido({ route, navigation }) {
             ))}
 
             <TouchableOpacity style={styles.botao} onPress={concluirPedido}>
-              <Text style={styles.textoBotao}>Concluir Pedido</Text>
+              <Text style={styles.textoBotao}>Alterar Status</Text>
             </TouchableOpacity>
           </>
         ) : (
