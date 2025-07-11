@@ -42,16 +42,15 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-  name="HistoricoCompras"
-  component={HistoricoCompras}
-  options={{ headerBackTitleVisible: false, title: '' }}
-/>
-<Stack.Screen
-  name="StatusPedido"
-  component={StatusPedido}
-  options={{ headerBackTitleVisible: false, title: '' }}
-/>
-
+          name="HistoricoCompras"
+          component={HistoricoCompras}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen
+          name="StatusPedido"
+          component={StatusPedido}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
         <Stack.Screen
           name="CadastroUsuario"
           component={CriarConta}
@@ -135,7 +134,7 @@ export default function App() {
         <Stack.Screen
           name="Pedidos"
           component={Pedidos}
-          options={{ headerBackTitleVisible: false, title: '' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DetalhesPedido"

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  Image
 } from "react-native";
 import axios from "axios";
 import cores from "../style/cores";
@@ -19,7 +20,6 @@ export default function Pedidos({ navigation }) {
     const carregarPedidos = async () => {
       try {
         const res = await axios.get("https://on-markett-2.onrender.com/api/pedidos");
-        // Filtra só os que não estão entregues
         const pendentes = res.data.filter(
           (pedido) => pedido.status.toLowerCase() !== "entregue"
         );
@@ -39,21 +39,34 @@ export default function Pedidos({ navigation }) {
       onPress={() => navigation.navigate("DetalhesPedido", { pedidoId: item.id })}
     >
       <Text style={styles.textoPedido}>Pedido #{item.id}</Text>
-      <Text>Status: {item.status}</Text>
-      <Text>Data: {new Date(item.data).toLocaleString()}</Text>
+      <Text style={styles.textoSecundario}>Status: {item.status}</Text>
+      <Text style={styles.textoSecundario}>
+        Data: {item.data ? new Date(item.data).toLocaleString() : "Data indisponível"}
+      </Text>
     </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Pedidos Pendentes</Text>
+        <Image
+          source={require('../../image/onMarket_2.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
+
       <FlatList
         data={pedidos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        ListEmptyComponent={<Text style={{ textAlign: "center", marginTop: 20 }}>Nenhum pedido pendente.</Text>}
-        contentContainerStyle={{ padding: 20 }}
+        ListEmptyComponent={
+          <Text style={styles.listaVazia}>Nenhum pedido pendente.</Text>
+        }
+        contentContainerStyle={styles.listaContainer}
       />
-      <MenuInferiorADM navigation={navigation}/>
+      <MenuInferiorADM navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -62,6 +75,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // texto à esquerda, imagem à direita
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  logo: {
+    width: 100,
+    height: 40,
+    size:100,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: cores.texto,
   },
   card: {
     backgroundColor: cores.cardProdutos,
@@ -75,5 +105,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
     color: cores.texto,
+  },
+  textoSecundario: {
+    color: cores.texto,
+  },
+  listaVazia: {
+    textAlign: "center",
+    marginTop: 20,
+    color: cores.texto,
+  },
+  listaContainer: {
+    padding: 20,
   },
 });

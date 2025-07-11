@@ -7,7 +7,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Image
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,8 +56,8 @@ export default function Login({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require('../image/onMarket_1.png')}
-        style={{ width: 400, height: 400, marginTop: 20 }}
+        source={require('../image/onMarket_3.png')}
+        style={{ width: 200, height: 200, marginTop: 20 }}
       />
       <View style={styles.inputContainer}>
         <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
