@@ -54,6 +54,10 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image
+        source={require('../image/onMarket_1.png')}
+        style={{ width: 400, height: 400, marginTop: 20 }}
+      />
       <View style={styles.inputContainer}>
         <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
