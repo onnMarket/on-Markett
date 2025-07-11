@@ -1,15 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Animated,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Animated, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MenuInferiorADM from '../navigation/navigationBar_admin';
 import cores from "../style/cores";
 
 export default function Pedidos({ navigation }) {
@@ -30,7 +22,6 @@ export default function Pedidos({ navigation }) {
 
       try {
         const res = await axios.get("https://on-markett-2.onrender.com/api/pedidos");
-        // Filtra só os que não estão entregues
         const pendentes = res.data.filter(
           (pedido) => pedido.status.toLowerCase() !== "entregue"
         );
@@ -52,8 +43,10 @@ export default function Pedidos({ navigation }) {
       onPress={() => navigation.navigate("DetalhesPedido", { pedidoId: item.id })}
     >
       <Text style={styles.textoPedido}>Pedido #{item.id}</Text>
-      <Text>Status: {item.status}</Text>
-      <Text>Data: {new Date(item.data).toLocaleString()}</Text>
+      <Text style={styles.textoSecundario}>Status: {item.status}</Text>
+      <Text style={styles.textoSecundario}>
+        Data: {item.data ? new Date(item.data).toLocaleString() : "Data indisponível"}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -65,28 +58,25 @@ export default function Pedidos({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Se estiver carregando, mostra a seta giratória */}
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <Animated.View
-            style={[
-              styles.arrow,
-              { transform: [{ rotate: rotateInterpolate }] },
-            ]}
-          >
-            <Text style={styles.arrowText}>↻</Text> {/* Seta giratória */}
-          </Animated.View>
-          <Text style={styles.loadingText}>Carregando pedidos...</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={pedidos}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          ListEmptyComponent={<Text style={{ textAlign: "center", marginTop: 20 }}>Nenhum pedido pendente.</Text>}
-          contentContainerStyle={{ padding: 20 }}
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Pedidos Pendentes</Text>
+        <Animated.Image
+          source={require('../../image/onMarket_2.png')}
+          style={[styles.logo, { transform: [{ rotate: rotateInterpolate }] }]}
+          resizeMode="contain"
         />
-      )}
+      </View>
+
+      <FlatList
+        data={pedidos}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        ListEmptyComponent={
+          <Text style={styles.listaVazia}>Nenhum pedido pendente.</Text>
+        }
+        contentContainerStyle={styles.listaContainer}
+      />
+      <MenuInferiorADM navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -95,6 +85,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // texto à esquerda, imagem à direita
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  logo: {
+    width: 100,
+    height: 40,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: cores.texto,
   },
   card: {
     backgroundColor: cores.cardProdutos,
@@ -109,22 +115,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: cores.texto,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  arrow: {
-    fontSize: 50,  // Tamanho da seta
+  textoSecundario: {
     color: cores.texto,
   },
-  arrowText: {
-    fontSize: 50,
+  listaVazia: {
+    textAlign: "center",
+    marginTop: 20,
     color: cores.texto,
   },
-  loadingText: {
-    fontSize: 16,
-    marginTop: 10,
-    color: cores.texto,
+  listaContainer: {
+    padding: 20,
   },
 });
