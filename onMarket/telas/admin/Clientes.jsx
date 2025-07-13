@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,Image,ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Row, Table } from 'react-native-table-component';
 
@@ -38,7 +38,11 @@ const Clientes = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.headerRow}>
             <Text style={styles.title}>Lista de Clientes</Text>
-            {/* Se quiser, pode adicionar botão de adicionar cliente aqui */}
+              <Image
+                source={require("../../image/onMarket_2.png")}
+                style={styles.logo}
+                resizeMode="contain"
+              />
           </View>
 
           {loading ? (
@@ -129,6 +133,10 @@ const styles = StyleSheet.create({
   cellText: {
     margin: 6,
     textAlign: 'center',
+  },
+  logo: {
+    width: 110,
+    height: 40,
   },
 });
 

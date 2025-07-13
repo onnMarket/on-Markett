@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import cores from "../style/cores";
+import MenuInferiorCliente from "../navigation/navigationBar_cliente";
 
 export default function HistoricoPedidos({ navigation }) {
   const [pedidos, setPedidos] = useState([]);
@@ -31,10 +32,14 @@ export default function HistoricoPedidos({ navigation }) {
           return;
         }
 
-        const res = await axios.get(`https://on-markett-2.onrender.com/api/pedidos/comprador/${id}`);
+        const res = await axios.get(
+          `https://on-markett-2.onrender.com/api/pedidos/comprador/${id}`
+        );
         const pedidosDetalhados = await Promise.all(
           res.data.map(async (pedido) => {
-            const resDetalhes = await axios.get(`https://on-markett-2.onrender.com/api/pedidos/${pedido.id}`);
+            const resDetalhes = await axios.get(
+              `https://on-markett-2.onrender.com/api/pedidos/${pedido.id}`
+            );
             const itens = await Promise.all(
               resDetalhes.data.itens.map(async (item) => {
                 const produto = await axios.get(
@@ -69,12 +74,21 @@ export default function HistoricoPedidos({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text style={styles.titulo}>Histórico de Pedidos</Text>
+        <View style={styles.header}>
+          <Text style={styles.titulo}>Histórico de Pedidos</Text>
+          <Image
+            source={require("../../image/onMarket_2.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
 
         {carregando ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={cores.Primaria} />
-            <Text style={{ marginTop: 10, color: cores.texto }}>Carregando pedidos...</Text>
+            <Text style={{ marginTop: 10, color: cores.texto }}>
+              Carregando pedidos...
+            </Text>
           </View>
         ) : pedidos.length === 0 ? (
           <Text style={{ textAlign: "center" }}>Nenhum pedido encontrado.</Text>
@@ -83,7 +97,9 @@ export default function HistoricoPedidos({ navigation }) {
             <TouchableOpacity
               key={pedido.id}
               style={styles.pedidoContainer}
-              onPress={() => navigation.navigate("StatusPedido", { pedidoId: pedido.id })}
+              onPress={() =>
+                navigation.navigate("StatusPedido", { pedidoId: pedido.id })
+              }
             >
               <Text style={styles.dataPedido}>
                 Compra {index + 1} - {new Date(pedido.data).toLocaleDateString()}
@@ -93,9 +109,10 @@ export default function HistoricoPedidos({ navigation }) {
                   <Image
                     key={item.id}
                     source={{
-                      uri: item.produto.foto?.length < 100
-                        ? `https://drive.google.com/uc?export=view&id=${item.produto.foto}`
-                        : `data:image/jpeg;base64,${item.produto.foto}`,
+                      uri:
+                        item.produto.foto?.length < 100
+                          ? `https://drive.google.com/uc?export=view&id=${item.produto.foto}`
+                          : `data:image/jpeg;base64,${item.produto.foto}`,
                     }}
                     style={styles.itemImagem}
                   />
@@ -108,6 +125,7 @@ export default function HistoricoPedidos({ navigation }) {
           ))
         )}
       </ScrollView>
+      <MenuInferiorCliente navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -117,11 +135,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: cores.Secundaria,
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between", // Alinha título à esquerda e logo à direita
+    marginBottom: 15,
+  },
   titulo: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 15,
     color: cores.texto,
+  },
+  logo: {
+    width: 110,
+    height: 40,
   },
   loadingContainer: {
     marginTop: 50,

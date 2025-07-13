@@ -44,7 +44,7 @@ export default function App() {
         <Stack.Screen
           name="HistoricoCompras"
           component={HistoricoCompras}
-          options={{ headerBackTitleVisible: false, title: '' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="StatusPedido"
@@ -109,7 +109,7 @@ export default function App() {
         <Stack.Screen
           name="Perfil"
           component={Perfil}
-          options={{ headerBackTitleVisible: false, title: '' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EditarConta"

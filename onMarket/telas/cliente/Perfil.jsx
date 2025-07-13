@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import cores from '../style/cores';
 import { useFocusEffect } from '@react-navigation/native';
+import MenuInferiorCliente from "../navigation/navigationBar_cliente";
 
 export default function Perfil({ navigation }) {
   const [usuario, setUsuario] = useState(null);
@@ -85,45 +85,51 @@ export default function Perfil({ navigation }) {
 
   if (!usuario) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.texto}>Carregando dados do usuário...</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.titulo}>Perfil do Usuário</Text>
+    <View style={styles.container}>
+      <View style={styles.conteudoCentralizado}>
+        <View style={styles.card}>
+          <Text style={styles.titulo}>Perfil do Usuário</Text>
 
-        <Text style={styles.label}>Nome:</Text>
-        <Text style={styles.valor}>{usuario.nome}</Text>
+          <Text style={styles.label}>Nome:</Text>
+          <Text style={styles.valor}>{usuario.nome}</Text>
 
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.valor}>{usuario.email}</Text>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.valor}>{usuario.email}</Text>
 
-        <Text style={styles.label}>CPF:</Text>
-        <Text style={styles.valor}>{usuario.cpf || '-'}</Text>
+          <Text style={styles.label}>CPF:</Text>
+          <Text style={styles.valor}>{usuario.cpf || '-'}</Text>
 
-        <Text style={styles.label}>Tipo de Conta:</Text>
-        <Text style={styles.valor}>{usuario.tipo}</Text>
+          <Text style={styles.label}>Tipo de Conta:</Text>
+          <Text style={styles.valor}>{usuario.tipo}</Text>
 
-        <Text style={styles.label}>Senha:</Text>
-        <Text style={styles.valor}>{usuario.senha || '-'}</Text>
+          <Text style={styles.label}>Senha:</Text>
+          <Text style={styles.valor}>{usuario.senha || '-'}</Text>
 
-        <TouchableOpacity style={styles.botaoEditar} onPress={editarConta}>
-          <Text style={styles.textoBotao}>Editar Conta</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.botaoEditar} onPress={editarConta}>
+            <Text style={styles.textoBotao}>Editar Conta</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.botaoExcluir} onPress={excluirConta}>
-          <Text style={styles.textoBotao}>Excluir Conta</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.botaoExcluir} onPress={excluirConta}>
+            <Text style={styles.textoBotao}>Excluir Conta</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.botaoLogout} onPress={logout}>
-          <Text style={styles.textoBotao}>Sair</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.botaoLogout} onPress={logout}>
+            <Text style={styles.textoBotao}>Sair</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.menuInferior}>
+        <MenuInferiorCliente navigation={navigation} />
+      </View>
+    </View>
   );
 }
 
@@ -131,8 +137,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
-    justifyContent: 'center',
     paddingHorizontal: 20,
+  },
+  conteudoCentralizado: {
+    flex: 1,
+    justifyContent: 'center',  // Centraliza verticalmente
+    paddingBottom: 80,          // Espaço para a barra fixa inferior
   },
   card: {
     backgroundColor: cores.cardProdutos,
@@ -188,5 +198,11 @@ const styles = StyleSheet.create({
     color: cores.texto,
     fontSize: 16,
     textAlign: 'center',
+  },
+  menuInferior: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });

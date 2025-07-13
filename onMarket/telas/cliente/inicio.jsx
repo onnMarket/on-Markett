@@ -1,5 +1,5 @@
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Correção aqui
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import BarraPesquisaClientes from '../navigation/baraPesquisa_clientes';
 import MenuInferiorCliente from '../navigation/navigationBar_cliente';
 import cores from '../style/cores';
@@ -46,30 +47,26 @@ export default function Inicio({ navigation }) {
       })
       .catch(err => console.error('Erro ao buscar dados:', err));
 
-    // Função para carregar a quantidade de itens no carrinho
+    // Carregar quantidade de itens do carrinho
     async function carregarCarrinho() {
       try {
-        // Recuperar o usuário do AsyncStorage
         const usuarioSalvo = await AsyncStorage.getItem('@usuario');
         const usuario = JSON.parse(usuarioSalvo);
         const usuarioId = usuario?.id;
 
         if (usuarioId) {
-          // Fazer requisição para obter o carrinho do usuário
           const respostaCarrinho = await axios.get(
             `https://on-markett-2.onrender.com/api/carrinho/${usuarioId}`
           );
-
-          // Contar a quantidade de itens no carrinho
           const quantidade = respostaCarrinho.data.itens.length;
-          setQuantidadeCarrinho(quantidade);  // Atualizar o estado com a quantidade de itens
+          setQuantidadeCarrinho(quantidade);
         }
       } catch (error) {
         console.error('Erro ao carregar carrinho:', error);
       }
     }
 
-    carregarCarrinho();  // Chama a função para carregar a quantidade do carrinho
+    carregarCarrinho();
   }, []);
 
   const produtosFiltrados = produtos.filter(prod => {
@@ -80,29 +77,13 @@ export default function Inicio({ navigation }) {
 
   return (
     <SafeAreaView style={estilos.container}>
-      {/* HEADER */}
-      <BarraPesquisaClientes setBusca={setBusca} busca={busca} />
+      <BarraPesquisaClientes setBusca={setBusca} busca={busca} quantidadeCarrinho={quantidadeCarrinho} />
 
-      {/* Ícone do carrinho no topo com quantidade */}
-      <View style={estilos.carrinhoContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Carrinho')}>
-          <FontAwesome name="shopping-cart" size={30} color={cores.texto} />
-          {quantidadeCarrinho > 0 && (
-            <View style={estilos.badge}>
-              <Text style={estilos.badgeText}>{quantidadeCarrinho}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
-
-      {/* CONTEÚDO PRINCIPAL */}
       <ScrollView style={estilos.conteudo} showsVerticalScrollIndicator={false}>
-        {/* CATEGORIAS */}
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categorias</Text>
         </View>
         <View style={estilos.grid}>
-          {/* Botão "Todos" */}
           <TouchableOpacity
             style={[
               estilos.itemCategoria,
@@ -116,7 +97,6 @@ export default function Inicio({ navigation }) {
             <Text style={estilos.textoCategoria}>Todos</Text>
           </TouchableOpacity>
 
-          {/* Demais categorias */}
           {categorias.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -142,7 +122,6 @@ export default function Inicio({ navigation }) {
           ))}
         </View>
 
-        {/* PRODUTOS */}
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Produtos</Text>
         </View>
@@ -171,20 +150,14 @@ export default function Inicio({ navigation }) {
                   resizeMode="cover"
                 />
               ) : (
-                <View
-                  style={[
-                    estilos.imagemProduto,
-                    { backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' },
-                  ]}
-                >
+                <View style={[estilos.imagemProduto, { backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' }]}>
                   <Text>Sem imagem</Text>
                 </View>
               )}
               <View style={estilos.infoCard}>
                 <Text style={estilos.nomeProduto}>{item.nome}</Text>
                 <Text style={estilos.precoProduto}>
-                  R${' '}
-                  {typeof item.preco === 'number'
+                  R$ {typeof item.preco === 'number'
                     ? item.preco.toFixed(2)
                     : parseFloat(item.preco)?.toFixed(2) || '0.00'}
                 </Text>
@@ -196,7 +169,6 @@ export default function Inicio({ navigation }) {
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* MENU FIXO INFERIOR */}
       <MenuInferiorCliente navigation={navigation} />
     </SafeAreaView>
   );
@@ -206,28 +178,6 @@ const estilos = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
-  },
-  carrinhoContainer: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 1,
-  },
-  badge: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: 'red',
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#fff',
   },
   conteudo: {
     padding: 20,
