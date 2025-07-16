@@ -178,7 +178,7 @@ export default function CadastroCartao({ navigation }) {
       {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 4 })}
       {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
 
-      <TouchableOpacity style={styles.botaoSalvar} onPress={handleCadastrarCartao}>
+      <TouchableOpacity style={styles.botaoSalvarUnico} onPress={handleCadastrarCartao}>
         <Text style={styles.textoBotao}>Cadastrar Cartão</Text>
       </TouchableOpacity>
 
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: cores.texto,
   },
-  botaoSalvar: {
+  botaoSalvarUnico: {
     backgroundColor: cores.botaoEnviar,
     paddingVertical: 12,
     borderRadius: 10,
@@ -282,27 +282,35 @@ const styles = StyleSheet.create({
   botoesAcao: {
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 10, // use apenas se seu React Native for 0.71+
   },
   botaoEditar: {
     backgroundColor: cores.botaoEditar,
-    padding: 10,
+    paddingVertical: 10,
     borderRadius: 8,
+    alignItems: "center",
     flex: 1,
-    marginRight: 5,
   },
   botaoExcluir: {
     backgroundColor: cores.botaoDeletar,
-    padding: 10,
+    paddingVertical: 10,
     borderRadius: 8,
+    alignItems: "center",
     flex: 1,
-    marginLeft: 5,
   },
   botaoCancelar: {
     backgroundColor: cores.botaoSair,
-    padding: 12,
+    paddingVertical: 10,
     borderRadius: 8,
+    alignItems: "center",
     flex: 1,
-    marginLeft: 5,
+  },
+  botaoSalvar: {
+    backgroundColor: cores.botaoEnviar,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    flex: 1,
   },
   modalContainer: {
     flex: 1,
