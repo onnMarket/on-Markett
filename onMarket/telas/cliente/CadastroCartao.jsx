@@ -175,7 +175,7 @@ export default function CadastroCartao({ navigation }) {
       />
       <TextInput
         style={styles.input}
-        placeholder="Validade (YYYY-MM-DD)"
+        placeholder="Validade (DD-MM-AAAA)"
         value={form.validade}
         onChangeText={(text) =>
           setForm({ ...form, validade: formatarValidade(text) })
@@ -319,25 +319,25 @@ const styles = StyleSheet.create({
     color: cores.texto,
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: cores.cardProdutos,
     padding: 12,
     marginBottom: 10,
     borderRadius: 8,
     color: "#000",
   },
   botaoCadastrar: {
-    backgroundColor: "blue",
+    backgroundColor: cores.botaoEnviar,
     padding: 15,
     borderRadius: 8,
     marginBottom: 20,
   },
   botaoTexto: {
-    color: "#fff",
+    color: cores.textoClaro,
     fontWeight: "bold",
     textAlign: "center",
   },
   cartaoBox: {
-    backgroundColor: "#eee",
+    backgroundColor: cores.impossibilitar,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -351,14 +351,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   botaoEditar: {
-    backgroundColor: "#2196F3",
+    backgroundColor: cores.botaoEditar,
     padding: 10,
     borderRadius: 8,
     flex: 1,
     marginRight: 5,
   },
   botaoExcluir: {
-    backgroundColor: "red",
+    backgroundColor: cores.botaoDeletar,
     padding: 10,
     borderRadius: 8,
     flex: 1,
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: cores.fundoPopup,
     padding: 20,
     borderRadius: 10,
     width: "90%",
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   botaoCancelar: {
-    backgroundColor: "gray",
+    backgroundColor: cores.botaoSair,
     padding: 12,
     borderRadius: 8,
     flex: 1,

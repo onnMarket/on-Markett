@@ -1,6 +1,7 @@
 const cores = {
   Principal: "#4CAF50",
   Secundaria: "#f5f5f5",
+  fundoPopup: "#f0f0f0",
   IconeCategorias: "#FF9800",
   cardProdutos: "#fff",
   Preco: "#2AAA53",
