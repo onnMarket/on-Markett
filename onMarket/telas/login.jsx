@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import axios from "axios";
+import React, { useState } from "react";
 import {
   Alert,
   SafeAreaView,
@@ -8,59 +8,74 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Image
-} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+  Image,
+  ActivityIndicator, // <--- importado
+} from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import cores from './style/cores';
+import cores from "./style/cores";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [loading, setLoading] = useState(false); // <--- estado loading
 
   async function login() {
     if (!email || !senha) {
-      Alert.alert('Erro', 'Preencha todos os campos.');
+      Alert.alert("Erro", "Preencha todos os campos.");
       return;
     }
 
+    setLoading(true); // começa loading
+
     try {
-      const response = await axios.post('https://on-markett-2.onrender.com/api/login', {
-        email,
-        senha,
-      });
+      const response = await axios.post(
+        "https://on-markett-2.onrender.com/api/login",
+        {
+          email,
+          senha,
+        }
+      );
 
       const { user } = response.data;
 
-
       const userComSenha = { ...user, senha };
 
-      await AsyncStorage.setItem('@usuario', JSON.stringify(userComSenha));
+      await AsyncStorage.setItem("@usuario", JSON.stringify(userComSenha));
 
-      if (user.tipo === 'adm') {
-        navigation.navigate('InicioADM');
-      } else if (user.tipo === 'cliente') {
-        navigation.navigate('Inicio');
+      setLoading(false); // termina loading
+
+      if (user.tipo === "adm") {
+        navigation.navigate("InicioADM");
+      } else if (user.tipo === "cliente") {
+        navigation.navigate("Inicio");
       } else {
-        Alert.alert('Erro', 'Tipo de usuário desconhecido!');
+        Alert.alert("Erro", "Tipo de usuário desconhecido!");
       }
     } catch (error) {
-      const mensagem = error?.response?.data?.error || 'Erro ao realizar login.';
-      Alert.alert('Erro', mensagem);
-      console.error('Erro no login:', mensagem);
+      setLoading(false); // termina loading no erro
+      const mensagem =
+        error?.response?.data?.error || "Erro ao realizar login.";
+      Alert.alert("Erro", mensagem);
+      console.error("Erro no login:", mensagem);
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require('../image/onMarket_3.png')}
+        source={require("../image/onMarket_3.png")}
         style={{ width: 200, height: 200, marginTop: 20 }}
       />
       <View style={styles.inputContainer}>
-        <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
+        <MaterialIcons
+          name="email"
+          size={24}
+          color={cores.texto}
+          style={styles.icon}
+        />
         <TextInput
           placeholder="Email"
           placeholderTextColor="#999"
@@ -73,7 +88,12 @@ export default function Login({ navigation }) {
       </View>
 
       <View style={styles.inputContainer}>
-        <MaterialIcons name="lock" size={24} color={cores.texto} style={styles.icon} />
+        <MaterialIcons
+          name="lock"
+          size={24}
+          color={cores.texto}
+          style={styles.icon}
+        />
         <TextInput
           placeholder="Senha"
           placeholderTextColor="#999"
@@ -84,22 +104,33 @@ export default function Login({ navigation }) {
         />
         <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
           <MaterialIcons
-            name={mostrarSenha ? 'visibility' : 'visibility-off'}
+            name={mostrarSenha ? "visibility" : "visibility-off"}
             size={24}
             color={cores.texto}
           />
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('RecuperacaoSenha')}>
+      <TouchableOpacity onPress={() => navigation.navigate("RecuperacaoSenha")}>
         <Text style={styles.recuperarSenha}>Esqueceu a senha?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao_1} onPress={login}>
-        <Text style={styles.textoClaro}>Login</Text>
+      <TouchableOpacity
+        style={[styles.botao_1, loading && { opacity: 0.7 }]} // deixa botão semi-transparente quando carregando
+        onPress={login}
+        disabled={loading} // desabilita botão enquanto carrega
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color={cores.Secundaria} />
+        ) : (
+          <Text style={styles.textoClaro}>Login</Text>
+        )}
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao_2} onPress={() => navigation.navigate('CadastroUsuario')}>
+      <TouchableOpacity
+        style={styles.botao_2}
+        onPress={() => navigation.navigate("CadastroUsuario")}
+      >
         <Text style={styles.texto}>Cadastre-se</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -110,18 +141,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: cores.Secundaria,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: cores.input,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    width: '100%',
+    width: "100%",
     marginBottom: 15,
   },
   icon: {
@@ -147,17 +178,17 @@ const styles = StyleSheet.create({
   },
   texto: {
     color: cores.texto,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
   },
   textoClaro: {
     color: cores.Secundaria,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
   },
   recuperarSenha: {
     color: cores.texto,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
