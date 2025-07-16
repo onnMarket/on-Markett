@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   botaoCartao: {
-    backgroundColor: "#4e8cff", // azul cartão
+    backgroundColor: cores.botaoEnviar,
     marginTop: 15,
     paddingVertical: 12,
     borderRadius: 10,
