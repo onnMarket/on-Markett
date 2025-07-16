@@ -9,6 +9,17 @@ import MenuInferiorCliente from "../navigation/navigationBar_cliente";
 export default function Perfil({ navigation }) {
   const [usuario, setUsuario] = useState(null);
 
+  // Função para formatar CPF no formato 000.000.000-00
+  function formatarCPF(value) {
+    if (!value) return "-";
+    const cpfLimpo = value.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) return value; // Se não tiver 11 dígitos, retorna como veio
+    return cpfLimpo
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+
   useFocusEffect(
     useCallback(() => {
       const carregarUsuario = async () => {
@@ -103,7 +114,7 @@ export default function Perfil({ navigation }) {
           <Text style={styles.valor}>{usuario.email}</Text>
 
           <Text style={styles.label}>CPF:</Text>
-          <Text style={styles.valor}>{usuario.cpf || "-"}</Text>
+          <Text style={styles.valor}>{formatarCPF(usuario.cpf)}</Text>
 
           <Text style={styles.label}>Tipo de Conta:</Text>
           <Text style={styles.valor}>{usuario.tipo}</Text>
