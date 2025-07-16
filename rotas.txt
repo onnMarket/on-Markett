@@ -1,0 +1,61 @@
+PATCH /pedidos/:id/status
+GET 127.0.1:3000/api/pedidos/2/ --> mostra o pedido
+GET 127.0.1:3000/api/pedidos/comprador/2 --> mostra os pedidos de um comprador específico
+POST /pedidos/finalizar 
+{
+  "compradorId": 1,
+  "formaPagamento": "pix",
+  "produtos": [
+    { "produtoId": 1, "quantidade": 2 },
+    { "produtoId": 2, "quantidade": 1 }
+  ]
+}
+--> Cadastrar uma compra
+Cadastro do pagamento
+
+POST /api/payment/cadastrar
+
+{
+  "compradorId": 1,
+  "nomeTitular": "João Silva",
+  "numeroCartao": "1234 5678 9876 5432",
+  "validade": "2026-12-31",
+  "codigoSeguranca": "123",
+  "limite": 5000.00
+}
+
+
+Finalizar compra usando esse pagamento:
+
+POST /api/payment/finalizar
+
+{
+  "compradorId": 1,
+  "formaPagamento": "credito",
+  "pagamentoId": 10
+}
+
+Carrinho
+
+POST api/carrinho/adicionar
+
+{
+  "compradorId": 1,
+  "produtoId": 7,
+  "quantidade": 3
+}
+
+3. Adicionar itens no carrinho (exemplo)
+POST /api/carrinho/adicionar
+
+{
+  "compradorId": 1,
+  "produtoId": 7,
+  "quantidade": 3
+}
+
+Depois, para ver o carrinho atualizado, faça:
+http
+Copiar
+Editar
+GET /api/carrinho/1
