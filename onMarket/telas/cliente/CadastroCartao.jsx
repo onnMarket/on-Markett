@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import cores from "../style/cores";
 
 export default function CadastroCartao({ navigation }) {
@@ -153,149 +154,68 @@ export default function CadastroCartao({ navigation }) {
     }
   };
 
+  const renderInput = (icon, placeholder, value, onChangeText, props = {}) => (
+    <View style={styles.inputContainer}>
+      <MaterialIcons name={icon} size={24} color={cores.texto} style={styles.icon} />
+      <TextInput
+        style={styles.input}
+        placeholder={placeholder}
+        placeholderTextColor="#999"
+        value={value}
+        onChangeText={onChangeText}
+        {...props}
+      />
+    </View>
+  );
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.titulo}>Cadastrar Novo Cartão</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nome do Titular"
-        value={form.nomeTitular}
-        onChangeText={(text) => setForm({ ...form, nomeTitular: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Número do Cartão"
-        keyboardType="numeric"
-        value={form.numeroCartao}
-        onChangeText={(text) =>
-          setForm({ ...form, numeroCartao: formatarNumeroCartao(text) })
-        }
-        maxLength={19}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Validade (DD-MM-AAAA)"
-        value={form.validade}
-        onChangeText={(text) =>
-          setForm({ ...form, validade: formatarValidade(text) })
-        }
-        maxLength={10}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="CVV"
-        keyboardType="numeric"
-        secureTextEntry
-        value={form.codigoSeguranca}
-        onChangeText={(text) => setForm({ ...form, codigoSeguranca: text })}
-        maxLength={4}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Limite"
-        keyboardType="numeric"
-        value={form.limite}
-        onChangeText={(text) => setForm({ ...form, limite: text })}
-      />
+      {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
+      {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
+      {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
+      {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 4 })}
+      {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
 
-      <TouchableOpacity
-        style={styles.botaoCadastrar}
-        onPress={handleCadastrarCartao}
-      >
-        <Text style={styles.botaoTexto}>Cadastrar Cartão</Text>
+      <TouchableOpacity style={styles.botaoSalvar} onPress={handleCadastrarCartao}>
+        <Text style={styles.textoBotao}>Cadastrar Cartão</Text>
       </TouchableOpacity>
 
       <Text style={styles.titulo}>Cartões Salvos</Text>
       {cartoes.map((cartao) => (
         <View key={cartao.id} style={styles.cartaoBox}>
           <Text style={styles.cartaoTexto}>
-            **** **** **** {cartao.numeroCartao.slice(-4)} -{" "}
-            {cartao.nomeTitular}
+            **** **** **** {cartao.numeroCartao.slice(-4)} - {cartao.nomeTitular}
           </Text>
           <View style={styles.botoesAcao}>
-            <TouchableOpacity
-              style={styles.botaoEditar}
-              onPress={() => abrirModalEdicao(cartao)}
-            >
+            <TouchableOpacity style={styles.botaoEditar} onPress={() => abrirModalEdicao(cartao)}>
               <Text style={styles.botaoTexto}>Editar</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaoExcluir}
-              onPress={() => handleExcluirCartao(cartao.id)}
-            >
+            <TouchableOpacity style={styles.botaoExcluir} onPress={() => handleExcluirCartao(cartao.id)}>
               <Text style={styles.botaoTexto}>Excluir</Text>
             </TouchableOpacity>
           </View>
         </View>
       ))}
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+      <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.titulo}>Editar Cartão</Text>
 
-            <TextInput
-              style={styles.input}
-              placeholder="Nome do Titular"
-              value={form.nomeTitular}
-              onChangeText={(text) => setForm({ ...form, nomeTitular: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Número do Cartão"
-              keyboardType="numeric"
-              value={form.numeroCartao}
-              onChangeText={(text) =>
-                setForm({ ...form, numeroCartao: formatarNumeroCartao(text) })
-              }
-              maxLength={19}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Validade (YYYY-MM-DD)"
-              value={form.validade}
-              onChangeText={(text) =>
-                setForm({ ...form, validade: formatarValidade(text) })
-              }
-              maxLength={10}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="CVV"
-              keyboardType="numeric"
-              secureTextEntry
-              value={form.codigoSeguranca}
-              onChangeText={(text) =>
-                setForm({ ...form, codigoSeguranca: text })
-              }
-              maxLength={4}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Limite"
-              keyboardType="numeric"
-              value={form.limite}
-              onChangeText={(text) => setForm({ ...form, limite: text })}
-            />
+            {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
+            {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
+            {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
+            {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 4 })}
+            {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
 
             <View style={styles.botoesAcao}>
-              <TouchableOpacity
-                style={styles.botaoSalvar}
-                onPress={handleSalvarEdicao}
-              >
-                <Text style={styles.botaoTexto}>Salvar</Text>
+              <TouchableOpacity style={styles.botaoSalvar} onPress={handleSalvarEdicao}>
+                <Text style={styles.textoBotao}>Salvar</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.botaoCancelar}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.botaoTexto}>Cancelar</Text>
+              <TouchableOpacity style={styles.botaoCancelar} onPress={() => setModalVisible(false)}>
+                <Text style={styles.textoBotao}>Cancelar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -318,23 +238,35 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: cores.texto,
   },
-  input: {
-    backgroundColor: cores.cardProdutos,
-    padding: 12,
-    marginBottom: 10,
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cores.input,
     borderRadius: 8,
-    color: "#000",
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    width: '100%',
+    marginBottom: 15,
   },
-  botaoCadastrar: {
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: cores.texto,
+  },
+  botaoSalvar: {
     backgroundColor: cores.botaoEnviar,
-    padding: 15,
-    borderRadius: 8,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
     marginBottom: 20,
   },
-  botaoTexto: {
+  textoBotao: {
     color: cores.textoClaro,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   cartaoBox: {
     backgroundColor: cores.impossibilitar,
@@ -345,6 +277,7 @@ const styles = StyleSheet.create({
   cartaoTexto: {
     fontSize: 16,
     marginBottom: 10,
+    color: cores.texto,
   },
   botoesAcao: {
     flexDirection: "row",
@@ -364,9 +297,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 5,
   },
+  botaoCancelar: {
+    backgroundColor: cores.botaoSair,
+    padding: 12,
+    borderRadius: 8,
+    flex: 1,
+    marginLeft: 5,
+  },
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -375,19 +315,5 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: "90%",
-  },
-  botaoSalvar: {
-    backgroundColor: "green",
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    marginRight: 5,
-  },
-  botaoCancelar: {
-    backgroundColor: cores.botaoSair,
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    marginLeft: 5,
   },
 });
