@@ -30,30 +30,6 @@ export default function PerfilADM({ navigation }) {
     return cpfLimpo;
   }
 
-  const validarCampos = () => {
-    if (!nome || !cpf || !email || !senha) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
-      return false;
-    }
-
-    // Validação simples de email
-    const regexEmail = /^\S+@\S+\.\S+$/;
-    if (!regexEmail.test(email)) {
-      Alert.alert("Erro", "Por favor, insira um email válido.");
-      return false;
-    }
-
-    // Limpa CPF e verifica se tem 11 números
-    const cpfLimpo = cpf.replace(/\D/g, '');
-    if (cpfLimpo.length !== 11) {
-      Alert.alert("Erro", "CPF deve conter 11 números.");
-      return false;
-    }
-
-    return true;
-  };
-
-
   useFocusEffect(
     useCallback(() => {
       const carregarUsuario = async () => {
