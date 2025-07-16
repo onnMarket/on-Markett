@@ -2,17 +2,22 @@
   "expo": {
     "name": "OnMarket",
     "slug": "onmarket",
-    "icon": "./image/onMarket_1.png",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./image/onMarket_Logo.png",
     "splash": {
       "image": "./image/onMarket_1.png",
       "resizeMode": "contain",
       "backgroundColor": "blue"
     },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./image/onMarket_Logo.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
     "web": {
       "favicon": "./image/onMarket_3.png",
-      "size": "192x192",
       "backgroundColor": "#ffffff"
     },
     "plugins": [
