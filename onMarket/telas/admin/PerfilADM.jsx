@@ -15,6 +15,45 @@ import MenuInferiorADM from '../navigation/navigationBar_admin';
 export default function PerfilADM({ navigation }) {
   const [usuario, setUsuario] = useState(null);
 
+  function formatarCPF(value) {
+    // Remove tudo que não é número
+    let cpfLimpo = value.replace(/\D/g, '');
+
+    // Limita o tamanho a 11 números
+    cpfLimpo = cpfLimpo.substring(0, 11);
+
+    // Aplica a máscara
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    return cpfLimpo;
+  }
+
+  const validarCampos = () => {
+    if (!nome || !cpf || !email || !senha) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      return false;
+    }
+
+    // Validação simples de email
+    const regexEmail = /^\S+@\S+\.\S+$/;
+    if (!regexEmail.test(email)) {
+      Alert.alert("Erro", "Por favor, insira um email válido.");
+      return false;
+    }
+
+    // Limpa CPF e verifica se tem 11 números
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      Alert.alert("Erro", "CPF deve conter 11 números.");
+      return false;
+    }
+
+    return true;
+  };
+
+
   useFocusEffect(
     useCallback(() => {
       const carregarUsuario = async () => {
@@ -104,7 +143,7 @@ export default function PerfilADM({ navigation }) {
           <Text style={styles.valor}>{usuario.email}</Text>
 
           <Text style={styles.label}>CPF:</Text>
-          <Text style={styles.valor}>{usuario.cpf || '-'}</Text>
+          <Text style={styles.valor} onTextLayout={texto => formatarCPF(texto)}>{usuario.cpf || '-'}</Text>
 
           <Text style={styles.label}>Tipo de Conta:</Text>
           <Text style={styles.valor}>{usuario.tipo}</Text>
@@ -162,6 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: cores.texto,
     marginTop: 10,
+
   },
   valor: {
     fontSize: 18,
