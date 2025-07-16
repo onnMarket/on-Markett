@@ -19,6 +19,22 @@ export default function CriarConta({ navigation }) {
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
+  // Função para formatar o CPF com máscara 000.000.000-00
+  function formatarCPF(value) {
+    // Remove tudo que não é número
+    let cpfLimpo = value.replace(/\D/g, '');
+
+    // Limita o tamanho a 11 números
+    cpfLimpo = cpfLimpo.substring(0, 11);
+
+    // Aplica a máscara
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    return cpfLimpo;
+  }
+
   const validarCampos = () => {
     if (!nome || !cpf || !email || !senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
@@ -99,7 +115,7 @@ export default function CriarConta({ navigation }) {
           placeholder="CPF"
           placeholderTextColor="#999"
           value={cpf}
-          onChangeText={setCpf}
+          onChangeText={text => setCpf(formatarCPF(text))}
           keyboardType="numeric"
           style={styles.input}
           maxLength={14} // permite CPF com máscara, tipo 000.000.000-00
