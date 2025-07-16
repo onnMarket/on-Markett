@@ -119,7 +119,7 @@ export default function PerfilADM({ navigation }) {
           <Text style={styles.valor}>{usuario.email}</Text>
 
           <Text style={styles.label}>CPF:</Text>
-          <Text style={styles.valor} onTextLayout={texto => formatarCPF(texto)}>{usuario.cpf || '-'}</Text>
+          <Text style={styles.valor}>{usuario.cpf ? formatarCPF(usuario.cpf) : '-'}</Text>
 
           <Text style={styles.label}>Tipo de Conta:</Text>
           <Text style={styles.valor}>{usuario.tipo}</Text>
@@ -142,7 +142,7 @@ export default function PerfilADM({ navigation }) {
       </View>
 
       <View style={styles.menuInferior}>
-      <MenuInferiorADM navigation={navigation} />
+        <MenuInferiorADM navigation={navigation} />
       </View>
     </View>
   );
@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: cores.texto,
     marginTop: 10,
-
   },
   valor: {
     fontSize: 18,
