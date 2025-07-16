@@ -11,8 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
-
 import MenuInferiorADM from '../navigation/navigationBar_admin';
 import BarraPesquisaADM from '../navigation/barraPesquisa_admin';
 import cores from '../style/cores';

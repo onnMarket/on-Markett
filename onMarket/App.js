@@ -15,6 +15,7 @@ import CadastrarMembro from "./telas/admin/cadastrarMembro";
 import AtualizarMembro from "./telas/admin/AtualizarMembro";
 import Produto from "./telas/cliente/Produto";
 import Perfil from "./telas/cliente/Perfil";
+import PerfilADM from "./telas/admin/PerfilADM";
 import EditarConta from "./telas/cliente/EditarConta";
 import Carrinho from "./telas/cliente/Carrinho";
 import CadastrarCategoria from "./telas/admin/CadastrarCateogia";
@@ -109,6 +110,11 @@ export default function App() {
         <Stack.Screen
           name="Perfil"
           component={Perfil}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PerfilADM"
+          component={PerfilADM}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -28,6 +28,10 @@ const insets = useSafeAreaInsets();
         <MaterialIcons name="groups" size={28} color={cores.Secundaria} />
         <Text style={{ color: cores.Secundaria, fontSize: 12, textAlign: 'center' }}>Clientes</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={estilos.item} onPress={() => navigation.navigate('PerfilADM')}>
+        <MaterialIcons name="person" size={35} color="#fff" />
+        <Text style={estilos.textoItem}>Perfil</Text>
+      </TouchableOpacity>
     </View>
   );
 }
