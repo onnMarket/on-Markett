@@ -22,7 +22,6 @@ import CadastrarCategoria from "./telas/admin/CadastrarCateogia";
 import VisualizarCliente from "./telas/admin/VisualizarCliente";
 import Pedidos from "./telas/admin/Pedidos";
 import DetalhesPedido from "./telas/admin/DetalhesPedido";
-import Pagamento from "./telas/cliente/Pagamento";
 import HistoricoCompras from "./telas/cliente/HistoricoPedidos";
 import StatusPedido from "./telas/cliente/StatusPedido";
 import CadastroCartao from "./telas/cliente/CadastroCartao";
@@ -148,11 +147,6 @@ export default function App() {
         <Stack.Screen
           name="DetalhesPedido"
           component={DetalhesPedido}
-          options={{ headerBackTitleVisible: false, title: '' }}
-        />
-        <Stack.Screen
-          name="Pagamento"
-          component={Pagamento}
           options={{ headerBackTitleVisible: false, title: '' }}
         />
       </Stack.Navigator>
