@@ -18,7 +18,12 @@ export default function Carrinho({ navigation }) {
   const [itens, setItens] = useState([]);
   const [usuarioId, setUsuarioId] = useState(null);
   const [carrinhoId, setCarrinhoId] = useState(null);
-  const [carregando, setCarregando] = useState(true);  // Estado de carregamento
+  const [carregando, setCarregando] = useState(true);
+
+  // NOVO: cartões e cartão selecionado
+  const [cartoes, setCartoes] = useState([]);
+  const [cartaoSelecionado, setCartaoSelecionado] = useState(null);
+  const [carregandoCartoes, setCarregandoCartoes] = useState(false);
 
   useEffect(() => {
     async function carregarUsuarioEItens() {
@@ -35,14 +40,31 @@ export default function Carrinho({ navigation }) {
 
         setUsuarioId(id);
 
-        const res = await axios.get(`https://on-markett-2.onrender.com/api/carrinho/${id}`);
-        setCarrinhoId(res.data.carrinhoId);
-        setItens(res.data.itens || []);
-        setCarregando(false);  // Definir carregando como false após o carregamento do carrinho
+        setCarregando(true);
+        const resCarrinho = await axios.get(
+          `https://on-markett-2.onrender.com/api/carrinho/${id}`
+        );
+        setCarrinhoId(resCarrinho.data.carrinhoId);
+        setItens(resCarrinho.data.itens || []);
+        setCarregando(false);
+
+        // Buscar cartões
+        setCarregandoCartoes(true);
+        const resCartoes = await axios.get(
+          `https://on-markett-2.onrender.com/api/payment/listar/${id}`
+        );
+        setCartoes(resCartoes.data || []);
+        setCarregandoCartoes(false);
+
+        // Se tiver cartões, selecionar o primeiro por padrão
+        if (resCartoes.data && resCartoes.data.length > 0) {
+          setCartaoSelecionado(resCartoes.data[0].id);
+        }
       } catch (error) {
-        console.error("Erro ao carregar carrinho:", error);
-        Alert.alert("Erro", "Não foi possível carregar o carrinho.");
-        setCarregando(false);  // Definir carregando como false em caso de erro também
+        console.error("Erro ao carregar dados:", error);
+        Alert.alert("Erro", "Não foi possível carregar o carrinho ou cartões.");
+        setCarregando(false);
+        setCarregandoCartoes(false);
       }
     }
 
@@ -64,7 +86,9 @@ export default function Carrinho({ navigation }) {
     }
 
     try {
-      await axios.delete(`https://on-markett-2.onrender.com/api/carrinho/${carrinhoId}/${produtoId}`);
+      await axios.delete(
+        `https://on-markett-2.onrender.com/api/carrinho/${carrinhoId}/${produtoId}`
+      );
       setItens((prev) => prev.filter((item) => item.produtoId !== produtoId));
       Alert.alert("Sucesso", "Item removido do carrinho.");
     } catch (error) {
@@ -80,30 +104,47 @@ export default function Carrinho({ navigation }) {
     }
 
     if (itens.length === 0) {
-      Alert.alert("Carrinho vazio", "Adicione produtos antes de finalizar a compra.");
+      Alert.alert(
+        "Carrinho vazio",
+        "Adicione produtos antes de finalizar a compra."
+      );
+      return;
+    }
+
+    if (!cartaoSelecionado) {
+      Alert.alert(
+        "Cartão não selecionado",
+        "Selecione um cartão para finalizar a compra."
+      );
       return;
     }
 
     try {
-      // Use a chamada correta de acordo com seu backend:
-      await axios.post(`https://on-markett-2.onrender.com/api/carrinho/finalizar`, {
-        compradorId: usuarioId,
-        formaPagamento: "dinheiro", // adapte para permitir outras formas de pagamento
-      });
+      await axios.post(
+        `https://on-markett-2.onrender.com/api/payment/finalizar`,
+        {
+          compradorId: usuarioId,
+          formaPagamento: "cartao",
+          pagamentoId: cartaoSelecionado,
+        }
+      );
 
       setItens([]);
       Alert.alert("Compra finalizada", "Obrigado pela sua compra!");
-      // navigation.navigate("Home"); // opcional: redirecionar após compra
+      // navigation.navigate("Home");
     } catch (error) {
       console.error("Erro ao finalizar compra:", error);
-      Alert.alert("Erro", error.response?.data?.error || "Não foi possível finalizar a compra.");
+      Alert.alert(
+        "Erro",
+        error.response?.data?.error || "Não foi possível finalizar a compra."
+      );
     }
   };
 
   return (
     <SafeAreaView style={estilos.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        {carregando ? (  // Mostrar o indicador de carregamento enquanto carregando
+        {carregando ? (
           <View style={estilos.carregandoContainer}>
             <ActivityIndicator size="large" color={cores.Preco} />
             <Text style={estilos.textoCarregando}>Carregando carrinho...</Text>
@@ -128,7 +169,11 @@ export default function Carrinho({ navigation }) {
                 <View
                   style={[
                     estilos.imagemProduto,
-                    { backgroundColor: "#ccc", justifyContent: "center", alignItems: "center" },
+                    {
+                      backgroundColor: "#ccc",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    },
                   ]}
                 >
                   <Text>Sem imagem</Text>
@@ -144,33 +189,98 @@ export default function Carrinho({ navigation }) {
                 <TouchableOpacity
                   style={estilos.botaoRemover}
                   onPress={() =>
-                    Alert.alert("Confirmar", "Deseja remover esse item do carrinho?", [
-                      { text: "Cancelar", style: "cancel" },
-                      { text: "Remover", onPress: () => removerItem(item.produtoId) },
-                    ])
+                    Alert.alert(
+                      "Confirmar",
+                      "Deseja remover esse item do carrinho?",
+                      [
+                        { text: "Cancelar", style: "cancel" },
+                        {
+                          text: "Remover",
+                          onPress: () => removerItem(item.produtoId),
+                        },
+                      ]
+                    )
                   }
                 >
-                  <Text style={{ color: "#fff", textAlign: "center" }}>Remover</Text>
+                  <Text style={{ color: "#fff", textAlign: "center" }}>
+                    Remover
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
           ))
         )}
 
+        {/* Mostrar cartões, total e botão finalizar APENAS se houver itens */}
         {itens.length > 0 && (
           <>
-            <Text style={estilos.total}>Total: R$ {calcularTotal().toFixed(2)}</Text>
+            {carregandoCartoes ? (
+              <View style={{ marginTop: 20, alignItems: "center" }}>
+                <ActivityIndicator size="small" color={cores.Preco} />
+                <Text>Carregando cartões...</Text>
+              </View>
+            ) : cartoes.length === 0 ? (
+              <Text
+                style={{ marginTop: 20, textAlign: "center", color: "red" }}
+              >
+                Nenhum cartão cadastrado. Por favor, cadastre um cartão.
+              </Text>
+            ) : (
+              <View style={{ marginTop: 20 }}>
+                <Text
+                  style={{
+                    marginBottom: 8,
+                    fontWeight: "bold",
+                    color: cores.texto,
+                  }}
+                >
+                  Selecione um cartão para pagamento:
+                </Text>
+                {cartoes.map((cartao) => (
+                  <TouchableOpacity
+                    key={cartao.id}
+                    style={[
+                      estilos.cartaoItem,
+                      cartaoSelecionado === cartao.id &&
+                        estilos.cartaoSelecionado,
+                    ]}
+                    onPress={() => setCartaoSelecionado(cartao.id)}
+                  >
+                    <Text style={{ color: cores.texto }}>
+                      {`**** **** **** ${cartao.numeroCartao.slice(-4)} - ${
+                        cartao.nomeTitular
+                      }`}
+                    </Text>
+                    <Text style={{ color: cores.texto, fontSize: 12 }}>
+                      {`Validade: ${cartao.validade}`}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            <Text style={estilos.total}>
+              Total: R$ {calcularTotal().toFixed(2)}
+            </Text>
 
             <TouchableOpacity
               style={estilos.botaoFinalizar}
               onPress={() =>
-                Alert.alert("Finalizar Compra", `Total a pagar: R$ ${calcularTotal().toFixed(2)}\nConfirmar compra?`, [
-                  { text: "Cancelar", style: "cancel" },
-                  { text: "Confirmar", onPress: finalizarCompra },
-                ])
+                Alert.alert(
+                  "Finalizar Compra",
+                  `Total a pagar: R$ ${calcularTotal().toFixed(
+                    2
+                  )}\nConfirmar compra?`,
+                  [
+                    { text: "Cancelar", style: "cancel" },
+                    { text: "Confirmar", onPress: finalizarCompra },
+                  ]
+                )
               }
             >
-              <Text style={{ color: "#fff", textAlign: "center", fontSize: 16 }}>
+              <Text
+                style={{ color: "#fff", textAlign: "center", fontSize: 16 }}
+              >
                 Finalizar Compra
               </Text>
             </TouchableOpacity>
@@ -244,5 +354,15 @@ const estilos = StyleSheet.create({
     textAlign: "right",
     marginTop: 20,
     marginRight: 10,
+  },
+  cartaoItem: {
+    backgroundColor: cores.cardProdutos,
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  cartaoSelecionado: {
+    borderWidth: 2,
+    borderColor: cores.Preco,
   },
 });
