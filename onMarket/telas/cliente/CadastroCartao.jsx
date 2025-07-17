@@ -175,7 +175,7 @@ export default function CadastroCartao({ navigation }) {
       {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
       {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
       {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
-      {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 4 })}
+      {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 })}
       {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
 
       <TouchableOpacity style={styles.botaoSalvarUnico} onPress={handleCadastrarCartao}>
@@ -207,7 +207,7 @@ export default function CadastroCartao({ navigation }) {
             {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
             {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
             {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
-            {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 4 })}
+            {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 })}
             {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
 
             <View style={styles.botoesAcao}>
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   botoesAcao: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 10, // use apenas se seu React Native for 0.71+
+    gap: 10,
   },
   botaoEditar: {
     backgroundColor: cores.botaoEditar,
