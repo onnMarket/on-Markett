@@ -24,7 +24,6 @@ export default function Inicio({ navigation }) {
   const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
 
   useEffect(() => {
-    // Carregar categorias e produtos
     Promise.all([
       axios.get('https://on-markett-2.onrender.com/api/categorias'),
       axios.get('https://on-markett-2.onrender.com/api/produtos')
@@ -47,7 +46,6 @@ export default function Inicio({ navigation }) {
       })
       .catch(err => console.error('Erro ao buscar dados:', err));
 
-    // Carregar quantidade de itens do carrinho
     async function carregarCarrinho() {
       try {
         const usuarioSalvo = await AsyncStorage.getItem('@usuario');
@@ -83,6 +81,7 @@ export default function Inicio({ navigation }) {
         <View style={estilos.linhaTitulo}>
           <Text style={estilos.conteudo_principal}>Categorias</Text>
         </View>
+        
         <View style={estilos.grid}>
           <TouchableOpacity
             style={[
@@ -92,7 +91,7 @@ export default function Inicio({ navigation }) {
             onPress={() => setCategoriaSelecionada(null)}
           >
             <View style={estilos.circuloIcone}>
-              <MaterialIcons name="apps" size={28} color="#212121" />
+              <MaterialIcons name="apps" size={28} color={cores.texto} />
             </View>
             <Text style={estilos.textoCategoria}>Todos</Text>
           </TouchableOpacity>
@@ -112,9 +111,9 @@ export default function Inicio({ navigation }) {
             >
               <View style={estilos.circuloIcone}>
                 {item.tipo === 'MaterialIcons' ? (
-                  <MaterialIcons name={item.icone} size={28} color="#212121" />
+                  <MaterialIcons name={item.icone} size={28} color={cores.texto} />
                 ) : (
-                  <FontAwesome name={item.icone} size={28} color="#212121" />
+                  <FontAwesome name={item.icone} size={28} color={cores.texto} />
                 )}
               </View>
               <Text style={estilos.textoCategoria}>{item.nome}</Text>
@@ -166,6 +165,7 @@ export default function Inicio({ navigation }) {
             </TouchableOpacity>
           ))}
         </View>
+
         <View style={{ height: 100 }} />
       </ScrollView>
 
@@ -198,20 +198,18 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    rowGap: 15,
-    columnGap: 10,
   },
   itemCategoria: {
-    width: '23%',
+    width: '22%',
     alignItems: 'center',
-    marginBottom: 15,
-    marginRight: 10,
-    paddingVertical: 5,
-    borderRadius: 10,
+    marginBottom: 8,
   },
   categoriaSelecionada: {
-    backgroundColor: '#c8e6c9',
+    backgroundColor: '#a5d6a7',
+    borderRadius: 10,
     padding: 10,
+    borderWidth: 2,
+    borderColor: cores.Principal,
   },
   circuloIcone: {
     backgroundColor: cores.IconeCategorias,

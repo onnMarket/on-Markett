@@ -46,24 +46,19 @@ export default function CadastroCartao({ navigation }) {
     }
   };
 
+  // Máscara: Número do cartão no formato #### #### #### ####
   const formatarNumeroCartao = (value) => {
     const numeros = value.replace(/\D/g, "").slice(0, 16);
     const partes = numeros.match(/.{1,4}/g);
     return partes ? partes.join(" ") : "";
   };
 
+  // Máscara: Validade no formato MM/AA
   const formatarValidade = (value) => {
-    const numeros = value.replace(/\D/g, "").slice(0, 8);
-    if (numeros.length <= 2) return numeros;
-    if (numeros.length <= 4)
-      return numeros.slice(0, 2) + "/" + numeros.slice(2);
-    return (
-      numeros.slice(0, 2) +
-      "/" +
-      numeros.slice(2, 4) +
-      "/" +
-      numeros.slice(4, 8)
-    );
+    const numeros = value.replace(/\D/g, "").slice(0, 4);
+    if (numeros.length === 0) return "";
+    if (numeros.length < 3) return numeros;
+    return numeros.slice(0, 2) + "/" + numeros.slice(2);
   };
 
   const handleCadastrarCartao = async () => {
@@ -120,7 +115,7 @@ export default function CadastroCartao({ navigation }) {
     setForm({
       nomeTitular: cartao.nomeTitular,
       numeroCartao: formatarNumeroCartao(cartao.numeroCartao),
-      validade: cartao.validade,
+      validade: formatarValidade(cartao.validade),
       codigoSeguranca: cartao.codigoSeguranca,
       limite: cartao.limite.toString(),
     });
@@ -172,11 +167,40 @@ export default function CadastroCartao({ navigation }) {
     <ScrollView style={styles.container}>
       <Text style={styles.titulo}>Cadastrar Novo Cartão</Text>
 
-      {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
-      {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
-      {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
-      {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 })}
-      {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
+      {renderInput(
+        "person",
+        "Nome do Titular",
+        form.nomeTitular,
+        text => setForm({ ...form, nomeTitular: text })
+      )}
+      {renderInput(
+        "credit-card",
+        "Número do Cartão",
+        form.numeroCartao,
+        text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }),
+        { keyboardType: "numeric", maxLength: 19 }
+      )}
+      {renderInput(
+        "calendar-today",
+        "Validade (MM/AA)",
+        form.validade,
+        text => setForm({ ...form, validade: formatarValidade(text) }),
+        { maxLength: 5 }
+      )}
+      {renderInput(
+        "lock",
+        "CVV",
+        form.codigoSeguranca,
+        text => setForm({ ...form, codigoSeguranca: text }),
+        { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 }
+      )}
+      {renderInput(
+        "payments",
+        "Limite",
+        form.limite,
+        text => setForm({ ...form, limite: text }),
+        { keyboardType: "numeric" }
+      )}
 
       <TouchableOpacity style={styles.botaoSalvarUnico} onPress={handleCadastrarCartao}>
         <Text style={styles.textoBotao}>Cadastrar Cartão</Text>
@@ -204,11 +228,40 @@ export default function CadastroCartao({ navigation }) {
           <View style={styles.modalContent}>
             <Text style={styles.titulo}>Editar Cartão</Text>
 
-            {renderInput("person", "Nome do Titular", form.nomeTitular, text => setForm({ ...form, nomeTitular: text }))}
-            {renderInput("credit-card", "Número do Cartão", form.numeroCartao, text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }), { keyboardType: "numeric", maxLength: 19 })}
-            {renderInput("calendar-today", "Validade (DD/MM/AAAA)", form.validade, text => setForm({ ...form, validade: formatarValidade(text) }), { maxLength: 10 })}
-            {renderInput("lock", "CVV", form.codigoSeguranca, text => setForm({ ...form, codigoSeguranca: text }), { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 })}
-            {renderInput("payments", "Limite", form.limite, text => setForm({ ...form, limite: text }), { keyboardType: "numeric" })}
+            {renderInput(
+              "person",
+              "Nome do Titular",
+              form.nomeTitular,
+              text => setForm({ ...form, nomeTitular: text })
+            )}
+            {renderInput(
+              "credit-card",
+              "Número do Cartão",
+              form.numeroCartao,
+              text => setForm({ ...form, numeroCartao: formatarNumeroCartao(text) }),
+              { keyboardType: "numeric", maxLength: 19 }
+            )}
+            {renderInput(
+              "calendar-today",
+              "Validade (MM/AA)",
+              form.validade,
+              text => setForm({ ...form, validade: formatarValidade(text) }),
+              { maxLength: 5 }
+            )}
+            {renderInput(
+              "lock",
+              "CVV",
+              form.codigoSeguranca,
+              text => setForm({ ...form, codigoSeguranca: text }),
+              { keyboardType: "numeric", secureTextEntry: true, maxLength: 3 }
+            )}
+            {renderInput(
+              "payments",
+              "Limite",
+              form.limite,
+              text => setForm({ ...form, limite: text }),
+              { keyboardType: "numeric" }
+            )}
 
             <View style={styles.botoesAcao}>
               <TouchableOpacity style={styles.botaoSalvar} onPress={handleSalvarEdicao}>
@@ -239,13 +292,13 @@ const styles = StyleSheet.create({
     color: cores.texto,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: cores.input,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    width: '100%',
+    width: "100%",
     marginBottom: 15,
   },
   icon: {
@@ -260,13 +313,13 @@ const styles = StyleSheet.create({
     backgroundColor: cores.botaoEnviar,
     paddingVertical: 12,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   textoBotao: {
     color: cores.textoClaro,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   cartaoBox: {
     backgroundColor: cores.impossibilitar,
