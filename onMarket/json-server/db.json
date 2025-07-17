@@ -1,26 +1,4 @@
 {
-  "usuario": [
-    {
-      "id": "8c21",
-      "nome": "Mateus Juan",
-      "email": "mjhs2@discente.ifpe.edu.br",
-      "tipo": "adm",
-      "cpf": "0000000001",
-      "senha": "123456789"
-    }
-  ],
-  "produtos": [
-    {
-      "id": "97f5",
-      "nome": "Mateus Juan",
-      "foto": "1n0QmJQ3C8u2CyOVL6Ih13S4JZmgWhvg6",
-      "categoria": "Casa",
-      "descricao": "lindo",
-      "preco": 10,
-      "validade": "10/10/2025",
-      "quantidade_estoque": 1
-    }
-  ],
   "categorias": [
     {
       "id": "1",

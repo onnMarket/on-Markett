@@ -20,11 +20,34 @@ export default function CriarConta({ navigation }) {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [tipo, setTipo] = useState('adm');
 
+  // Função para aplicar a máscara no CPF
+  function formatarCPF(value) {
+    let cpfLimpo = value.replace(/\D/g, '');
+    cpfLimpo = cpfLimpo.substring(0, 11);
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d)/, '$1.$2');
+    cpfLimpo = cpfLimpo.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    return cpfLimpo;
+  }
+
   const validarCampos = () => {
     if (!nome || !cpf || !email || !senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return false;
     }
+
+    const regexEmail = /^\S+@\S+\.\S+$/;
+    if (!regexEmail.test(email)) {
+      Alert.alert("Erro", "Por favor, insira um email válido.");
+      return false;
+    }
+
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      Alert.alert("Erro", "CPF deve conter 11 números.");
+      return false;
+    }
+
     return true;
   };
 
@@ -32,10 +55,12 @@ export default function CriarConta({ navigation }) {
     if (!validarCampos()) return;
 
     try {
+      const cpfLimpo = cpf.replace(/\D/g, '');
+
       const response = await axios.post("https://on-markett-2.onrender.com/api/users", {
         nome,
         email,
-        cpf,
+        cpf: cpfLimpo,
         senha,
         tipo,
       });
@@ -51,6 +76,7 @@ export default function CriarConta({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Nome */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="person" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
@@ -62,6 +88,7 @@ export default function CriarConta({ navigation }) {
         />
       </View>
 
+      {/* Email */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="email" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
@@ -75,18 +102,21 @@ export default function CriarConta({ navigation }) {
         />
       </View>
 
+      {/* CPF com máscara */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="badge" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
           placeholder="CPF"
           placeholderTextColor="#999"
           value={cpf}
-          onChangeText={setCpf}
+          onChangeText={text => setCpf(formatarCPF(text))}
           keyboardType="numeric"
           style={styles.input}
+          maxLength={14} // máscara 000.000.000-00
         />
       </View>
 
+      {/* Senha com ícone de visibilidade */}
       <View style={styles.inputContainer}>
         <MaterialIcons name="lock" size={24} color={cores.texto} style={styles.icon} />
         <TextInput
@@ -106,6 +136,7 @@ export default function CriarConta({ navigation }) {
         </TouchableOpacity>
       </View>
 
+      {/* Botão de salvar */}
       <TouchableOpacity style={styles.botaoSalvar} onPress={criarConta}>
         <Text style={styles.textoBotao}>Salvar</Text>
       </TouchableOpacity>

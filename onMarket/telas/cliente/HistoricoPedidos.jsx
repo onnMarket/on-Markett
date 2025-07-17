@@ -73,7 +73,7 @@ export default function HistoricoPedidos({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 80 }}>
         <View style={styles.header}>
           <Text style={styles.titulo}>Histórico de Pedidos</Text>
           <Image
