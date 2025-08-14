@@ -1,5 +1,5 @@
 {
-  "name": "onmarket",
+  "name": "onmarket-app",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,16 +9,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/config-plugins": "~10.1.1",
     "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
-    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-async-storage/async-storage": "2.1.2",
     "@react-native-picker/picker": "^2.11.1",
     "@react-navigation/bottom-tabs": "^7.3.14",
     "@react-navigation/native": "^7.1.14",
     "@react-navigation/native-stack": "^7.3.12",
     "@react-navigation/stack": "^7.3.3",
     "axios": "^1.10.0",
-    "expo": "53.0.16",
+    "expo": "53.0.20",
     "expo-av": "~15.1.7",
     "expo-status-bar": "~2.2.3",
     "expo-video": "~2.2.2",
@@ -45,5 +46,12 @@
     "@babel/core": "^7.20.0",
     "typescript": "~5.8.3"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  }
 }

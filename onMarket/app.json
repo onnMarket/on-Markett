@@ -4,12 +4,8 @@
     "slug": "onmarket",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./image/onMarket_Logo.png",
-    "splash": {
-      "image": "./image/onMarket_1.png",
-      "resizeMode": "contain",
-      "backgroundColor": "blue"
-    },
+    "icon": "./image/onMarket_Logo.png"
+  },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./image/onMarket_Logo.png",
@@ -29,4 +25,4 @@
       }
     }
   }
-}
+
